@@ -1,0 +1,16 @@
+{
+    "name": "HIDDEN HOTEL BOOKING",
+    "short_name": "HIDDEN",
+    "start_url": "/user",
+    "display": "standalone",
+    "background_color": "#f8f8f8",
+    "description": "HIDDEN HOTEL",
+    "icons": [
+      {
+        "src": "/assets/icons/LOGO.svg",
+        "sizes": "192x192",
+        "type": "image/svg"
+      }
+    ]
+  }
+  
