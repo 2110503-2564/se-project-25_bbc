@@ -33,7 +33,7 @@ const Menubar = () => {
         left: '5px',
         right: '5px',
         top: '5px',
-        height: '50px',
+        height: '48px',
         zIndex: '300',
         backgroundColor: atTop ? "rgba(255,255,255, 0)" : "rgba(255,255,255, 0.8)",
         transition: "all 0.5s ease",

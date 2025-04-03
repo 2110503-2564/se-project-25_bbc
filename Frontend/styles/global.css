@@ -2,6 +2,7 @@
 
 :root {
   --main-color: #3C82F6;
+  --card-color1: #f8fbff;
   --font-size: 16px;
 }
 
@@ -18,10 +19,8 @@ body{
 .hdcard_white{
   background-color: rgb(255, 255, 255);
   border-radius: 8px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.132);
-  border: solid;
-  border-width: 1px;
-  border-color: #00000017;
+  box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.132);
+
 }
 
 .align_item_center{
@@ -32,6 +31,9 @@ body{
 
 .main_bg{
   background-color: var(--main-color);
+}
+.card_bg1{
+  background-color: var(--card-color1);
 }
 
 .backdrop-blur {
@@ -56,3 +58,15 @@ body{
 .main_text{
   color: var(--main-color);
 }
+
+.bigcard_image_container{
+  background-color: gray;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  height: 133px;
+  border-radius: 7px;
+  overflow: hidden;
+}
+

@@ -4,7 +4,7 @@ import Booking from "../models/Booking.js";
 
 export const searchHotel = async (req, res) => {
     try {
-        const { select, populate, ...filters } = req.query;
+        const { select, populate, limit, ...filters } = req.query;
 
         // Build the query with filters
         let query = Hotel.find(filters);
@@ -23,6 +23,11 @@ export const searchHotel = async (req, res) => {
                 if (popSelect) query = query.populate({ path: popField, select: popSelect.split(";").join(" ") });
                 else query = query.populate(popField);
             });
+        }
+
+        // Handle limit if provided
+        if (limit) {
+            query = query.limit(Number(limit));
         }
 
         // Execute the query
