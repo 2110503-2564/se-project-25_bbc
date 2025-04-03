@@ -6,10 +6,9 @@ const Hero = () => {
       className='main_bg align_item_center'
       style={{
         width:"100%",
-        paddingTop:"60px",
         paddingLeft:"20px",
         paddingRight:"20px",
-        height:"500px",
+        height:"100vh",
         zIndex:"-300",
         WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)",
         maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)"

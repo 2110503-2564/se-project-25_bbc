@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import TextButton from './TextButton';
+import TextButton from './buttons/TextButton';
 
 const Menubar = () => {
   const [atTop, setAtTop] = useState(true);
 
+  //--- scroll style
   useEffect(() => {
     const handleScroll = () => {
       setAtTop(window.scrollY < 50);
@@ -21,6 +22,7 @@ const Menubar = () => {
       boxShadow: 'none'
     }
   : {};
+  //---
 
 
   return (
@@ -65,7 +67,7 @@ const Menubar = () => {
           <TextButton text='Book' />
           <TextButton text='My-booking' />
           <TextButton text='Register' />
-          <TextButton text='Sign-In' />
+          <TextButton text='Sign-In' linkString='/auth/signin'/>
         </div>
       </div>
     </div>

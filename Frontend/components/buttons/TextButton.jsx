@@ -1,11 +1,15 @@
+import Link from '@node_modules/next/link'
 import React from 'react'
 
 const TextButton = ({
   onClick,
-  text="Button"
+  text="Button",
+  linkString=""
 }= {}) => {
   return (
+    <Link href={linkString}>
     <div 
+      onClick={onClick}
       style={{
         display:"inline-block",
         height:'48px',
@@ -18,7 +22,9 @@ const TextButton = ({
         fontWeight:"400"
       }}
     >
-      {text}</div>
+      {text}
+    </div>
+    </Link>
   )
 }
 
