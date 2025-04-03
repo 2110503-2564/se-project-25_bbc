@@ -64,9 +64,8 @@ const Menubar = () => {
             textAlign: 'right',
           }}
         >
-          <TextButton text='Book' />
+          <TextButton text='Book' linkString='/hotels-page' />
           <TextButton text='My-booking' />
-          <TextButton text='Register' />
           <TextButton text='Sign-In' linkString='/auth/signin'/>
         </div>
       </div>
