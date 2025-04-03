@@ -31,7 +31,6 @@ const roomSchema = new mongoose.Schema({
         type : Number,
         required : true
     },
-    isAvailable: { type: Boolean , default: true },
     image_url: { type: String , default: "" }
 });
 

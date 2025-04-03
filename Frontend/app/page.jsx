@@ -1,7 +1,9 @@
 import React from 'react'
 import Hero from '@components/Hero'
+import { searchHotel } from '@api/hotel'
 
-const page = () => {
+const page = async () => {
+  const hotels = await searchHotel();
   return (
     <div>
       <Hero/>

@@ -8,8 +8,10 @@ import { Server } from 'socket.io';
 import connectDB from './config/mongo.js';
 
 // Import Routes
-import authRoutes from './routes/authRoutes.js'
-import hotelRoutes from './routes/hotelRoutes.js'
+import authRoutes from './routes/authRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
+import hotelRoutes from './routes/hotelRoutes.js';
+import roomRoutes from './routes/roomRoutes.js';
 
 // -------------------------- Configuration -------------------------- //
 dotenv.config();
@@ -35,7 +37,9 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // API Routes 
 app.use("/api/auth", authRoutes);
+app.use("/api/booking", bookingRoutes);
 app.use("/api/hotel", hotelRoutes);
+app.use("/api/room", roomRoutes);
 
 
 // -------------------------- Socket.io Setup -------------------------- //
