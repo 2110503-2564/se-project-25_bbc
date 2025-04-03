@@ -6,8 +6,6 @@ const router = express.Router();
 
 // -------------------------- Authentication Routes -------------------------- //
 
-router.get('/profile', protect , authController.getProfile);
-
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 

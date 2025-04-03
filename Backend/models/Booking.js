@@ -18,7 +18,7 @@ const bookSchema = new mongoose.Schema({
     },
     status: { 
         type: String, 
-        enum: ["pending", "accepted", "rejected"],
+        enum: ["pending", "accepted", "rejected", "confirmed", "checked-in", "checked-out" ],
         required: true,
         default: "pending"
     },
@@ -34,12 +34,23 @@ const bookSchema = new mongoose.Schema({
     check_out_date: {
         type: Date,
         required: [true, 'Check-out date is required'],
-        validate: {
-            validator: function(value) {
-                return value > this.check_in_date;
+        validate: [
+            {
+                validator: function(value) {
+                    return value > this.check_in_date;
+                },
+                message: 'Check-out date must be after check-in date'
             },
-            message: 'Check-out date must be after check-in date'
-        }
+            {
+                validator: function(value) {
+                    const maxDays = 4; // Maximum stay of 4 days (3 nights)
+                    const diffTime = value.getTime() - this.check_in_date.getTime();
+                    const diffDays = diffTime / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+                    return diffDays <= maxDays;
+                },
+                message: 'Booking cannot exceed 4 days'
+            }
+        ]
     },
     total_price: {
         type: Number,

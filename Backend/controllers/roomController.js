@@ -1,4 +1,5 @@
 import Room from "../models/Room.js";
+import Booking from "../models/Booking.js";
 
 export const searchRoom = async (req, res) => {
     try {
@@ -28,6 +29,7 @@ export const searchRoom = async (req, res) => {
 
         res.status(200).json({ 
             success: true,
+            count: rooms.length,
             rooms
         });
     } catch (error) {
@@ -58,6 +60,25 @@ export const updateRoom = async (req , res) => {
             { new: true , runValidators: true }
         )
 
+        res.status(200).json({ success: true, room });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
+
+export const deleteRoom = async (req , res) => {
+    try{
+        if(req.user.role === "hotel_admin" && req.user.hotel_id.toString() !== req.body.room.hotel_id.toString())
+            return res.status(403).json({ success: false , message: "You do not have permission to delete this room."});
+
+        // Delete all bookings related to this room EXCEPT "rejected" or "checked-out"
+        await Booking.deleteMany({ 
+            room_id: req.params.id, 
+            status: { $nin: ["rejected", "checked-out"] } 
+        });
+        
+        const room = await Room.findByIdAndDelete(req.params.id);
         res.status(200).json({ success: true, room });
     } catch (error) {
         console.error(error);

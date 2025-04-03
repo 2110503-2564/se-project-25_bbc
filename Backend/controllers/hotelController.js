@@ -1,4 +1,6 @@
 import Hotel from "../models/Hotel.js";
+import Room from "../models/Room.js";
+import Booking from "../models/Booking.js";
 
 export const searchHotel = async (req, res) => {
     try {
@@ -28,6 +30,7 @@ export const searchHotel = async (req, res) => {
 
         res.status(200).json({ 
             success: true,
+            count: hotels.length,
             hotels
         });
     } catch (error) {
@@ -45,3 +48,40 @@ export const createHotel = async (req , res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 }
+
+export const updateHotel = async (req , res) => {
+    try{
+        const hotel = await Hotel.findByIdAndUpdate(
+            req.params.id, 
+            req.body,
+            { new: true , runValidators: true }
+        )
+        res.status(200).json({ success: true, hotel });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
+
+export const deleteHotel = async (req, res) => {
+    try {
+        const hotelId = req.params.id;
+
+        // Delete all bookings for rooms in this hotel, excluding "rejected" and "checked-out" statuses
+        await Booking.deleteMany({ 
+            hotel_id: hotelId, 
+            status: { $nin: ["rejected", "checked-out"] } 
+        });
+
+        // Delete all rooms in the hotel
+        await Room.deleteMany({ hotel_id: hotelId });
+
+        // Delete the hotel
+        const hotel = await Hotel.findByIdAndDelete(hotelId);
+
+        res.status(200).json({ success: true, hotel });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
+    }
+};
