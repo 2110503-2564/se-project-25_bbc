@@ -40,7 +40,7 @@ export default function SigninBox() {
       <div style={inputContainerStyle}>
         <input className="text"
           type="tel"
-          placeholder="เบอร์โทรศัพท์"
+          placeholder="e-mail"
           value={uid}
           onChange={(e) => setUid(e.target.value)}
           style={inputStyle}
@@ -52,7 +52,7 @@ export default function SigninBox() {
         <input
           className="text"
           type="text"
-          placeholder="รหัสผ่าน"
+          placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={inputStyle}
@@ -62,7 +62,7 @@ export default function SigninBox() {
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
       <button className="main_bg text" onClick={handleLogin} style={buttonStyle}>
-        เข้าสู่ระบบ
+        Sign-In
       </button>
     </div>
   );

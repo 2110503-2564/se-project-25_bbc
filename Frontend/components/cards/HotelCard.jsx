@@ -1,9 +1,9 @@
 import React from 'react'
 
-const HotelCards = () => {
+const HotelCard = () => {
   return (
     <div>HotelCards</div>
   )
 }
 
-export default HotelCards
+export default HotelCard
