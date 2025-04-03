@@ -6,23 +6,33 @@ const roomSchema = new mongoose.Schema({
         ref : 'Hotel',
         required: true
     },
-    room_number : {
-        type : String ,
+    room_number: {
+        type: String,
+        required: true
+    },
+    type: {
+        type: String,
+        enum: ['Standard', 'Deluxe', 'Suite'],
+        required: true
+    },
+    capacity: {
+        type: Number,
+        required: true
+    },
+    amenities: {
+        type: [String],
+        default: []
+    },
+    isAvailable: {
+        type: Boolean,
+        default: true
+    },
+    rate_per_night : {
+        type : Number,
         required : true
     },
-    capacity : {
-        type : Number ,
-        required : true
-    },
-    price_per_night : {
-        type : Number ,
-        required : true
-    },
-    status : {
-        type: String ,
-        enum: ["available" , "pending" , "booked"],
-        default: "available"
-    }
+    isAvailable: { type: Boolean , default: true },
+    image_url: { type: String , default: "" }
 });
 
 roomSchema.index({ hotel_id: 1, room_number: 1 }, { unique: true });

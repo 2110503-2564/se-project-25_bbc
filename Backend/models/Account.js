@@ -15,6 +15,10 @@ const accountSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a telephone number'],
         unique: true,
+        match: [
+            /^(?:\d{10}|\d{3}-\d{3}-\d{4})$/,
+            'Please add a valid telephone number in the format xxx-xxx-xxxx or as 10 digits.'
+        ]
     },
     email: {
         type: String,
@@ -28,8 +32,7 @@ const accountSchema = new mongoose.Schema({
     password : {
         type : String ,
         required: [true, 'Please add a password'],
-        minlenght: 6,
-        select: false
+        minlength: 6
     },
     role : { 
         type : String , 
@@ -38,44 +41,25 @@ const accountSchema = new mongoose.Schema({
     },
     hotel_id : {
         type : mongoose.Schema.ObjectId , 
-        ref : 'Account',
+        ref : 'Hotel',
         default : null 
-    },
-    create_at:{
-        type: Date,
-        default: Date.now
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 },{
     toJSON: {virtuals: true},
-    toObject: {virtuals: true}
+    toObject: {virtuals: true},
+    timestamps : true
 });
 
-accountSchema.virtual('bookings' , {
-    ref : 'Booking',
-    localField : '_id',
-    foreignField : 'account_id',
-    justOne : false
+accountSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
 });
 
-accountSchema.pre('save' , async function(next){
-    // Format telephone number as xxx-xxx-xxxx
-    if (this.tel) {
-        // Remove all non-numeric characters
-        this.tel = this.tel.replace(/\D/g, '');
-
-        // If the number has 10 digits, format it as xxx-xxx-xxxx
-        if (this.tel.length === 10) {
-            this.tel = this.tel.replace(/^(\d{3})(\d{3})(\d{4})$/, '$1-$2-$3');
-        } else {
-            next(new Error('Telephone number must contain exactly 10 digits.'));
-            return;
-        }
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password,salt);
+accountSchema.virtual('full_name').get(function () {
+    return `${this.first_name} ${this.last_name}`;
 });
 
 accountSchema.methods.getSignedJwtToken = function(){

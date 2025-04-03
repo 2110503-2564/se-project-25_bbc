@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const hotelSchema = new mongoose.Schema({
-    hotel_name : {
+    name : {
         type : String , 
         require : [true , 'Please add a name'] , 
         maxlength: [50, 'Name cannot be more than 50 characters']
@@ -10,6 +10,10 @@ const hotelSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a telephone number'],
         unique: true
+    },
+    description: { 
+        type: String ,
+        maxlength: [200, 'Description cannot be more than 200 characters'] 
     },
     address: {
         city: {
@@ -39,17 +43,12 @@ const hotelSchema = new mongoose.Schema({
             type: Number,
             required: [true, 'Please add a longtitude']
         }
-    }
+    },
+    image_url: { type: String , default: "" }
 },{
     toJSON: {virtuals: true},
-    toObject: {virtuals: true}
-});
-
-hotelSchema.virtual('bookings' , {
-    ref : 'Booking',
-    localField : '_id',
-    foreignField : 'hotel_id',
-    justOne : false
+    toObject: {virtuals: true},
+    timestamps: true
 });
 
 const Hotel = mongoose.model('Hotel', hotelSchema);

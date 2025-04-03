@@ -8,6 +8,8 @@ import { Server } from 'socket.io';
 import connectDB from './config/mongo.js';
 
 // Import Routes
+import authRoutes from './routes/authRoutes.js'
+import hotelRoutes from './routes/hotelRoutes.js'
 
 // -------------------------- Configuration -------------------------- //
 dotenv.config();
@@ -32,7 +34,8 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // API Routes 
-
+app.use("/api/auth", authRoutes);
+app.use("/api/hotel", hotelRoutes);
 
 
 // -------------------------- Socket.io Setup -------------------------- //

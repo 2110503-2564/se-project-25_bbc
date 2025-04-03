@@ -1,40 +1,52 @@
 import mongoose from 'mongoose';
 
 const bookSchema = new mongoose.Schema({
-    account_id : {
-        type : mongoose.Schema.ObjectId , 
-        ref : 'Account',
+    account_id: {
+        type: mongoose.Schema.ObjectId, 
+        ref: 'Account',
         required: true
     },
-    hotel_id : {
-        type : mongoose.Schema.ObjectId , 
-        ref : 'Hotel',
-        required: [true , 'Please add hotel id']
+    hotel_id: {
+        type: mongoose.Schema.ObjectId, 
+        ref: 'Hotel',
+        required: [true, 'Please add hotel id']
     },
-    room_id : {
-        type : mongoose.Schema.ObjectId , 
-        ref : 'Room',
+    room_id: {
+        type: mongoose.Schema.ObjectId, 
+        ref: 'Room',
         required: true
     },
-    status : { 
-        type : String , 
-        enum : ["pending", "accept", "reject"],
-        required : true ,
-        default : "pending"
+    status: { 
+        type: String, 
+        enum: ["pending", "accepted", "rejected"],
+        required: true,
+        default: "pending"
     },
-    num_people : {
+    num_people: {
         type: Number,
-        required: [true , 'Please add number of people'],
+        required: [true, 'Please add number of people'],
         min: [1, 'Number of people must be at least 1']
     },
-    check_in_date : {
+    check_in_date: {
         type: Date,
-        required: [true , 'Format date is YYYY-MM-DD']
+        required: [true, 'Check-in date is required'],
     },
-    check_out_date : {
-        type: Date
+    check_out_date: {
+        type: Date,
+        required: [true, 'Check-out date is required'],
+        validate: {
+            validator: function(value) {
+                return value > this.check_in_date;
+            },
+            message: 'Check-out date must be after check-in date'
+        }
     },
-} , { timestamps : true });
+    total_price: {
+        type: Number,
+        required: true,
+        min: [0, 'Total price cannot be negative']
+    }
+}, { timestamps: true });
 
 const Booking = mongoose.model('Booking', bookSchema);
 export default Booking;
