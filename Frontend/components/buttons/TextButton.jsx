@@ -20,7 +20,7 @@ const TextButton = ({
         padding:"6px",
         paddingLeft:"20px",
         paddingRight:"20px",
-        paddingTop:"6px",
+        paddingTop:"5px",
         marginTop:"8px",
         marginRight:"8px",
         fontSize:"15px",
