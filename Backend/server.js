@@ -12,6 +12,7 @@ import authRoutes from './routes/authRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import hotelRoutes from './routes/hotelRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
+import accountRoutes from './routes/accountRoutes.js'
 
 // -------------------------- Configuration -------------------------- //
 dotenv.config();
@@ -40,6 +41,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/booking", bookingRoutes);
 app.use("/api/hotel", hotelRoutes);
 app.use("/api/room", roomRoutes);
+app.use("/api/account",accountRoutes);
 
 
 // -------------------------- Socket.io Setup -------------------------- //
