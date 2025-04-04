@@ -1,6 +1,5 @@
 import React from 'react'
-import SigninBox from '@components/SigninBox'
-import Link from '@node_modules/next/link'
+import RegBox from '@components/RegBox'
 
 const page = () => {
   return (
@@ -11,25 +10,12 @@ const page = () => {
       className='align_item_center'
       style={{backgroundColor:'white', height:"100%", width:"300px", left:"calc(50% - 150px)", position:"absolute"}}>
       <div style={{marginBottom:"120px", width:"100%"}}>
-      <div 
+        <div 
           className='home_text'
           style={{width:"100%", textAlign:"center", fontSize:"20px", fontWeight:"600"}}>
-          Welcome Back!
-        </div>
-        <SigninBox/>
-        <div 
-          className='home_text'
-          style={{width:"100%", textAlign:"center"}}>
-          Not have an account yet?
-        </div>
-        <Link href={"/auth/reg"} style={{textDecoration:"none"}}>
-        <div 
-          className='main_text'
-          style={{width:"100%", textAlign:"center"}}
-        >
           Register
         </div>
-        </Link>
+        <RegBox/>
       </div>
       </div>
       

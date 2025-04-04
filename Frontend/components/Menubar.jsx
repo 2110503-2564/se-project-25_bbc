@@ -24,6 +24,10 @@ const Menubar = () => {
   : {};
   //---
 
+  //--- sign-out
+  const handleSignOut = () => {
+    localStorage.clear();
+  };
 
   return (
     <div
@@ -66,7 +70,14 @@ const Menubar = () => {
         >
           <TextButton text='Book' linkString='/hotels-page' />
           <TextButton text='My-booking' />
-          <TextButton text='Sign-In' linkString='/auth/signin'/>
+          {
+            localStorage.getItem("token") ? (
+              <TextButton text='Sign-out' linkString='/' onClick={handleSignOut}/>
+            ) : (
+              <TextButton text='Sign-In' linkString='/auth/signin'/>
+            )
+          }
+          
         </div>
       </div>
     </div>

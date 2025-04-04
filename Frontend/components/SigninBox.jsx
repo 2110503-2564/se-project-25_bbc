@@ -1,7 +1,10 @@
 "use client";
 import { useState } from "react";
+import { signinUser } from "@api/auth";
+import { useRouter } from "next/navigation";
 
 export default function SigninBox() {
+  const router = useRouter();
   const [uid, setUid] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -14,13 +17,12 @@ export default function SigninBox() {
     }
 
     try {
-      const response = await vendorLogin(uid, password);
+      const response = await signinUser(uid, password);
 
-      if (response.message == "Login as vendor successfully") {
-        localStorage.setItem("tokenVendor", response.token);
-        localStorage.setItem("storeIdVendor", response.vendor.store_id);
-        localStorage.setItem("nameVendor", response.vendor.username);
-        window.location.reload();
+      if (response.success) {
+        localStorage.setItem("token", response.token);
+        window.location.reload(); // Reload the page to apply the token
+        router.push("/"); // Redirect to the home page
       } else {
         setError("Login failed. Please check your User ID.");
       }
@@ -70,7 +72,7 @@ export default function SigninBox() {
 
 const containerStyle = {
   maxWidth: "300px",
-  margin: "50px auto",
+  margin: "0px auto",
   padding: "20px",
   textAlign: "center",
   position: "relative"
