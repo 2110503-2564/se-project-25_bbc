@@ -73,10 +73,10 @@ const Menubar = () => {
             textAlign: 'right',
           }}
         >
-          <TextButton text='Book' linkString='/hotels-page' />
+          <TextButton text='Hotels' linkString='/hotels-page' />
           <TextButton text='My-booking' />
           {
-            token ? (
+             typeof window !== 'undefined' && localStorage.getItem("token") ? (
               <TextButton text='Sign-out' linkString='/' onClick={handleSignOut} showBox={true}/>
             ) : (
               <TextButton text='Sign-In' linkString='/auth/signin' showBox={true}/>
