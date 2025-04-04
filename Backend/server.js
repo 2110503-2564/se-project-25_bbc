@@ -124,7 +124,7 @@ const initializeServer = async () =>{
         await connectDB(); 
 
         server.listen(PORT , '0.0.0.0', () => {
-            console.log(`🎉 BBC Backend server is live at http://localhost:${PORT} 🎉`);
+            console.log(`🎉 BBC Backend server is live at ${process.env.HOST}:${PORT} 🎉`);
         });
     }
     catch(err){
