@@ -4,22 +4,30 @@ import React from 'react'
 const TextButton = ({
   onClick,
   text="Button",
-  linkString=""
+  linkString="",
+  showBox=false
 }= {}) => {
   return (
     <Link href={linkString}>
     <div 
+      className={`${showBox ? "cutout-text" : ""}`}
       onClick={onClick}
       style={{
         display:"inline-block",
-        height:'48px',
+        height:'32px',
         alignItems:"center",
         boxSizing:"border-box",
         padding:"6px",
-        paddingTop:"11px",
-        marginRight:"10px",
-        fontSize:"18px",
-        fontWeight:"400"
+        paddingLeft:"20px",
+        paddingRight:"20px",
+        paddingTop:"6px",
+        marginTop:"8px",
+        marginRight:"8px",
+        fontSize:"15px",
+        fontWeight:"400",
+        borderRadius:"20px",
+        backgroundColor:`${showBox ? "black" : "transparent"}`,
+        color:`${showBox ? "white" : "black"}`,
       }}
     >
       {text}

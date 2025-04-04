@@ -1,11 +1,13 @@
 import React from 'react'
 import Image from '@node_modules/next/image'
+import Link from '@node_modules/next/link'
 
 const HotelSelectCard = ({
   hotel=null
 } = {}) => {
   if (hotel)
   return (
+    <Link href={`/hotels-page/${hotel._id}`}>
     <div
       className='hdcard_white'
       style={{ 
@@ -44,6 +46,7 @@ const HotelSelectCard = ({
         </span>
       </div> 
     </div>
+    </Link>
   )
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TextButton from './buttons/TextButton';
+import Link from '@node_modules/next/link';
 
 const Menubar = () => {
   const [atTop, setAtTop] = useState(true);
@@ -19,7 +20,7 @@ const Menubar = () => {
       backgroundColor: 'transparent',
       borderColor: 'transparent',
       backdropFilter: 'none',
-      boxShadow: 'none'
+      boxShadow: 'none',
     }
   : {};
   //---
@@ -39,6 +40,7 @@ const Menubar = () => {
         top: '5px',
         height: '48px',
         zIndex: '300',
+        borderRadius: '30px',
         backgroundColor: atTop ? "rgba(255,255,255, 0)" : "rgba(255,255,255, 0.8)",
         transition: "all 0.5s ease",
         ...overrideStyles
@@ -52,12 +54,6 @@ const Menubar = () => {
           top: '0',
           bottom: '0',
       }}>
-        <img
-          src='/icons/HIDDEN logo.svg'
-          className='h-3 mt-4.5 ml-4.5'
-          style={{ display: 'inline-block', position: "absolute", left: "4.5px", top: "0px" }}
-          alt="Logo"
-        />
         <div
           style={{
             position: 'absolute',
@@ -72,13 +68,25 @@ const Menubar = () => {
           <TextButton text='My-booking' />
           {
             localStorage.getItem("token") ? (
-              <TextButton text='Sign-out' linkString='/' onClick={handleSignOut}/>
+              <TextButton text='Sign-out' linkString='/' onClick={handleSignOut} showBox={true}/>
             ) : (
-              <TextButton text='Sign-In' linkString='/auth/signin'/>
+              <TextButton text='Sign-In' linkString='/auth/signin' showBox={true}/>
             )
           }
           
         </div>
+        <Link href='/' style={{zIndex:"300"}}>
+        <div style={{
+          height:"100%",
+          width:"110px",
+        }}>
+        <img
+          src='/icons/HIDDEN logo.svg'
+          style={{ height:'13px', marginLeft:"14px", marginTop:"17.5px", display: 'inline-block', position: "absolute", left: "4.5px", top: "0px" }}
+          alt="Logo"
+        />
+        </div>
+        </Link>
       </div>
     </div>
   );
