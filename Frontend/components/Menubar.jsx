@@ -1,9 +1,11 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import TextButton from './buttons/TextButton';
 import Link from '@node_modules/next/link';
 
 const Menubar = () => {
   const [atTop, setAtTop] = useState(true);
+  const [token, setToken] = useState(null); // State to hold token value
 
   //--- scroll style
   useEffect(() => {
@@ -13,6 +15,13 @@ const Menubar = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+    }
   }, []);
 
   const overrideStyles = atTop
@@ -67,7 +76,7 @@ const Menubar = () => {
           <TextButton text='Book' linkString='/hotels-page' />
           <TextButton text='My-booking' />
           {
-            localStorage.getItem("token") ? (
+            token ? (
               <TextButton text='Sign-out' linkString='/' onClick={handleSignOut} showBox={true}/>
             ) : (
               <TextButton text='Sign-In' linkString='/auth/signin' showBox={true}/>

@@ -5,7 +5,7 @@ import { searchHotel } from '@api/hotel';
 const page = async () => {
   const hotelsData = await searchHotel();
   const hotels = hotelsData.hotels;
-
+  console.log(hotelsData);
   return (
     <div>
       <div

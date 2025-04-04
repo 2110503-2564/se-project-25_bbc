@@ -20,8 +20,10 @@ export default function SigninBox() {
       const response = await signinUser(uid, password);
 
       if (response.success) {
-        localStorage.setItem("token", response.token);
-        window.location.reload(); // Reload the page to apply the token
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", response.token);
+          window.location.reload(); // Reload the page to apply the token
+        }
         router.push("/"); // Redirect to the home page
       } else {
         setError("Login failed. Please check your User ID.");

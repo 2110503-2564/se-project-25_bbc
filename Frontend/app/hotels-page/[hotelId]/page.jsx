@@ -3,9 +3,10 @@ import { searchHotel } from '@api/hotel';
 import Image from '@node_modules/next/image';
 
 const page = async ({ params }) => {
-  const { hotelId } = params;
+  const { hotelId } = await params;
   const hotelData = await searchHotel(`_id=${hotelId}`);
   const hotel = hotelData.hotels[0];
+  console.log("result:" , hotelData);
   return (
     <div>
       <div style={{

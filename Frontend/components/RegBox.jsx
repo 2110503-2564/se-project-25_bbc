@@ -20,7 +20,10 @@ export default function RegBox() {
       const response = await registerUser(firstName, lastName, email, tel, password);
       
       if (response.success) {
-        //localStorage.setItem("token", response.token);
+        if (typeof window !== "undefined") {
+          //localStorage.setItem("token", response.token);
+          window.location.reload();
+        }
       } else {
         setError("Registration failed. Please try again.");
       }
