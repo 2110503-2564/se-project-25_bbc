@@ -1,11 +1,15 @@
 import React from 'react'
 import { searchHotel } from '@api/hotel';
+import { searchRoom } from '@api/room';
 import Image from '@node_modules/next/image';
+import RoomList from '@components/lists/RoomList';
 
 const page = async ({ params }) => {
   const { hotelId } = await params;
   const hotelData = await searchHotel(`_id=${hotelId}`);
   const hotel = hotelData.hotels[0];
+  const roomData = await searchRoom(`hotel_id=${hotelId}`);
+  const rooms = roomData.rooms;
   console.log("result:" , hotelData);
   return (
     <div>
@@ -51,7 +55,7 @@ const page = async ({ params }) => {
       </div>
 
       <div>
-        Hello
+        <RoomList rooms={rooms} />
       </div>
     </div>
   )

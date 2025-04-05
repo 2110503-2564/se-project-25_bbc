@@ -5,6 +5,7 @@
   --sub-color1: #536787;
   --card-color1: #f8fbff;
   --card-color2: #f2f2f2;
+  --un-color: #b9b9b9;
   --font-size: 16px;
 }
 
@@ -43,6 +44,9 @@ body{
 .card_bg2{
   background-color: var(--card-color2);
 }
+.un_bg{
+  background-color: var(--un-color);
+}
 
 .backdrop-blur {
   backdrop-filter: blur(10px);
@@ -66,10 +70,10 @@ body{
 .main_text{
   color: var(--main-color);
 }
-
-.cutout-text {
-  mix-blend-mode: destination-out;
+.sub_text{
+  color: var(--sub-color1);
 }
+
 
 .bigcard_image_container{
   background-color: gray;

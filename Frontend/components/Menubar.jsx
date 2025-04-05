@@ -37,6 +37,7 @@ const Menubar = () => {
   //--- sign-out
   const handleSignOut = () => {
     localStorage.clear();
+    document.cookie = "token=; path=/; max-age=0";
   };
 
   return (
