@@ -45,7 +45,7 @@ export default function SigninBox() {
       <div style={inputContainerStyle}>
         <input className="text"
           type="tel"
-          placeholder="e-mail"
+          placeholder="telephone"
           value={uid}
           onChange={(e) => setUid(e.target.value)}
           style={inputStyle}
