@@ -17,7 +17,7 @@ export const register = async (req, res) => {
         const account = await Account.create(req.body);
 
         res.status(201).json({ 
-            message: "Account registered successfully!",
+            success: true,
             account
         });
 
