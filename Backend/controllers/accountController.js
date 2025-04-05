@@ -20,7 +20,7 @@ export const getProfile = async (req , res) => {
 
 export const broadcast = async (req , res) => {
     try{
-
+        console.log("Boardcast!!!");
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Get account profile failed", error: error.message });
