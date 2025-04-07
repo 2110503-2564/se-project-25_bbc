@@ -30,14 +30,19 @@ export const registerUser = async ( first_name, last_name, email, tel, password 
   }
 };
 
-export const signinUser = async (tel, password) => {
+export const signinUser = async (identifier, password) => {
   try {
+
+    const isEmail = identifier.includes('@');
+
+    const body = isEmail ? {email:identifier,password} : {tel:identifier,password};
+
     const response = await fetch(`${URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ tel, password }),
+      body: JSON.stringify(body),
     });
 
     const data = await response.json();

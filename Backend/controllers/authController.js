@@ -56,3 +56,16 @@ export const login = async (req, res) => {
         res.status(500).json({ success: false, message: "Login failed", error: error.message });
     }
 };
+
+export const logout = async (req, res) => {
+    // make token null and set expired
+    res.cookie('token','none',{
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    });
+
+    res.status(200).json({
+        success: true,
+        message: 'Logout successfully'
+    });
+};

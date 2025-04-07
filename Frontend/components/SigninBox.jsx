@@ -23,9 +23,8 @@ export default function SigninBox() {
         if (typeof window !== "undefined") {
           localStorage.setItem("token", response.token);
           document.cookie = `token=${response.token}; path=/; max-age=36000`;
-          window.location.reload(); // Reload the page to apply the token
+          window.location.href = "/" // Reload the page to apply the token and direct to home page
         }
-        router.push("/"); // Redirect to the home page
       } else {
         setError("Login failed. Please check your User ID.");
       }
@@ -44,23 +43,27 @@ export default function SigninBox() {
 
       <div style={inputContainerStyle}>
         <input className="text"
-          type="tel"
-          placeholder="telephone"
+          type="text"
+          placeholder="Email or Telephone"
           value={uid}
           onChange={(e) => setUid(e.target.value)}
           style={inputStyle}
-          inputMode="numeric"
-          maxLength={10}
         />
       </div>
       <div style={inputContainerStyle}>
         <input
           className="text"
-          type="text"
+          type={isRevealing? "text":"password"}
           placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={inputStyle}
+        />
+        <img
+          src={isRevealing ? "/icons/hide.png" : "/icons/view.png"}
+          alt="Toggle password visibility"
+          onClick={() => setIsRevealing((prev) => !prev)}
+          style={eyeImageStyle}
         />
       </div>
 
@@ -104,4 +107,15 @@ const buttonStyle = {
   border: "none",
   borderRadius: "5px",
   cursor: "pointer"
+};
+
+const eyeImageStyle = {
+  position: "absolute",
+  top: "50%",
+  right: "10px",
+  transform: "translateY(-50%)",
+  width: "20px",
+  height: "20px",
+  cursor: "pointer",
+  zIndex: 2,
 };
