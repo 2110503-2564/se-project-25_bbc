@@ -1,5 +1,30 @@
 const URL = process.env.NEXT_PUBLIC_API_URL;
 
+export async function searchBookings({
+  token
+}){
+  try{
+    const res = await fetch(`${URL}/api/booking/search`,{
+      method:"GET",
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const data = await res.json();
+
+    if(!res.ok){
+      throw new Error(`Error fecth bookings with message: ${data.message}`);
+    }
+
+    return data ;
+
+  }catch (error) {
+    console.error("Search Booking error:", error);
+    throw error;
+  }
+}
+
 export async function createBooking({
   token,
   account_id,
