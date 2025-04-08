@@ -72,8 +72,8 @@ export const BookingForms = ({
   };
 
   return (
-    <div className="w-full h-[95vh] p-8 bg-white shadow-lg rounded-2xl max-w-[500px] mt-20">
-      <h2 className="text-2xl font-bold text-blue-700 mb-4">Book This Room</h2>
+    <div className="w-full h-[95vh] p-8 hdcard_white max-w-[500px] mt-20">
+      <h2 className="text-2xl font-bold main_text mb-4">Book This Room</h2>
 
       <p className="text-sm text-gray-500 mb-4">
         Booking cannot exceed <span className="font-semibold text-red-500">4 days</span>
@@ -122,8 +122,7 @@ export const BookingForms = ({
 
         <button
           type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200 disabled:opacity-50"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
         >
           {loading ? "Processing..." : "Book Now"}
         </button>
@@ -135,11 +134,14 @@ export const BookingForms = ({
           <p className="text-red-600 font-medium text-sm mt-2">{errorMessage}</p>
         )}
       </form>
-      {/* Debug */}
-      <div>
-        <p>{checkInDate}</p>
-        <p>{checkOutDate}</p>
-        <p>{numPeople}</p>
+
+      {/* Debugging Info */}
+      <div className="mt-6 text-sm text-gray-500 space-y-1">
+        <p><strong>account_id:</strong> {account_id}</p>
+        <p><strong>hotel_id:</strong> {hotel_id}</p>
+        <p><strong>room_id:</strong> {room_id}</p>
+        <p><strong>status:</strong> {status}</p>
+        <p><strong>total_price:</strong> ${total_price}</p>
       </div>
     </div>
   );

@@ -77,7 +77,7 @@ const Menubar = () => {
             textAlign: 'right',
             display: 'flex',
             justifyContent: 'flex-end',
-            paddingRight: '16px', // optional padding
+            paddingRight: '0px', // optional padding
           }}
         >
           <TextButton text='Hotels' linkString='/hotels-page' />
@@ -91,7 +91,7 @@ const Menubar = () => {
 
           {user && (
             <div style={{ display: 'flex'}}>
-              <TextButton text={`Welcome ${user.account.first_name}`} />
+              {/* make name appear when click*/}
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Image
                   src="/icons/profile-user-black.png"
