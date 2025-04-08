@@ -8,7 +8,9 @@ export const BookingForms = ({
   room_id,
   total_price,
   status = "pending",
-  roomCapacity
+  roomCapacity,
+  hotelName,
+  room
 }) => {
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
@@ -17,6 +19,10 @@ export const BookingForms = ({
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const storedToken = localStorage.getItem("token");
+  const storedLogin = localStorage.getItem("res_login");
+  const parsedLogin = JSON.parse(storedLogin); // json contain data when login
+
   const handleBookingSubmit = async (e) => {
     e.preventDefault(); // prevent form refresh
     setSuccessfulMessage('');
@@ -24,23 +30,21 @@ export const BookingForms = ({
     setLoading(true);
 
     try {
-      
-      const storedToken = localStorage.getItem("token");
-      const storedLogin = localStorage.getItem("res_login");
-      const parsedLogin = JSON.parse(storedLogin); // json contain data when login
 
-      if (!storedToken) {
-        setErrorMessage("No token provided");
+      if (!storedToken || !parsedLogin?.account?.id) {
+        setErrorMessage("Authentication error. Please log in again.");
         return;
       }
 
       if(!checkInDate || !checkOutDate){
         setErrorMessage("Please select both check-in and check-out dates.")
+        setLoading(false);
         return;
       }
 
       if(!numPeople){
-        setErrorMessage("Please define amount of people.")
+        setErrorMessage("Please fill amount of people.")
+        setLoading(false);
         return;
       }
 
@@ -50,15 +54,15 @@ export const BookingForms = ({
       }
 
       await createBooking({
-        token:storedToken,
-        account_id:parsedLogin.account.id,
-        hotel_id:hotel_id,
-        room_id:room_id,
-        status:status,
-        num_people: numPeople,
-        check_in_date: checkInDate,
-        check_out_date: checkOutDate,
-        total_price:total_price,
+        token: storedToken,
+        account_id: parsedLogin.account.id,
+        hotel_id: hotel_id,
+        room_id: room_id,
+        status: status,
+        checkInDate: checkInDate,    // camelCase key
+        checkOutDate: checkOutDate,  // camelCase key
+        numPeople: numPeople,        // camelCase key
+        total_price: total_price,
       });
 
       setSuccessfulMessage("Booking Successful");
@@ -120,6 +124,39 @@ export const BookingForms = ({
           />
         </div>
 
+        {/* Detail of Booking */}
+        <div className='mt-20 mb-20'>
+          <h2 className="text-2xl font-bold main_text mb-2">Confirmation Detail of Booking</h2>
+          <p className="text-sm text-gray-500 mb-4">
+            <span className="font-semibold text-red-500 underline">Make sure</span> before starting your booking.
+          </p>
+          <table className="w-full text-sm">
+            <tbody>
+              <tr>
+                <td className="font-semibold main_text pr-4 py-1">Name:</td>
+                <td className="text-gray-500 font-light">{`${parsedLogin.account.first_name} ${parsedLogin.account.last_name}`}</td>
+              </tr>
+              <tr>
+                <td className="font-semibold main_text pr-4 py-1">Hotel:</td>
+                <td className="text-gray-500 font-light">{hotelName}</td>
+              </tr>
+              <tr>
+                <td className="font-semibold main_text pr-4 py-1">Room:</td>
+                <td className="text-gray-500 font-light">{`${room.room_number} ${room.type}`}</td>
+              </tr>
+              <tr>
+                <td className="font-semibold main_text pr-4 py-1">Total Guest:</td>
+                <td className="text-gray-500 font-light">{`${numPeople} person`}</td>
+              </tr>
+              <tr>
+                <td className="font-semibold main_text pr-4 py-1">Total Price*:</td>
+                <td className="text-gray-500 font-light">{`${room.rate_per_night} $`}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
@@ -134,15 +171,6 @@ export const BookingForms = ({
           <p className="text-red-600 font-medium text-sm mt-2">{errorMessage}</p>
         )}
       </form>
-
-      {/* Debugging Info */}
-      <div className="mt-6 text-sm text-gray-500 space-y-1">
-        <p><strong>account_id:</strong> {account_id}</p>
-        <p><strong>hotel_id:</strong> {hotel_id}</p>
-        <p><strong>room_id:</strong> {room_id}</p>
-        <p><strong>status:</strong> {status}</p>
-        <p><strong>total_price:</strong> ${total_price}</p>
-      </div>
     </div>
   );
 };

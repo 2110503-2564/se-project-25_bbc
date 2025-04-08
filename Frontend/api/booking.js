@@ -6,9 +6,9 @@ export async function createBooking({
   hotel_id,
   room_id,
   status = "pending",
-  checkInDate,
-  checkOutDate,
-  numPeople,
+  checkInDate,    // camelCase parameter
+  checkOutDate,   // camelCase parameter
+  numPeople,      // camelCase parameter
   total_price,
 }) {
   try {
@@ -16,20 +16,20 @@ export async function createBooking({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // from NextAuth or localStorage
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        account_id:account_id,
-        hotel_id:hotel_id,
-        room_id:room_id,
-        status:status,
-        check_in_date: checkInDate,
-        check_out_date: checkOutDate,
-        num_people: numPeople,
-        total_price:total_price,
+        account_id,
+        hotel_id,
+        room_id,
+        status,
+        num_people: numPeople,       // Convert to snake_case
+        check_in_date: checkInDate,   // Convert to snake_case
+        check_out_date: checkOutDate, // Convert to snake_cas
+        total_price,
       }),
     });
-
+    
     const data = await res.json();
 
     if (!res.ok) {
