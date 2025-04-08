@@ -122,7 +122,7 @@ export const BookingForms = ({
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
+          className="w-full main_bg text-white py-2 rounded hover:main_bg transition duration-200"
         >
           {loading ? "Processing..." : "Book Now"}
         </button>
@@ -136,13 +136,7 @@ export const BookingForms = ({
       </form>
 
       {/* Debugging Info */}
-      <div className="mt-6 text-sm text-gray-500 space-y-1">
-        <p><strong>account_id:</strong> {account_id}</p>
-        <p><strong>hotel_id:</strong> {hotel_id}</p>
-        <p><strong>room_id:</strong> {room_id}</p>
-        <p><strong>status:</strong> {status}</p>
-        <p><strong>total_price:</strong> ${total_price}</p>
-      </div>
+     
     </div>
   );
 };
