@@ -51,9 +51,26 @@ export const createBooking = async (req , res) => {
         ? req.user.hotel_id 
         : req.body.hotel_id; 
 
+        const { account_id , hotel_id , room_id , check_in_date, check_out_date } = req.body;
+
         if(req.body.room.hotel_id.toString() !== req.body.hotel_id.toString())
             return res.status(400).json({ success: false, message: "This room does not belong to the specified hotel." });
         
+        const overlapping = await Booking.findOne({
+            hotel_id,
+            room_id,
+            account_id,
+            status: { $in: ["pending", "accepted", "confirmed"] },
+            $or: [
+                {
+                    check_in_date: { $lt: new Date(check_out_date) },
+                    check_out_date: { $gt: new Date(check_in_date) }
+                }
+            ]
+        });
+
+        if (overlapping) return res.status(400).json({ success: false, message: "You already have a booking for this room during the selected time." }); 
+
         const booking = await Booking.create(req.body);
 
         res.status(201).json({ success: true, booking });
@@ -145,41 +162,17 @@ export const confirmedBooking = async (req, res) => {
     }
 };
 
-export const checkInBooking = async (req, res) => {
+export const finishedBooking = async (req, res) => {
     try {
 
         const hotel_id = req.user.hotel_id || req.body.hotel_id;
 
         if(req.user.role === "hotel_admin" && req.user.hotel_id.toString() !== req.body.booking.hotel_id.toString())
-            return res.status(403).json({ success: false , message: "You do not have permission to check-in this booking."});
+            return res.status(403).json({ success: false , message: "You do not have permission to finish this booking."});
 
         const booking = await Booking.findOneAndUpdate(
             { _id : req.body.id , hotel_id },  
-            { status: "checked-in" },  
-            { new: true, runValidators: true }  
-        );
-
-        if(!booking) return res.status(404).json({ success: false, message: "Booking not found." }); 
-
-        res.status(200).json({ success: true, booking });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: error.message });
-    }
-};
-
-export const checkOutBooking = async (req, res) => {
-    try {
-
-        const hotel_id = req.user.hotel_id || req.body.hotel_id;
-
-        if(req.user.role === "hotel_admin" && req.user.hotel_id.toString() !== req.body.booking.hotel_id.toString())
-            return res.status(403).json({ success: false , message: "You do not have permission to check-out this booking."});
-
-        const booking = await Booking.findOneAndUpdate(
-            { _id : req.body.id , hotel_id },  
-            { status: "checked-out" },  
+            { status: "finished" },  
             { new: true, runValidators: true }  
         );
 
@@ -196,8 +189,10 @@ export const checkOutBooking = async (req, res) => {
 export const deleteBooking = async (req , res) => {
     try {
 
+        const hotel_id = req.user.hotel_id || req.body.hotel_id;
+
         if(req.user.role === "hotel_admin" && req.user.hotel_id.toString() !== req.body.booking.hotel_id.toString())
-            return res.status(403).json({ success: false , message: "You do not have permission to check-out this booking."});
+            return res.status(403).json({ success: false , message: "You do not have permission to delete this booking."});
 
         const booking = await Booking.findOneAndDelete(
             { _id : req.body.id , hotel_id },  
