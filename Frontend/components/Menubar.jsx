@@ -20,7 +20,7 @@ const Menubar = () => {
     const storedToken = localStorage.getItem("token");
     const storedLogin = localStorage.getItem("res_login");
     const parsedLogin = JSON.parse(storedLogin); // json contain data when login
-    console.log(parsedLogin);
+    // console.log(parsedLogin);
     setUser(parsedLogin);
     setToken(storedToken);
     setMounted(true); // ✅ Set mounted true after client-side run
