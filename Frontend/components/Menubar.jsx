@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import TextButton from './buttons/TextButton';
 import Link from 'next/link';
-import Image from '@node_modules/next/image';
+import Image from 'next/image';
 
 const Menubar = () => {
   const [atTop, setAtTop] = useState(true);
@@ -81,7 +81,7 @@ const Menubar = () => {
           }}
         >
           <TextButton text='Hotels' linkString='/hotels-page' />
-          <TextButton text='My-booking' />
+          <TextButton text='My-booking' linkString='/my-booking-page' />
 
           {mounted && token ? (
             <TextButton text='Sign-out' linkString='/' onClick={handleSignOut} showBox={true} />
@@ -89,16 +89,15 @@ const Menubar = () => {
             <TextButton text='Sign-In' linkString='/auth/signin' showBox={true} />
           ) : null}
 
-          {user && (
-            <div style={{ display: 'flex'}}>
-              {/* make name appear when click*/}
+          {mounted && user && (
+            <div style={{ display: 'flex' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Image
                   src="/icons/profile-user-black.png"
                   alt="profile-icon"
                   width={30}
                   height={30}
-                  style={{marginRight: '10px' }} // tweak margin as needed
+                  style={{ marginRight: '10px' }}
                 />
               </div>
             </div>

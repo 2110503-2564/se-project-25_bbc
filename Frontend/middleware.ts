@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Define protected routes (starts with these paths)
-const protectedRoutes = ['/rooms-page', '/dashboard', '/profile']
+const protectedRoutes = ['/rooms-page', '/dashboard', '/profile','/my-booking-page']
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value
