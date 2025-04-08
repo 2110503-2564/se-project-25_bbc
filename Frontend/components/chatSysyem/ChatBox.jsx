@@ -12,7 +12,8 @@ const ChatBox = () => {
         top:'20px',
         bottom:"20px",
         right:"20px",
-        zIndex:"3000"
+        zIndex:"800",
+        overflow:"hidden"
       }}
     >chatBox</div>
   )

@@ -159,7 +159,7 @@ export const BookingForms = ({
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
+          className="w-full main_bg text-white py-2 rounded hover:main_bg transition duration-200"
         >
           {loading ? "Processing..." : "Book Now"}
         </button>
