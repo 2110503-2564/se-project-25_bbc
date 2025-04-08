@@ -2,11 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import TextButton from './buttons/TextButton';
 import Link from 'next/link';
+import Image from '@node_modules/next/image';
 
 const Menubar = () => {
   const [atTop, setAtTop] = useState(true);
   const [mounted, setMounted] = useState(false); 
   const [token, setToken] = useState(null);
+  const [user,setUser] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +18,10 @@ const Menubar = () => {
 
     // ✅ This runs only on client
     const storedToken = localStorage.getItem("token");
+    const storedLogin = localStorage.getItem("res_login");
+    const parsedLogin = JSON.parse(storedLogin); // json contain data when login
+    console.log(parsedLogin);
+    setUser(parsedLogin);
     setToken(storedToken);
     setMounted(true); // ✅ Set mounted true after client-side run
 
@@ -69,16 +75,34 @@ const Menubar = () => {
             top: '0',
             bottom: '0',
             textAlign: 'right',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            paddingRight: '16px', // optional padding
           }}
         >
           <TextButton text='Hotels' linkString='/hotels-page' />
           <TextButton text='My-booking' />
-          
+
           {mounted && token ? (
             <TextButton text='Sign-out' linkString='/' onClick={handleSignOut} showBox={true} />
           ) : mounted ? (
             <TextButton text='Sign-In' linkString='/auth/signin' showBox={true} />
           ) : null}
+
+          {user && (
+            <div style={{ display: 'flex'}}>
+              <TextButton text={`Welcome ${user.account.first_name}`} />
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Image
+                  src="/icons/profile-user-black.png"
+                  alt="profile-icon"
+                  width={30}
+                  height={30}
+                  style={{marginRight: '10px' }} // tweak margin as needed
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         <Link href='/' style={{zIndex: "300"}}>

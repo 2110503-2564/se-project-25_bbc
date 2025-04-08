@@ -22,6 +22,7 @@ export default function SigninBox() {
       if (response.success) {
         if (typeof window !== "undefined") {
           localStorage.setItem("token", response.token);
+          localStorage.setItem('res_login',JSON.stringify(response));
           document.cookie = `token=${response.token}; path=/; max-age=36000`;
           window.location.href = "/" // Reload the page to apply the token and direct to home page
         }
