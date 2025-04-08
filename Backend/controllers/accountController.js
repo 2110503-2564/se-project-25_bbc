@@ -1,5 +1,4 @@
 import Account from "../models/Account.js";
-import { emitGuests } from "../services.js/web-socket.js";
 
 export const getProfile = async (req , res) => {
     try {
@@ -13,15 +12,6 @@ export const getProfile = async (req , res) => {
             account
         });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Get account profile failed", error: error.message });
-    }
-}
-
-export const broadcast = async (req , res) => {
-    try{
-        console.log("Boardcast!!!");
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Get account profile failed", error: error.message });

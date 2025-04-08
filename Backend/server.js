@@ -46,72 +46,43 @@ app.use("/api/account",accountRoutes);
 
 // -------------------------- Socket.io Setup -------------------------- //
 
+import { handleNewMessage } from './controllers/messageController.js';
+import { getRoomId } from './services/web-socket.js';
+
 const superAdminSockets = {};
 const hotelSockets = {};
 const userSockets = {};
 
 io.on('connection', (socket) => {
 
-    // Super admin connection
-    socket.on('superAdminConnect', (admin_id) => {
-
-        if (superAdminSockets[admin_id]) superAdminSockets[admin_id].disconnect();
-        
-        superAdminSockets[admin_id] = socket; 
-
-    }); 
-
-    // Hotel admin connection
-    socket.on('hotelAdminConnect', (hotel_id) => {
-
-        if (!hotelSockets[hotel_id]) 
-            hotelSockets[hotel_id] = [];
-
-        const existingSocketIndex = hotelSockets[hotel_id].indexOf(socket);
-        if (existingSocketIndex === -1) hotelSockets[hotel_id].push(socket); 
-
-    });  
-
-    // User connection
-    socket.on('userConnect', (user_id) => {
-
-        if (userSockets[user_id]) userSockets[user_id].disconnect();
-        
-        userSockets[user_id] = socket; 
-
+    socket.on('admin_join_user', ({ adminId, userId }) => {
+        const roomId = getRoomId(adminId, userId);
+        socket.join(roomId);
+        console.log(`Admin joined room`);
     });
 
-    // Disconnect
-    socket.on('disconnect', () => {
-
-        // Remove the socket when user disconnects
-        for (let admin_id in superAdminSockets) {
-            if (superAdminSockets[admin_id] === socket) {
-                delete superAdminSockets[admin_id];
-                break;
-            }
-        }
-
-        // Remove the socket when hotel admin disconnects
-        for (let hotel_id in hotelSockets) {
-            const index = hotelSockets[hotel_id].indexOf(socket);
-            if (index !== -1) {
-                hotelSockets[hotel_id].splice(index, 1); 
-                break;
-            }
-        }
-
-        // Remove the socket when user disconnects
-        for (let user_id in userSockets) {
-            if (userSockets[user_id] === socket) {
-                delete userSockets[user_id];
-                break;
-            }
-        }
-
+    socket.on('user_join_admin', ({ userId, adminId }) => {
+        const roomId = getRoomId(userId , adminId);
+        socket.join(roomId);
+        console.log(`User joined room`);
     });
 
-    // 
+    socket.on('send_message', async ({ from, to, text }) => {
+        try {
+            const roomId = getRoomId(from, to);
+            const message = await handleNewMessage({ from, to, text });
+    
+            io.to(roomId).emit('new_message', {
+                from,
+                to,
+                text,
+                createdAt: message.createdAt,
+            });
+        } catch (err) {
+            console.error('send_message error:', err);
+            socket.emit('message_error', 'Something went wrong');
+        }
+    });
 
 });
 
@@ -137,5 +108,3 @@ const initializeServer = async () =>{
 }
 
 initializeServer();
-
-export { userSockets , hotelSockets , superAdminSockets , io };

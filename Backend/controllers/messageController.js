@@ -39,3 +39,12 @@ export const searchMessage = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+
+export const handleNewMessage = async ({ from, to, text }) => {
+    try {
+        return await Message.create({ from , to , text });
+    } catch (error) {
+        console.error('Error saving new message:', error);
+        throw new Error('Message could not be saved');
+    }
+};
