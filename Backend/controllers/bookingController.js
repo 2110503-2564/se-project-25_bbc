@@ -196,15 +196,11 @@ export const checkOutBooking = async (req, res) => {
 export const deleteBooking = async (req , res) => {
     try {
 
-        const hotel_id = req.user.hotel_id || req.body.hotel_id;
-
         if(req.user.role === "hotel_admin" && req.user.hotel_id.toString() !== req.body.booking.hotel_id.toString())
             return res.status(403).json({ success: false , message: "You do not have permission to check-out this booking."});
 
-        const booking = await Booking.findOneAndUpdate(
+        const booking = await Booking.findOneAndDelete(
             { _id : req.body.id , hotel_id },  
-            { status: "checked-out" },  
-            { new: true, runValidators: true }  
         );
 
         if(!booking) return res.status(404).json({ success: false, message: "Booking not found." }); 

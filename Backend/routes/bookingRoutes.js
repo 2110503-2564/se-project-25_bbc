@@ -10,8 +10,12 @@ const router = express.Router();
 router.get('/search' , bookingController.searchBooking);
 router.post('/pending' , protect , roomExist , hotelExist , bookingController.createBooking);
 
-router.put('/accept' , protect , roomExist , hotelExist , bookingController.acceptedBooking);
-router.put('/reject' , protect , roomExist , hotelExist , bookingController.rejectedBooking);
-router.put('/confirm' , protect , roomExist , hotelExist , bookingController.confirmedBooking);
+router.put('/accept' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.acceptedBooking);
+router.put('/reject' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.rejectedBooking);
+router.put('/confirm' , protect , bookingExist , bookingController.confirmedBooking);
+router.put('/checked-in' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.checkInBooking);
+router.put('/checked-out' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.checkOutBooking);
+
+router.delete('/:booking_id' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.deleteBooking);
 
 export default router;

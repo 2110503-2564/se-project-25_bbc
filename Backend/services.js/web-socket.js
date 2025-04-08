@@ -3,6 +3,8 @@
 // Variable & Function
 import { userSockets , hotelSockets , superAdminSockets , io } from '../server.js';
 
+// Chat
+
 const emitUser = (user_id , event , data) => {
     try{
         const userSocket = userSockets[user_id];
