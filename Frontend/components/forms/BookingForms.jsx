@@ -79,8 +79,8 @@ export const BookingForms = ({
     <div className="w-full h-[95vh] p-8 hdcard_white max-w-[500px] mt-20">
       <h2 className="text-2xl font-bold main_text mb-4">Book This Room</h2>
 
-      <p className="text-sm text-gray-500 mb-4">
-        Booking cannot exceed <span className="font-semibold text-red-500">4 days</span>
+      <p className="text-sm sub_text mb-4">
+        Booking cannot exceed <span className="font-semibold text-black">4 days</span>
       </p>
 
       <form className="space-y-4" onSubmit={handleBookingSubmit}>
@@ -127,30 +127,30 @@ export const BookingForms = ({
         {/* Detail of Booking */}
         <div className='mt-20 mb-20'>
           <h2 className="text-2xl font-bold main_text mb-2">Confirmation Detail of Booking</h2>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm sub_text mb-4">
             <span className="font-semibold text-red-500 underline">Make sure</span> before starting your booking.
           </p>
           <table className="w-full text-sm">
             <tbody>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Name:</td>
-                <td className="text-gray-500 font-light">{`${parsedLogin.account.first_name} ${parsedLogin.account.last_name}`}</td>
+                <td className="sub_text font-light">{`${parsedLogin.account.first_name} ${parsedLogin.account.last_name}`}</td>
               </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Hotel:</td>
-                <td className="text-gray-500 font-light">{hotelName}</td>
+                <td className="sub_text font-light">{hotelName}</td>
               </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Room:</td>
-                <td className="text-gray-500 font-light">{`${room.room_number} ${room.type}`}</td>
+                <td className="sub_text font-light">{`${room.room_number} ${room.type}`}</td>
               </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Total Guest:</td>
-                <td className="text-gray-500 font-light">{`${numPeople} person`}</td>
+                <td className="sub_text font-light">{`${numPeople} person`}</td>
               </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Total Price*:</td>
-                <td className="text-gray-500 font-light">{`${room.rate_per_night} $`}</td>
+                <td className="sub_text font-light">{`${room.rate_per_night} $`}</td>
               </tr>
             </tbody>
           </table>

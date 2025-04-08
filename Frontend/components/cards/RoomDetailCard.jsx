@@ -17,12 +17,12 @@ export const RoomDetailCard = ({ room = null ,hotelName=""}) => {
         </div>
   
         {/* Room Details */}
-        <div className="p-6">
-          <h2 className="text-2xl font-bold mb-2 main_text capitalize">
-            Room Number:<span>{room.room_number}</span>
+        <div className="p-6" style={{fontSize:"14px"}}>
+          <h2 className="text-2xl font-bold mb-2 capitalize">
+            <span>{room.type}</span>
           </h2>
           <p className="sub_text mb-1">
-            <span className="font-semibold">Room Type:</span> {room.type}
+            <span className="font-semibold">Room Number:</span> {room.room_number}
           </p>
           <p className="sub_text mb-1">
             <span className="font-semibold">Hotel Name:</span> {hotelName}
@@ -34,7 +34,7 @@ export const RoomDetailCard = ({ room = null ,hotelName=""}) => {
             <span className="font-semibold">Rate:</span> ${room.rate_per_night} / night
           </p>
           <p className={`mt-2 font-semibold ${
-            room.isAvailable ? 'text-green-600' : 'text-red-500'
+            room.isAvailable ? 'main_text' : 'un_text'
           }`}>
             {room.isAvailable ? 'Available' : 'Not Available'}
           </p>
