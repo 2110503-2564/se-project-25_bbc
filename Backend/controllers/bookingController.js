@@ -93,7 +93,7 @@ export const acceptedBooking = async (req, res) => {
             return res.status(403).json({ success: false , message: "You do not have permission to accept this booking."});
 
         const booking = await Booking.findOneAndUpdate(
-            { _id : req.body.id , hotel_id },  
+            { _id : req.body.booking_id , hotel_id },  
             { status: "accepted" },  
             { new: true, runValidators: true }  
         );
@@ -119,7 +119,7 @@ export const rejectedBooking = async (req, res) => {
             return res.status(403).json({ success: false , message: "You do not have permission to reject this booking."});
         
         const booking = await Booking.findOneAndUpdate(
-            { _id : req.body.id , hotel_id },  
+            { _id : req.body.booking_id , hotel_id },  
             { status: "rejected" },  
             { new: true, runValidators: true }  
         );
@@ -147,7 +147,7 @@ export const confirmedBooking = async (req, res) => {
         : req.body.hotel_id; 
         
         const booking = await Booking.findOneAndUpdate(
-            { _id : req.body.id , account_id , hotel_id },  
+            { _id : req.body.booking_id , account_id , hotel_id },  
             { status: "confirmed" },  
             { new: true, runValidators: true }  
         );
@@ -175,7 +175,7 @@ export const canceledBooking = async (req, res) => {
         : req.body.hotel_id; 
         
         const booking = await Booking.findOneAndUpdate(
-            { _id : req.body.id , account_id , hotel_id },  
+            { _id : req.body.booking_id , account_id , hotel_id },  
             { status: "canceled" },  
             { new: true, runValidators: true }  
         );
@@ -199,7 +199,7 @@ export const finishedBooking = async (req, res) => {
             return res.status(403).json({ success: false , message: "You do not have permission to finish this booking."});
 
         const booking = await Booking.findOneAndUpdate(
-            { _id : req.body.id , hotel_id },  
+            { _id : req.body.booking_id , hotel_id },  
             { status: "finished" },  
             { new: true, runValidators: true }  
         );
@@ -223,7 +223,7 @@ export const deleteBooking = async (req , res) => {
             return res.status(403).json({ success: false , message: "You do not have permission to delete this booking."});
 
         const booking = await Booking.findOneAndDelete(
-            { _id : req.body.id , hotel_id },  
+            { _id : req.body.booking_id , hotel_id },  
         );
 
         if(!booking) return res.status(404).json({ success: false, message: "Booking not found." }); 
