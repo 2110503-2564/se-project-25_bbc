@@ -53,6 +53,7 @@ io.on('connection', (socket) => {
     socket.on('join_room', async ({ account_id , hotel_id }) => {
         const room = [account_id, hotel_id].sort().join('_');
         socket.join(room);
+        console.log("join room");
         try {
             const messageHistory = await getMessageHistory(room);
             socket.emit('message_history', messageHistory);
@@ -65,6 +66,7 @@ io.on('connection', (socket) => {
         try {
             const message = await handleNewMessage({ from, to, text });
             const room = message.room;
+            console.log(room);
     
             io.to(room).emit('new_message', {
                 from,

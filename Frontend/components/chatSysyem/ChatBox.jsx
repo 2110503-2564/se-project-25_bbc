@@ -1,29 +1,28 @@
+"use client"
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { ChatContext } from '@providers/chatProvider';
 import io from 'socket.io-client';
 
 const ChatBox = () => {
   const { isShow, setIsShow } = useContext(ChatContext);
+  const [account_id , setaccount_id] = useState('');
+  const [hotel_id , sethotel_id] = useState('');
+  const [role , setRole] = useState('');
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
-  const [role, setRole] = useState('');
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null); // Add a ref for the message container
-  
+
   useEffect(() => {
-
-    const login = JSON.parse(localStorage.getItem(res_login)); 
-    const account_id = login?.account?.id;
-    const hotel_id = login?.account?.hotel_id;
-    const role = login?.account?.role;
-    setRole(role)
-
     const socket = io(process.env.NEXT_PUBLIC_API_URL);
     socketRef.current = socket;
+
+    if(!role) return;
 
     socket.emit('join_room', { account_id , hotel_id });
 
     socket.on('message_history', (history) => {
+      console.log(history);
       setMessages(history);
     });
 
@@ -40,7 +39,14 @@ const ChatBox = () => {
       socket.off('disconnect');
       socket.disconnect();
     };
-  }, []);
+  }, [account_id , hotel_id , role]);
+
+  useEffect(() => {
+    const login = JSON.parse(localStorage.getItem("res_login")); 
+    setaccount_id("67ee05b51889d01faf79c6f2");
+    sethotel_id("67ee11a1d9ae9f28ff2d3fc8");
+    setRole(login?.account?.role);
+  } , []);
 
   useEffect(() => {
     // Scroll to bottom whenever messages change
@@ -53,10 +59,12 @@ const ChatBox = () => {
     if (!text.trim()) return;
 
     const message = {
-      from: userId,
-      to: adminId,
+      from: role === "user" ? account_id : hotel_id,
+      to: role === "user" ? hotel_id : account_id,
       text,
-    };
+    };   
+    
+    console.log(message);
 
     socketRef.current.emit('send_message', message);
     setText('');
@@ -93,7 +101,7 @@ const ChatBox = () => {
         }}
       >
         {messages.map((msg, idx) => {
-          const isUser = msg.from === userId;
+          const isUser = role === "user" ? msg.from === account_id : msg.from === hotel_id;
           return (
             <div
               key={idx}
