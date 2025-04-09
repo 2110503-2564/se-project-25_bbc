@@ -46,26 +46,34 @@ app.use("/api/account",accountRoutes);
 
 // -------------------------- Socket.io Setup -------------------------- //
 
-import { getRoomId , getMessageHistory , handleNewMessage, findRoomsByParticipant } from './controllers/messageController.js';
+import { searchChat , handleNewMessage , getMessageHistory, findChatRoom } from './services/chat.js';
 
 io.on('connection', (socket) => {
 
-    socket.on('join_room', async ({ account_id , hotel_id }) => {
-        const room = getRoomId(account_id , hotel_id);
-        socket.join(room);
+    socket.on('search_chat', async ({ account_id , hotel_id }) => {
         try {
-            const messageHistory = await getMessageHistory(room);
-            socket.emit('message_history', messageHistory);
+            const chats = await searchChat(account_id , hotel_id);
+            socket.emit('my_chat', chats);
+        } catch (err) {
+            console.error('Error searching chat room:', err);
+        }
+    });
+
+    socket.on('join_chat', async ({ account_id, hotel_id, chat_id }) => {
+        const chatId = chat_id || await findChatRoom({ account_id , hotel_id });
+        socket.join(chatId);
+        try {
+            const messageHistory = await getMessageHistory(chatId);
+            socket.emit('message_history', { messageHistory });
         } catch (err) {
             console.error('Error loading message history for admin:', err);
         }
     });
 
-    socket.on('send_message', async ({ from, to, text }) => {
+    socket.on('send_message', async ({ from, chat_id, text }) => {
         try {
-            const room = getRoomId({ from , to });
-            const message = await handleNewMessage({ from, to, text , room });
-            io.to(room).emit('new_message', message);
+            const message = await handleNewMessage(from, chat_id, text);
+            io.to(chat_id).emit('receive_message', message);
         } catch (err) {
             console.error('send_message error:', err);
             socket.emit('message_error', 'Something went wrong');
