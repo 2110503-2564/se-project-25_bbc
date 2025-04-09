@@ -148,7 +148,35 @@ export const confirmedBooking = async (req, res) => {
         
         const booking = await Booking.findOneAndUpdate(
             { _id : req.body.id , account_id , hotel_id },  
-            { status: "confirm" },  
+            { status: "confirmed" },  
+            { new: true, runValidators: true }  
+        );
+
+        if(!booking) return res.status(404).json({ success: false, message: "Booking not found." }); 
+
+        res.status(200).json({ success: true, booking });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const canceledBooking = async (req, res) => {
+    try {
+        const account_id = 
+        req.user.role === "user" 
+        ? req.user.id
+        : req.body.account_id
+
+        const hotel_id =
+        req.user.role === "hotel_admin" 
+        ? req.user.hotel_id 
+        : req.body.hotel_id; 
+        
+        const booking = await Booking.findOneAndUpdate(
+            { _id : req.body.id , account_id , hotel_id },  
+            { status: "canceled" },  
             { new: true, runValidators: true }  
         );
 
