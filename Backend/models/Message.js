@@ -6,22 +6,14 @@ const messageSchema = new mongoose.Schema({
         ref: 'Account',
         required: true 
     },
-    to: { 
+    chat_id: {
         type: mongoose.Schema.ObjectId, 
-        ref: 'Account',
-        required: true 
+        ref: 'Chat',
+        required: true
     },
     text: { type: String },
 },{
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true},
     timestamps: true
-});
-
-messageSchema.virtual('room').get(function () {
-    const from = this.from?.toString?.() || '';
-    const to = this.to?.toString?.() || '';
-    return [from, to].sort().join('_');
 });
 
 const Message = mongoose.model('Message', messageSchema);

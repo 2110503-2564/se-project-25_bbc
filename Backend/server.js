@@ -46,14 +46,13 @@ app.use("/api/account",accountRoutes);
 
 // -------------------------- Socket.io Setup -------------------------- //
 
-import { getMessageHistory , handleNewMessage } from './controllers/messageController.js';
+import { getRoomId , getMessageHistory , handleNewMessage, findRoomsByParticipant } from './controllers/messageController.js';
 
 io.on('connection', (socket) => {
 
     socket.on('join_room', async ({ account_id , hotel_id }) => {
-        const room = [account_id, hotel_id].sort().join('_');
+        const room = getRoomId(account_id , hotel_id);
         socket.join(room);
-        console.log("join room");
         try {
             const messageHistory = await getMessageHistory(room);
             socket.emit('message_history', messageHistory);
@@ -64,16 +63,9 @@ io.on('connection', (socket) => {
 
     socket.on('send_message', async ({ from, to, text }) => {
         try {
-            const message = await handleNewMessage({ from, to, text });
-            const room = message.room;
-            console.log(room);
-    
-            io.to(room).emit('new_message', {
-                from,
-                to,
-                text,
-                createdAt: message.createdAt,
-            });
+            const room = getRoomId({ from , to });
+            const message = await handleNewMessage({ from, to, text , room });
+            io.to(room).emit('new_message', message);
         } catch (err) {
             console.error('send_message error:', err);
             socket.emit('message_error', 'Something went wrong');

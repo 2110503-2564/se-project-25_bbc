@@ -1,48 +1,18 @@
 import Message from '../models/Message.js';
 
-export const searchMessage = async (req, res) => {
-    try {
-        const { select, populate, limit, ...filters } = req.query;
-
-        // Build the query with filters
-        let query = Message.find(filters);
-
-        // Handle selection
-        if (select) {
-            const fieldsToSelect = select.split(",").join(" ");
-            query = query.select(fieldsToSelect);
-        }
-
-        // Handle populate
-        if (populate) {
-            const populateFields = populate.split(",");
-            populateFields.forEach((field) => {
-                let [popField, popSelect] = field.split(":");
-                if (popSelect) query = query.populate({ path: popField, select: popSelect.split(";").join(" ") });
-                else query = query.populate(popField);
-            });
-        }
-
-        // Handle limit if provided
-        if (limit) query = query.limit(Number(limit));
-
-        // Execute the query
-        const messages = await query;
-
-        res.status(200).json({ 
-            success: true,
-            count: messages.length,
-            messages
-        });
+export const searchChatRoom = async ( req , res ) => {
+    try{
+    
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error searching message:', error);
+        res.status(500).json({ success: false, error: error.message })
     }
-};
+}
 
-export const handleNewMessage = async ({ from, to, text }) => {
+
+export const handleNewMessage = async ({ from, to, text, room }) => {
     try {
-        return await Message.create({ from , to , text });
+        return await Message.create({ from , to , text , room });
     } catch (error) {
         console.error('Error saving new message:', error);
         throw new Error('Message could not be saved');
@@ -55,4 +25,8 @@ export const getMessageHistory = async (room) => {
     } catch (err) {
         throw new Error('Error fetching message history');
     }
+}
+
+export const getRoomId = (account_id , hotel_id) => {
+    return [account_id, hotel_id].sort().join("_");
 }
