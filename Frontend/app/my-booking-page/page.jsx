@@ -5,12 +5,12 @@ import { BookingList } from '@components/lists/BookingList'
 
 const Page = async () => {
   const cookieStore = cookies()
-  const token = cookieStore.get('token')?.value
+  const token = await cookieStore.get('token')?.value
   const bookings = token ? await searchBookings(token) : null
-  console.log(bookings);
+  // console.log(bookings);
 
   return (
-    <div className='bg-gradient-to-b from-blue-500 to-white min-h-screen flex gap-4 p-4'>
+    <div className='bg-gradient-to-b from-blue-500 to-white min-h-screen flex gap-4 p-4 mb-20'>
       <UserProfileTab />
       <BookingList bookings={bookings} />
     </div>

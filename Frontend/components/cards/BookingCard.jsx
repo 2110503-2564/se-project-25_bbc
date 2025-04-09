@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from 'react'
 import { searchHotel } from '@api/hotel';
 import { searchRoom } from '@api/room';
+import Link from '@node_modules/next/link';
+import TextButton from '@components/buttons/TextButton';
+import Image from '@node_modules/next/image';
 
 export const BookingCard = ({ booking }) => {
 
@@ -78,10 +81,19 @@ export const BookingCard = ({ booking }) => {
             </tbody>
           </table>
       
-          <div className="mt-4 flex justify-end">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all">
-              Manage Booking
-            </button>
+          <div className="mt-4 flex justify-end flex-row">
+            <Link href={`/my-booking-page/manage-booking-page?booking_id=${booking._id}&name=${booking.userName}&hotel_id=${hotel?._id}&room_id=${room?._id}&num=${booking.num_people}`}>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all flex items-center">
+                <p>Manage Booking</p>
+                <Image
+                  src="/icons/pen-white.png"
+                  alt="pen-white"
+                  width={15}
+                  height={15}
+                  className="ml-2"
+                />
+              </button>
+            </Link>
           </div>
         </div>
       );

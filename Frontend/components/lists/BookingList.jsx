@@ -56,7 +56,7 @@ export const BookingList = ({ bookings }) => {
   }
 
   return (
-    <div className="w-full p-6 bg-white rounded-xl shadow-lg relative top-20 mb-20">
+    <div className="w-full p-6 bg-white rounded-lg shadow-lg relative top-20 mb-20">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold main_text text-3xl mt-5">
           {user?.account.role === 'user' ? 'Your Booking' : 'All Booking'}
