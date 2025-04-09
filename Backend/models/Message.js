@@ -18,6 +18,12 @@ const messageSchema = new mongoose.Schema({
     timestamps: true
 });
 
+messageSchema.virtual('room').get(function () {
+    const from = this.from?.toString?.() || '';
+    const to = this.to?.toString?.() || '';
+    return [from, to].sort().join('_');
+});
+
 const Message = mongoose.model('Message', messageSchema);
 
 export default Message;

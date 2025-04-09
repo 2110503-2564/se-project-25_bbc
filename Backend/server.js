@@ -46,33 +46,27 @@ app.use("/api/account",accountRoutes);
 
 // -------------------------- Socket.io Setup -------------------------- //
 
-import { handleNewMessage } from './controllers/messageController.js';
-import { getRoomId } from './services/web-socket.js';
-
-const superAdminSockets = {};
-const hotelSockets = {};
-const userSockets = {};
+import { getMessageHistory , handleNewMessage } from './controllers/messageController.js';
 
 io.on('connection', (socket) => {
 
-    socket.on('admin_join_user', ({ adminId, userId }) => {
-        const roomId = getRoomId(adminId, userId);
-        socket.join(roomId);
-        console.log(`Admin joined room`);
-    });
-
-    socket.on('user_join_admin', ({ userId, adminId }) => {
-        const roomId = getRoomId(userId , adminId);
-        socket.join(roomId);
-        console.log(`User joined room`);
+    socket.on('join_room', async ({ account_id , hotel_id }) => {
+        const room = [account_id, hotel_id].sort().join('_');
+        socket.join(room);
+        try {
+            const messageHistory = await getMessageHistory(room);
+            socket.emit('message_history', messageHistory);
+        } catch (err) {
+            console.error('Error loading message history for admin:', err);
+        }
     });
 
     socket.on('send_message', async ({ from, to, text }) => {
         try {
-            const roomId = getRoomId(from, to);
             const message = await handleNewMessage({ from, to, text });
+            const room = message.room;
     
-            io.to(roomId).emit('new_message', {
+            io.to(room).emit('new_message', {
                 from,
                 to,
                 text,

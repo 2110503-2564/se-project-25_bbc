@@ -32,6 +32,11 @@ export const roomExist = async(req, res, next) => {
 
 export const bookingExist = async(req, res, next) => {
 
+    // req.body
+    // req.params
+    // req.query
+    // req.user
+
     const booking_id = req.params.booking_id || req.body.booking_id;
 
     try {

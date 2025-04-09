@@ -48,3 +48,11 @@ export const handleNewMessage = async ({ from, to, text }) => {
         throw new Error('Message could not be saved');
     }
 };
+
+export const getMessageHistory = async (room) => {
+    try {
+        return await Message.find({ room }).sort({ createdAt: 1 });
+    } catch (err) {
+        throw new Error('Error fetching message history');
+    }
+}
