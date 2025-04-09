@@ -25,6 +25,33 @@ export async function searchBookings({
   }
 }
 
+export async function getBooking({
+  token,
+  query = ""
+}) {
+  try {
+    const res = await fetch(`${URL}/api/booking/search?${query}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(`Error get booking with message: ${data.message}`);
+    }
+
+    return data;
+
+  } catch (error) {
+    console.error("Get Booking error", error);
+    throw error;
+  }
+}
+
+
 export async function createBooking({
   token,
   account_id,

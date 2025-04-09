@@ -38,7 +38,7 @@ export const UserProfileTab = () => {
         </h2>
       </div>
   
-      <div className='mt-5 border-2 border-blue-500 rounded-lg p-6 break-words'>
+      <div className='mt-5 rounded-lg p-6 break-words'>
         <div className="overflow-x-auto">
           <table className="w-full table-fixed text-xs sm:text-sm md:text-sm">
             <tbody>
