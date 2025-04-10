@@ -34,7 +34,7 @@ export const BookingDetailCard = () => {
   }, [roomId,bookingId]);
 
   return (
-    <div className="px-2 relative top-20 w-[40%] mx-2 hdcard_white overflow-hidden">
+    <div className="px-2 relative top-20 w-[40%] hdcard_white overflow-hidden">
       <div className="p-6" style={{ fontSize: "14px" }}>
         <h2 className="text-2xl font-bold mb-10 capitalize text-gray-500 text-center">
           Current Booking Details

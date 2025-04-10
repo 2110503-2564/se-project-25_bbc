@@ -1,7 +1,7 @@
 'use client';
 
 import { createBooking } from '@api/booking';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const BookingForms = ({
   hotel_id,
@@ -18,10 +18,21 @@ export const BookingForms = ({
   const [successfulMessage, setSuccessfulMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
 
-  const storedToken = localStorage.getItem("token");
-  const storedLogin = localStorage.getItem("res_login");
-  const parsedLogin = JSON.parse(storedLogin); // json contain data when login
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedLogin = localStorage.getItem("res_login");
+    try {
+      const parsedLogin = JSON.parse(storedLogin);
+      setToken(storedToken);
+      setUser(parsedLogin);
+    } catch (err) {
+      console.error("Failed to parse login info:", err);
+    }
+  }, []);
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault(); // prevent form refresh
@@ -29,45 +40,61 @@ export const BookingForms = ({
     setErrorMessage('');
     setLoading(true);
 
+    if (!token || !user?.account?.id) {
+      setErrorMessage("Authentication error. Please log in again.");
+      setLoading(false);
+      return;
+    }
+
+    if (!checkInDate || !checkOutDate) {
+      setErrorMessage("Please select both check-in and check-out dates.");
+      setLoading(false);
+      return;
+    }
+
+    if (!numPeople) {
+      setErrorMessage("Please fill amount of people.");
+      setLoading(false);
+      return;
+    }
+
+    if (checkInDate >= checkOutDate) {
+      setErrorMessage("Check In date must be before Check Out date.");
+      setLoading(false);
+      return;
+    }
+
+    if (Number(numPeople) > Number(roomCapacity)) {
+      setErrorMessage("Amount of people exceed capacity of this room.");
+      setLoading(false);
+      return;
+    }
+
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
+    const dayDifference = (checkOut - checkIn) / (1000 * 60 * 60 * 24);
+
+    if (dayDifference > 3) {
+      setErrorMessage("Booking cannot exceed 4 days");
+      setLoading(false);
+      return;
+    }
+
     try {
-
-      if (!storedToken || !parsedLogin?.account?.id) {
-        setErrorMessage("Authentication error. Please log in again.");
-        return;
-      }
-
-      if(!checkInDate || !checkOutDate){
-        setErrorMessage("Please select both check-in and check-out dates.")
-        setLoading(false);
-        return;
-      }
-
-      if(!numPeople){
-        setErrorMessage("Please fill amount of people.")
-        setLoading(false);
-        return;
-      }
-
-      if(numPeople > roomCapacity){
-        setErrorMessage("Amount of people exceed capacity of this room.")
-        return;
-      }
-
       await createBooking({
-        token: storedToken,
-        account_id: parsedLogin.account.id,
+        token: token,
+        account_id: user.account.id,
         hotel_id: hotel_id,
         room_id: room_id,
         status: status,
-        checkInDate: checkInDate,    // camelCase key
-        checkOutDate: checkOutDate,  // camelCase key
-        numPeople: numPeople,        // camelCase key
+        checkInDate: checkInDate,
+        checkOutDate: checkOutDate,
+        numPeople: numPeople,
         total_price: total_price,
       });
 
       setSuccessfulMessage("Booking Successful");
     } catch (err) {
-      console.log(err)
       console.error(err);
       setErrorMessage(err.message || "Booking Failed");
     } finally {
@@ -124,8 +151,15 @@ export const BookingForms = ({
           />
         </div>
 
+        {successfulMessage && (
+          <p className="text-green-600 font-medium text-sm mt-2">{successfulMessage}</p>
+        )}
+        {errorMessage && (
+          <p className="text-red-600 font-medium text-sm mt-2">{errorMessage}</p>
+        )}
+
         {/* Detail of Booking */}
-        <div className='mt-20 mb-20'>
+        <div className='mt-20 mb-10'>
           <h2 className="text-2xl font-bold main_text mb-2">Confirmation Detail of Booking</h2>
           <p className="text-sm sub_text mb-4">
             <span className="font-semibold text-red-500 underline">Make sure</span> before starting your booking.
@@ -134,7 +168,9 @@ export const BookingForms = ({
             <tbody>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Name:</td>
-                <td className="sub_text font-light">{`${parsedLogin.account.first_name} ${parsedLogin.account.last_name}`}</td>
+                <td className="sub_text font-light">
+                  {user ? `${user.account.first_name} ${user.account.last_name}` : "-"}
+                </td>
               </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Hotel:</td>
@@ -156,20 +192,12 @@ export const BookingForms = ({
           </table>
         </div>
 
-
         <button
           type="submit"
           className="w-full main_bg text-white py-2 rounded hover:main_bg transition duration-200"
         >
           {loading ? "Processing..." : "Book Now"}
         </button>
-
-        {successfulMessage && (
-          <p className="text-green-600 font-medium text-sm mt-2">{successfulMessage}</p>
-        )}
-        {errorMessage && (
-          <p className="text-red-600 font-medium text-sm mt-2">{errorMessage}</p>
-        )}
       </form>
     </div>
   );

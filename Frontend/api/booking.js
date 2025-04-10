@@ -83,6 +83,7 @@ export async function createBooking({
     });
     
     const data = await res.json();
+    console.log(data);
 
     if (!res.ok) {
       throw new Error(data.message || "Failed to create booking");
