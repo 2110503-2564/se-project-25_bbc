@@ -24,7 +24,7 @@ const page = async () => {
         <p className='home_text mt-5'>Hidden prides itself on offering a curated selection of hotels that you won't find on other booking platforms. From secluded boutique inns to one-of-a-kind historical retreats, our unique properties promise a stay that is as rare as it is memorable. Let us guide you to destinations where charm meets exclusivity.</p>
       </div>
       <div className='flex justify-center'>
-       <TextButton text='More Hotels' linkString='/hotels-page' showBox={true}/>
+       <TextButton text='More Hotels' marginOn={false} linkString='/hotels-page' showBox={true}/>
       </div>
       
       

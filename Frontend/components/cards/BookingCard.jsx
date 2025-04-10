@@ -30,7 +30,7 @@ export const BookingCard = ({ booking }) => {
       
 
       return (
-        <div className="border-2 border-blue-500 rounded-lg p-6 shadow-md mb-4 bg-white text-gray-600">
+        <div className="card_bg2 rounded-lg p-6  mb-4 bg-white text-gray-600">
           <table className="w-full table-auto text-sm">
             <tbody>
               <tr>
@@ -83,7 +83,7 @@ export const BookingCard = ({ booking }) => {
       
           <div className="mt-4 flex justify-end flex-row">
             <Link href={`/my-booking-page/manage-booking-page?booking_id=${booking._id}&name=${booking.userName}&hotel_id=${hotel?._id}&room_id=${room?._id}&num=${booking.num_people}`}>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all flex items-center">
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition-all flex items-center">
                 <p>Manage Booking</p>
                 <Image
                   src="/icons/pen-white.png"

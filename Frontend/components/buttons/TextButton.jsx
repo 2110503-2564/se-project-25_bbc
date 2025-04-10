@@ -5,7 +5,8 @@ const TextButton = ({
   onClick,
   text="Button",
   linkString="",
-  showBox=false
+  showBox=false,
+  marginOn=true
 }= {}) => {
   return (
     <Link href={linkString}>
@@ -22,7 +23,7 @@ const TextButton = ({
         paddingRight:"20px",
         paddingTop:"5px",
         marginTop:"8px",
-        marginRight:"8px",
+        marginRight: marginOn ? "8px" : "0px",
         fontSize:"15px",
         fontWeight:"400",
         borderRadius:"20px",

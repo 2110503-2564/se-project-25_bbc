@@ -63,7 +63,7 @@ export const BookingList = ({ bookings }) => {
         </h2>
 
         {/* Filter UI */}
-        <div className="relative flex items-center space-x-2">
+        <div className="relative flex items-center space-x-2" style={{ width:'60px'}}>
           <Image
             src={sortField || dropdownOpen ? '/icons/filter-blue.png' : '/icons/filter-outline-blue.png'} // Change image based on conditions
             alt="Filter Icon"
@@ -83,7 +83,7 @@ export const BookingList = ({ bookings }) => {
 
           {/* Dropdown */}
           {dropdownOpen && (
-            <div className="absolute right-0 top-10 bg-white border border-gray-300 rounded shadow-md z-10 w-52 transition-all duration-300 transform opacity-100">
+            <div className="absolute right-0 top-10 bg-white border border-gray-300 rounded-xl shadow-md z-10 w-52 transition-all duration-300 transform opacity-100">
               <button
                 className="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700 w-full text-left"
                 onClick={() => handleSortFieldChange('check_in_date')}

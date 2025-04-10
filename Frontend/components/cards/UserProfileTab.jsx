@@ -25,8 +25,8 @@ export const UserProfileTab = () => {
           width={100}
           height={100}
         />
-        <h2 className='font-semibold main_text text-[20px] mt-5'>Welcome</h2>
-        <h2 className='font-semibold main_text text-[20px]'>
+        <h2 className='font-semibold text-[20px] mt-5'>Welcome</h2>
+        <h2 className='font-semibold  text-[20px]'>
           {user && (
             <>
               <span className="text-red-500 capitalize">
