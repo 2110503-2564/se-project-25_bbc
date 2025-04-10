@@ -10,10 +10,13 @@ const ChatBox = () => {
   const [chat, setChat] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [hasJoinedChat, setHasJoinedChat] = useState(false);
 
   const [account_id, setAccountId] = useState('');
   const [hotel_id, setHotelId] = useState('');
   const [role , setRole] = useState('');
+  const textareaRef = useRef(null);
+  const chatBoxRef = useRef(null);
 
   useEffect(() => {
     const login = JSON.parse(localStorage.getItem("res_login"));
@@ -32,7 +35,10 @@ const ChatBox = () => {
 
     socketRef.current.on('my_chat', (chats) => setChats(chats));
 
-    socketRef.current.on('message_history', ({ messageHistory }) => setMessages(messageHistory));
+    socketRef.current.on('message_history', ({ messageHistory }) => {
+      setMessages(messageHistory);
+      setHasJoinedChat(true); // Set flag
+    })
 
     socketRef.current.on('receive_message', (incomingMessage) => 
       setMessages((prevMessages) => [...prevMessages, incomingMessage])
@@ -60,7 +66,38 @@ const ChatBox = () => {
 
       socketRef.current.emit('send_message', newMessage);
       setMessage(''); 
+      if (textareaRef.current) {
+        textareaRef.current.value = '';
+        textareaRef.current.style.height = 'auto';
+      }
   };
+
+  // Handle auto sroll
+  useEffect(() => {
+    if (!hasJoinedChat) return;
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTo({
+        top: chatBoxRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [hasJoinedChat]);
+
+  // Handle input area
+  const handleChangeMessage = (e) => {
+    setMessage(e.target.value);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'; // Reset height
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px'; // Set to scrollHeight
+    }
+  };
+  
 
   if(!chats) return <div>Loading</div>
 
@@ -70,7 +107,7 @@ const ChatBox = () => {
       style={{
         position: 'fixed',
         width: isShow ? '300px' : '20px',
-        top: isShow ? '20px' : 'calc(100% - 60px)',
+        top: isShow ? '60px' : 'calc(100% - 60px)',
         bottom: '60px',
         right: '20px',
         zIndex: '800',
@@ -85,11 +122,11 @@ const ChatBox = () => {
           top: '0',
           left: '0',
           right: '0',
-          height: '22px',
+          height: '30px',
           textAlign: 'center',
           backgroundColor: 'white',
           fontSize: '12px',
-          padding: '5px',
+          padding: '4px',
         }}
       >
         Customer Support
@@ -135,9 +172,11 @@ const ChatBox = () => {
         </div>
       ) : (
         // Show chat once a room is selected
-        <div style={{ marginTop: '20px', padding: '10px' }}>
-          <h3>Chat with {chat.hotel_name}</h3>
-          <div id="chatBox" style={{ height: 'calc(100% - 80px)', overflowY: 'auto' }}>
+        <div style={{ top: '20px', padding: '10px', position:"absolute", bottom:"0", left:"0", right:"0" }}>
+          <div id="chatBox" 
+          className='hide_scrollbar'
+          ref={chatBoxRef}
+          style={{ position:"absolute", top:"0", bottom:"80px", paddingBottom:"50px", left:"5px", right:"5px", overflowY: 'scroll' }}>
             {/* Display messages as chat bubbles */}
             {messages.map((msg, index) => (
               <div
@@ -147,14 +186,16 @@ const ChatBox = () => {
                   flexDirection: msg.from === account_id ? 'row-reverse' : 'row',
                   marginBottom: '10px',
                   padding: '5px',
+                  position: 'relative',
+                  minHeight: '40px'
                 }}
               >
                 <div
+                  className={`${msg.from === account_id ? "main_bg" : "card_bg2"}`}
                   style={{
-                    backgroundColor: msg.from === account_id ? '#4CAF50' : '#f0f0f0',
                     color: msg.from === account_id ? 'white' : 'black',
                     borderRadius: '20px',
-                    padding: '10px 15px',
+                    padding: '5px 15px',
                     maxWidth: '75%',
                     wordBreak: 'break-word',
                   }}
@@ -164,33 +205,46 @@ const ChatBox = () => {
               </div>
             ))}
           </div>
-          <div style={{ position: 'absolute', bottom: '10px' }}>
-            <input
-              type="text"
+          <div 
+            className='card_bg2'
+          
+          style={{ position: 'absolute', bottom: '10px', left:"10px", right:"10px", borderRadius:"20px", boxSizing:"border-box", padding:"5px"  }}>
+              <textarea
+              ref={textareaRef}
+              rows="1"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={handleChangeMessage}
               placeholder="Type a message"
               style={{
-                width: '100%',
+                width: 'calc(100% - 10px)',
                 padding: '8px',
-                marginBottom: '10px',
-                borderRadius: '5px',
-                border: '1px solid #ccc',
+                marginBottom: '40px',
+                borderRadius: '10px',
+                marginTop:"5px",
+                border: 'none',
+                marginLeft: '5px',
+                marginRight: '5px',
+                overflow: 'hidden',
+                resize: 'none', // Prevent manual resize
+                fontSize: '14px',
               }}
             />
             <button
               onClick={handleSendMessage}
+              className='main_bg align_item_center'
               style={{
-                width: '100%',
-                padding: '10px',
-                backgroundColor: '#4CAF50',
+                width: '35px',
+                height: '35px',
                 color: 'white',
                 border: 'none',
-                borderRadius: '5px',
+                borderRadius: '50px',
                 cursor: 'pointer',
+                right:'10px',
+                bottom:'10px',
+                position:'absolute'
               }}
             >
-              Send
+             <img src='/icons/send.svg' style={{width:"18px", marginRight:"2px", marginTop:"2.5px"}}/>
             </button>
           </div>
         </div>

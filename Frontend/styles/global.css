@@ -100,3 +100,11 @@ body{
 .clickButton:active{
   scale: 0.8;
 }
+
+.hide_scrollbar{
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide_scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
