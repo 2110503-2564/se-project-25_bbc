@@ -83,7 +83,9 @@ export const BookingCard = ({ booking }) => {
       
           <div className="mt-4 flex justify-end flex-row">
             <Link href={`/my-booking-page/manage-booking-page?booking_id=${booking._id}&name=${booking.userName}&hotel_id=${hotel?._id}&room_id=${room?._id}&num=${booking.num_people}`}>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition-all flex items-center">
+              <button className="bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 transition-all flex items-center"
+                style={{borderRadius:"20px"}}
+              >
                 <p>Manage Booking</p>
                 <Image
                   src="/icons/pen-white.png"

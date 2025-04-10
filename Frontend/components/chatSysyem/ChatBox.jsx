@@ -103,16 +103,21 @@ const ChatBox = () => {
 
   return (
     <div
-      className='hdcard_white'
+      className='hdcard_white border border-gray-300'
       style={{
+        borderRadius: '30px',
         position: 'fixed',
-        width: isShow ? '300px' : '20px',
-        top: isShow ? '60px' : 'calc(100% - 60px)',
+        width: '300px',
+        top: '60px',
         bottom: '60px',
         right: '20px',
         zIndex: '800',
         overflow: 'hidden',
-        transition: 'all 0.6s cubic-bezier(0.34, 1.15, 0.64, 1)',
+        transition: 'all 0.5s cubic-bezier(0.34, 1.15, 0.64, 1)',
+        pointerEvents: isShow ? "all" : "none",
+        scale: isShow ? 1 : 0.1,
+        transformOrigin: "bottom right",
+        opacity: isShow ? 1: 0
       }}
     >
       <div
