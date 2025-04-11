@@ -32,9 +32,9 @@ const page = async({searchParams}) =>{
         <div className='bg-gradient-to-b from-blue-500 to-white min-h-screen flex p-4'>
             <BookingDetailCard/>
             <UpdateBookingForms
-            booking={bookingData.bookings[0]}
-            hotelData={hotelData.hotels}
-            roomData={roomData.rooms}
+            bookings={bookingData.bookings[0]}
+            hotels={hotelData.hotels}
+            rooms={roomData.rooms}
             />
         </div>
     );

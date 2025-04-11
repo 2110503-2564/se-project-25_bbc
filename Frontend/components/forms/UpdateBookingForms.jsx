@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-export const UpdateBookingForms = (
+export const UpdateBookingForms = ({
     bookings,
     hotels,
     rooms
-)=>{
+})=>{
+    console.log("test")
+    console.log(rooms)
+    console.log(hotels)
 
     return(
     <div className="px-2 relative top-20 w-full mx-2 hdcard_white overflow-hidden">
