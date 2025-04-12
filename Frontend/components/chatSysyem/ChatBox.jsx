@@ -55,6 +55,10 @@ const ChatBox = () => {
     socketRef.current.emit('join_chat', { chat_id : chatRoom._id });
   };
 
+  const handleUnslelctRoom = () => {
+    setChat('');
+  }
+
   // Handle message sending
   const handleSendMessage = () => {
 
@@ -139,8 +143,9 @@ const ChatBox = () => {
 
       {/* Show room selection if no room is selected */}
       {!chat ? (
-        <div style={{ marginTop: '20px', padding: '10px', height: 'calc(100% - 50px)', overflowY: 'auto' }}>
-          <h3>Select a Chat Room</h3>
+        <div style={{ marginTop: '40px', padding: '10px', height: 'calc(100% - 50px)', overflowY: 'auto',
+          borderTop: "1px solid #d1d5db60"
+         }}>
           <ul style={{ listStyleType: 'none', padding: '0', margin: '0' }}>
             {chats?.map((room) => (
               <li
@@ -150,7 +155,6 @@ const ChatBox = () => {
                   cursor: 'pointer',
                   margin: '10px 0',
                   padding: '8px',
-                  background: '#f0f0f0',
                   borderRadius: '5px',
                   display: 'flex',
                   alignItems: 'center',
@@ -166,10 +170,13 @@ const ChatBox = () => {
                     objectFit: 'cover',
                     marginRight: '10px',
                     borderRadius: '5px',
+                    flexShrink: '0',
+                    borderRadius: '20px',
+                    backgroundColor: 'gray',
                   }}
                 />
                 <span style={{ fontSize: '14px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                  {room.hotel_id.name} - Chat Room
+                  {room.hotel_id.name} <br/> - Chat Room
                 </span>
               </li>
             ))}
@@ -177,7 +184,9 @@ const ChatBox = () => {
         </div>
       ) : (
         // Show chat once a room is selected
-        <div style={{ top: '20px', padding: '10px', position:"absolute", bottom:"0", left:"0", right:"0" }}>
+        <div style={{ top: '40px', padding: '10px', position:"absolute", bottom:"0", left:"0", right:"0" ,
+            borderTop: "1px solid #d1d5db60"
+        }}>
           <div id="chatBox" 
           className='hide_scrollbar'
           ref={chatBoxRef}
@@ -209,6 +218,22 @@ const ChatBox = () => {
                 </div>
               </div>
             ))}
+          </div>
+          <div 
+            onClick={handleUnslelctRoom}
+            className='align_item_center'
+            style={{
+            position:"absolute",
+            width:"30px",
+            height:"30px",
+            top:"-35px",
+          }}> 
+            <img 
+              src='/icons/chevron-left-2.svg'
+              style={{
+                width:"25px"
+              }}
+            />
           </div>
           <div 
             className='card_bg2'
