@@ -198,15 +198,15 @@ export const BookingForms = ({
               </tr>
             </tbody>
           </table>
-        </div>
-
-        <button
+          
+          <button
           type="submit"
           className="w-full main_bg text-white py-2 rounded hover:main_bg transition duration-200"
           style={{borderRadius:"20px"}}
         >
           {loading ? "Processing..." : "Book Now"}
         </button>
+        </div>
       </form>
     </div>
   );
