@@ -30,21 +30,24 @@ export const roomExist = async(req, res, next) => {
     }
 }
 
-export const bookingExist = async(req, res, next) => {
-
-    // req.body
-    // req.params
-    // req.query
-    // req.user
-
+export const bookingExist = async (req, res, next) => {
     const booking_id = req.params.booking_id || req.body.booking_id;
+
+    if (!booking_id) {
+        return res.status(400).json({ message: "Booking ID is required" });
+    }
 
     try {
         const booking = await Booking.findById(booking_id);
-        if (!booking) return res.status(404).json({ message: `Cannot find booking with id: ${hotel_id}` });
+        if (!booking) {
+            return res.status(404).json({ message: `Cannot find booking with id: ${booking_id}` });
+        }
         req.body.booking = booking;
         next();
     } catch (err) {
-        res.status(500).json({message : "Existence validation error" , error : err.message});
+        res.status(500).json({
+            message: "Existence validation error",
+            error: err.message
+        });
     }
-}
+};

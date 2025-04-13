@@ -14,6 +14,7 @@ router.put('/accept' , protect , authorize('hotel_admin' , 'super_admin') , book
 router.put('/reject' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.rejectedBooking);
 router.put('/confirm' , protect , bookingExist , bookingController.confirmedBooking);
 router.put('/finish' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.finishedBooking);
+router.put('/:booking_id', protect, authorize('hotel_admin' , 'super_admin', 'user') , bookingExist , bookingController.updateBooking)
 
 router.delete('/:booking_id' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.deleteBooking);
 

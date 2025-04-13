@@ -1,4 +1,6 @@
 import Booking from "../models/Booking.js";
+import Room from "../models/Room.js";
+
 
 export const searchBooking = async (req , res) => {
     try {
@@ -235,3 +237,311 @@ export const deleteBooking = async (req , res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 }
+
+export const updateBooking = async (req, res, next)=>{
+    try {
+        let booking = await Booking.findById(req.params.booking_id);
+
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                message: `No booking with the id of ${req.params.booking_id}`
+            });
+        }
+
+        if (req.user.role === 'user') {
+            // Check if user is owner of booking
+            if (booking.account_id.toString() !== req.user.id) {
+                return res.status(401).json({
+                    success: false,
+                    message: `The account with ID ${req.user.id} is not authorized to update this booking`
+                });
+            }
+
+            // Handle hotel change - users cannot change hotel
+
+
+            if (req.body.hotel_id && req.body.hotel_id !== booking.hotel_id.toString()) {
+                return res.status(403).json({
+                    success: false,
+                    message: `To update hotel, you must delete this booking and create a new one`
+                });
+            }
+
+            if(booking.status === 'accept' || booking.status === 'reject'){
+                return res.status(403).json({
+                    success: false,
+                    message: `Cannot update booking status is ${booking.status} , you need to delete and create new booking`
+                });
+            }
+
+            // Allow user to update these fields
+            const { room_number, check_in_date, check_out_date, num_people } = req.body;
+            let updateCheckInDate = check_in_date || booking.check_in_date;
+            let updateCheckOutDate = check_out_date || booking.check_out_date;
+            let updateNumPeople = num_people || booking.num_people;
+
+            if (updateCheckInDate && updateCheckOutDate) {
+                const checkInDate = new Date(updateCheckInDate);
+                const checkOutDate = new Date(updateCheckOutDate);
+
+                // Ensure check-out date is after check-in date
+                if (checkOutDate <= checkInDate) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The check-out date must be greater than check-in date`
+                    });
+                }
+
+                // Ensure the booking duration is at most 3 nights (4 days)
+                if (!isBookingDurationValid(updateCheckInDate, updateCheckOutDate)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The booking duration must be less than or equal to 3 nights (4 days)`
+                    });
+                }
+
+                // Check if the room number in the current hotel is available for the new dates
+                const room = await Room.findOne({ room_number, hotel_id: booking.hotel_id });
+                if (!room) {
+                    return res.status(404).json({
+                        success: false,
+                        message: `No room with room number ${room_number} in this hotel`
+                    });
+                }
+
+                // Check if room is available for the new dates
+                // if (!await isRoomAvailable(room.id, booking.hotel_id, updateCheckInDate, updateCheckOutDate,booking._id)) {
+                //     return res.status(400).json({
+                //         success: false,
+                //         message: `The room is not available for the selected dates`
+                //     });
+                // }
+
+                // Check room capacity
+                if (!await isRoomCapacityValid(room.id, updateNumPeople)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The room with id ${room_number} cannot handle ${updateNumPeople} people`
+                    });
+                }
+
+                // Update booking with new details
+                booking.check_in_date = updateCheckInDate;
+                booking.check_out_date = updateCheckOutDate;
+                booking.room_id = room.id;
+                booking.num_people = updateNumPeople;
+
+            } else if (room_number) {
+                // Check if room number is valid and available
+                const room = await Room.findOne({ room_number, hotel_id: booking.hotel_id });
+                if (!room) {
+                    return res.status(404).json({
+                        success: false,
+                        message: `No room with room number ${room_number} in this hotel`
+                    });
+
+                }
+
+                if (!await isRoomAvailable(room.id, booking.hotel_id, booking.check_in_date, booking.check_out_date,booking._id)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The room is not available for the selected dates`
+                    });
+                }
+
+                // Update room number and check room capacity
+                if (!await isRoomCapacityValid(room.id, booking.num_people)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The room with id ${room_number} cannot handle ${booking.num_people} people`
+                    });
+                }
+
+                booking.room_id = room.id;
+            }
+
+            // If user is updating the number of people, check the room capacity
+            if (updateNumPeople && !await isRoomCapacityValid(booking.room_id, updateNumPeople)) {
+                return res.status(400).json({
+                    success: false,
+                    message: `The room with id ${booking.room_id.room_number} cannot handle ${updateNumPeople} people`
+                });
+            }
+
+            await booking.save();
+            return res.status(200).json({
+                success: true,
+                message: `Booking updated successfully`,
+                booking
+            });
+
+        } else if (req.user.role === 'hotel_admin') {
+            // Ensure hotel admin can only update bookings in their hotel
+            if (booking.hotel_id.toString() !== req.user.hotel_id.toString()) {
+                return res.status(403).json({
+                    success: false,
+                    message: `Hotel Admin can only update bookings in their own hotel`
+                });
+            }
+
+            // Hotel admins can update the booking status
+            if (req.body.status) {
+                if (!["pending", "accept", "reject"].includes(req.body.status)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `Invalid status value. Allowed values: pending, accept, reject`
+                    });
+                }
+                booking.status = req.body.status;
+            }
+
+            // Allow hotel admin to update room number and check-in/check-out dates
+            if (req.body.room_number) {
+                const room = await Room.findOne({ room_number: req.body.room_number, hotel_id: req.user.hotel_id });
+                if (!room) {
+                    return res.status(404).json({
+                        success: false,
+                        message: `No room with room number ${req.body.room_number} in this hotel`
+                    });
+                }
+
+                if (!await isRoomAvailable(room.id, req.user.hotel_id, booking.check_in_date, booking.check_out_date,booking._id)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The room is not available for the selected dates`
+                    });
+                }
+
+                if(!await isRoomCapacityValid(room.id, booking.num_people)){
+                    return res.status(400).json({
+                        success: false,
+                        message: `The room with id ${room_number} cannot handle ${booking.num_people} people`
+                    });
+                 }
+
+                booking.room_id = room.id;
+            }
+
+            if (req.body.check_in_date && req.body.check_out_date) {
+                const checkInDate = new Date(req.body.check_in_date);
+                const checkOutDate = new Date(req.body.check_out_date);
+
+                if (checkOutDate <= checkInDate) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The check-out date must be greater than check-in date`
+                    });
+                }
+
+                booking.check_in_date = req.body.check_in_date;
+                booking.check_out_date = req.body.check_out_date;
+            }
+
+            await booking.save();
+            return res.status(200).json({
+                success: true,
+                message: `Booking updated successfully`,
+                booking
+            });
+
+        } else if (req.user.role === 'super_admin') {
+            // Super admin can update freely
+            if (req.body.check_in_date && req.body.check_out_date) {
+                const checkInDate = new Date(req.body.check_in_date);
+                const checkOutDate = new Date(req.body.check_out_date);
+
+                if (checkOutDate <= checkInDate) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The check-out date must be greater than check-in date`
+                    });
+                }
+
+                booking.check_in_date = req.body.check_in_date;
+                booking.check_out_date = req.body.check_out_date;
+            }
+
+            booking.status = req.body.status || booking.status;
+            booking.num_people = req.body.num_people || booking.num_people;
+            booking.hotel_id = req.body.hotel_id || booking.hotel_id;
+
+            if (req.body.room_number) {
+                const room = await Room.findOne({ room_number: req.body.room_number, hotel_id: booking.hotel_id });
+                if (!room) {
+                    return res.status(404).json({
+                        success: false,
+                        message: `No room with room number ${req.body.room_number} in this hotel`
+                    });
+                }
+
+                if (!await isRoomAvailable(room.id, booking.hotel_id, booking.check_in_date, booking.check_out_date , booking._id)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The room is not available for the selected dates`
+                    });
+                }
+
+                if(!await isRoomCapacityValid(room.id, booking.num_people)){
+                     return res.status(400).json({
+                          success: false,
+                          message: `The room with id ${room_number} cannot handle ${booking.num_people} people`
+                     });
+                }
+
+                booking.room_id = room.id;
+            }
+
+            await booking.save();
+            return res.status(200).json({
+                success: true,
+                message: `Booking updated successfully`,
+                booking
+            });
+        }
+
+    } catch (err) {
+        console.log(err.stack);
+        res.status(500).json({
+            success: false,
+            message: "Cannot update booking",
+            error: err.stack
+        });
+    }
+};
+
+const isBookingDurationValid = (check_in , check_out) => {
+    const check_in_date = new Date(check_in);
+    const check_out_date = new Date(check_out);
+    const diffTime = Math.abs(check_out_date - check_in_date);
+    // for example have live at hotel day 1 - day 4 => 4-1 => 3 nights
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    console.log("Nights :" , diffDays);
+    return diffDays <= 3;
+};
+
+const isRoomCapacityValid = async (room_id , num_people)=>{
+    const room = await Room.findById(room_id);
+    if(!room){
+        throw new Error(`No room with id ${room_id}`);
+    }
+    return num_people <= room.capacity;
+};
+
+const isRoomAvailable = async (room_id, hotel_id, check_in_date, check_out_date, bookingIdToExclude = null) => {
+    const query = {
+        room_id,
+        hotel_id,
+        $or: [
+            { check_in_date: { $lt: check_out_date }, check_out_date: { $gt: check_in_date } }, // General overlap
+        ],
+    };
+
+    // Exclude the current booking when updating
+    if (bookingIdToExclude) {
+        query._id = { $ne: bookingIdToExclude };
+    }
+
+    const conflictingBookings = await Booking.find(query);
+    return conflictingBookings.length === 0; // If no conflicts, room is available
+};
