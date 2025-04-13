@@ -15,6 +15,7 @@ export const BookingForms = ({
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
   const [numPeople, setNumPeople] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(room.rate_per_night);
   const [successfulMessage, setSuccessfulMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,13 @@ export const BookingForms = ({
       console.error("Failed to parse login info:", err);
     }
   }, []);
+
+  useEffect(() => {
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
+    const dayDifference = (checkOut - checkIn)/(1000 * 60 * 60 * 24);
+    setTotalPrice((room.rate_per_night*(dayDifference?dayDifference:1)).toFixed(2)); 
+  },[checkInDate, checkOutDate]);
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault(); // prevent form refresh
@@ -186,7 +194,7 @@ export const BookingForms = ({
               </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Total Price*:</td>
-                <td className="sub_text font-light">{`${room.rate_per_night} $`}</td>
+                <td className="sub_text font-light">{`${totalPrice} $`}</td>
               </tr>
             </tbody>
           </table>

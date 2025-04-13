@@ -21,23 +21,36 @@ export const RoomDetailCard = ({ room = null ,hotelName=""}) => {
           <h2 className="text-2xl font-bold mb-2 capitalize">
             <span>{room.type}</span>
           </h2>
-          <p className="sub_text mb-1">
-            <span className="font-semibold">Room Number:</span> {room.room_number}
-          </p>
-          <p className="sub_text mb-1">
-            <span className="font-semibold">Hotel Name:</span> {hotelName}
-          </p>
-          <p className="sub_text mb-1">
-            <span className="font-semibold">Capacity:</span> {room.capacity} guests
-          </p>
-          <p className="sub_text mb-1">
-            <span className="font-semibold">Rate:</span> ${room.rate_per_night} / night
-          </p>
+
+          <table className="w-full text-sm ">
+            <tbody>
+              <tr>
+                <td className="font-semibold pr-4 py-1 text-gray-500">Room Number:</td>
+                <td className="sub_text font-light">
+                {room.room_number}
+                </td>
+              </tr>
+              <tr>
+                <td className="font-semibold  pr-4 py-1 text-gray-500">Hotel Name:</td>
+                <td className="sub_text font-light">{hotelName}</td>
+              </tr>
+              <tr>
+                <td className="font-semibold  pr-4 py-1 text-gray-500">Capacity:</td>
+                <td className="sub_text font-light">{room.capacity} guests</td>
+              </tr>
+              <tr>
+                <td className="font-semibold  pr-4 py-1 text-gray-500">Total Guest:</td>
+                <td className="sub_text font-light">{room.rate_per_night} / night</td>
+              </tr>
+            </tbody>
+          </table>
+
           <p className={`mt-2 font-semibold ${
             room.isAvailable ? 'main_text' : 'un_text'
           }`}>
             {room.isAvailable ? 'Available' : 'Not Available'}
           </p>
+
           <p className="sub_text mt-2">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem, adipisci! Dolorum consequuntur dicta sint ipsa iure eius quae iusto, modi asperiores dolores quibusdam maiores porro, sed culpa voluptatem tempore consequatur.
           </p>
