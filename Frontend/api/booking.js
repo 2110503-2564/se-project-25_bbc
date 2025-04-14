@@ -30,6 +30,7 @@ export async function getBooking({
   query = ""
 }) {
   try {
+    console.log(token)
     const res = await fetch(`${URL}/api/booking/search?${query}`, {
       method: "GET",
       headers: {
@@ -92,6 +93,44 @@ export async function createBooking({
     return data;
   } catch (error) {
     console.error("Booking creation error:", error);
+    throw error;
+  }
+}
+
+export async function updateBooking({
+  token,
+  booking_id,
+  hotel_id,
+  room_number,
+  num_people,
+  check_in_date,
+  check_out_date
+}){
+  try {
+    const res = await fetch(`${URL}/api/booking/${booking_id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        hotel_id: hotel_id,
+        room_number: room_number,
+        num_people: num_people,
+        check_in_date: check_in_date,
+        check_out_date: check_out_date
+      })
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to update booking");
+    }
+
+  } catch(error) {
+    console.log("Update booking error:", error);
     throw error;
   }
 }

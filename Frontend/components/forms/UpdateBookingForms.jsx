@@ -10,10 +10,19 @@ export const UpdateBookingForms = ({
     rooms
 }) => {
     const [filteredRooms, setFilteredRooms] = useState([]);
+    const [bookingId, setBookingId] = useState(null);
+    const [hotelId, setHotelId] = useState(null);
+    const [token, setToken] = useState(null);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const hotelIdFromUrl = params.get("hotel_id");
+        const bookingIdFromUrl = params.get("booking_id")
+        const storedToken = localStorage.getItem("token");
+
+        setHotelId(hotelIdFromUrl);
+        setBookingId(bookingIdFromUrl);
+        setToken(storedToken);
 
         if (hotelIdFromUrl && rooms && rooms.length > 0) {
             const filtered = rooms.filter(room => room.hotel_id === hotelIdFromUrl);
@@ -22,7 +31,6 @@ export const UpdateBookingForms = ({
             setFilteredRooms(rooms); // fallback to all if no hotel_id
         }
     }, [rooms]);
-    console.log("test")
     console.log(rooms)
     console.log(hotels)
 
@@ -39,7 +47,13 @@ export const UpdateBookingForms = ({
                                 key={room._id}
                                 className="text-center w-full animate-fade-in"
                             >
-                                <UpdateBookingRoomCard room={room} className="w-full"></UpdateBookingRoomCard>
+                                <UpdateBookingRoomCard 
+                                    room={room} 
+                                    token={token} 
+                                    booking_id={bookingId} 
+                                    hotel_id={hotelId} 
+                                    className="w-full">
+                                </UpdateBookingRoomCard>
                             </div>
                         ))
                     ) : (
