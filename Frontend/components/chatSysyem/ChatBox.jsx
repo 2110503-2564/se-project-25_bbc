@@ -112,7 +112,7 @@ const ChatBox = () => {
         borderRadius: '30px',
         position: 'fixed',
         width: '300px',
-        top: '60px',
+        top: '70px',
         bottom: '60px',
         right: '20px',
         zIndex: '800',

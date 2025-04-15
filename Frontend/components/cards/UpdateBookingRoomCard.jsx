@@ -41,7 +41,7 @@ const UpdateBookingRoomCard = ({ room = null, token, booking_id, hotel_id }) => 
   }
 
   return (
-    <div className="flex flex-col w-full max-w-full rounded-2xl overflow-hidden shadow-md border border-gray-200 bg-white text-center transition-all duration-300">
+    <div className="flex flex-col w-full max-w-full rounded-2xl overflow-hidden  border border-gray-200 bg-white text-center transition-all duration-300">
       {/* Top Section */}
       <div className="flex w-full">
         <div className="relative w-1/3 min-w-[150px] h-[250px]">

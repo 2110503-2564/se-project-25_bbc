@@ -39,6 +39,9 @@ const Menubar = () => {
         borderColor: 'transparent',
         backdropFilter: 'none',
         boxShadow: 'none',
+        left:"5px",
+        right:"5px",
+        top:"5px"
       }
     : {};
 
@@ -47,14 +50,14 @@ const Menubar = () => {
       className="hdcard_white align_item_center backdrop-blur"
       style={{
         position: 'fixed',
-        left: '5px',
-        right: '5px',
+        left: '100px',
+        right: '100px',
         top: '5px',
         height: '48px',
         zIndex: '300',
         borderRadius: '30px',
         backgroundColor: atTop ? "rgba(255,255,255, 0)" : "rgba(255,255,255, 0.8)",
-        transition: "all 0.5s ease",
+        transition: 'all 0.6s cubic-bezier(0.34, 1.35, 0.64, 1)',
         ...overrideStyles
       }}
     >

@@ -30,7 +30,7 @@ export const BookingCard = ({ booking }) => {
       
 
       return (
-        <div className="card_bg2 rounded-lg p-6  mb-4 bg-white text-gray-600">
+        <div className="border border-gray-200 rounded-lg p-6  mb-4 bg-white text-gray-600">
           <table className="w-full table-auto text-sm">
             <tbody>
               <tr>
