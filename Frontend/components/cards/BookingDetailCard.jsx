@@ -71,6 +71,22 @@ export const BookingDetailCard = () => {
               <td>${room ? room.rate_per_night : "Loading..."} / night</td>
             </tr>
             <tr>
+              <td className="font-semibold py-1">Check-in Date:</td>
+              <td>
+                {booking?.check_in_date
+                  ? new Date(booking.check_in_date).toLocaleDateString()
+                  : "Loading..."}
+              </td>
+            </tr>
+            <tr>
+              <td className="font-semibold py-1">Check-out Date:</td>
+              <td>
+                {booking?.check_out_date
+                  ? new Date(booking.check_out_date).toLocaleDateString()
+                  : "Loading..."}
+              </td>
+            </tr>
+            <tr>
                 <td className="font-semibold py-1">Status:</td>
                 <td
                     className={`font-semibold ${

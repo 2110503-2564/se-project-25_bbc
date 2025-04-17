@@ -2,6 +2,7 @@
 
 import { createBooking } from '@api/booking';
 import { useEffect, useState } from 'react';
+import { SuccessDialog } from '@components/cards/SuccessDialog';
 
 export const BookingForms = ({
   hotel_id,
@@ -21,6 +22,7 @@ export const BookingForms = ({
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [openSuccess, setOpenSuccess] = useState(false);
 
 
   useEffect(() => {
@@ -102,6 +104,7 @@ export const BookingForms = ({
       });
 
       setSuccessfulMessage("Booking Successful");
+      setOpenSuccess(true);
     } catch (err) {
       console.error(err);
       setErrorMessage(err.message || "Booking Failed");
@@ -208,6 +211,11 @@ export const BookingForms = ({
         </button>
         </div>
       </form>
+      
+      <SuccessDialog 
+      open={openSuccess} 
+      onClose={()=>setOpenSuccess(false)} 
+      textshow={successfulMessage}/>
     </div>
   );
 };

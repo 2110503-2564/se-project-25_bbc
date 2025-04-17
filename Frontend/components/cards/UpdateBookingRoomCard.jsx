@@ -9,6 +9,9 @@ import {
   DialogActions,
   Button
 } from '@mui/material'
+import { CheckCircle } from '@node_modules/@mui/icons-material'
+import { green } from '@node_modules/@mui/material/colors'
+import { SuccessDialog } from './SuccessDialog'
 
 const UpdateBookingRoomCard = ({ room = null, token, booking_id, hotel_id }) => {
   const [isSelected, setIsSelected] = useState(false)
@@ -16,6 +19,7 @@ const UpdateBookingRoomCard = ({ room = null, token, booking_id, hotel_id }) => 
   const [checkIn, setCheckIn] = useState('')
   const [checkOut, setCheckOut] = useState('')
   const [openConfirm, setOpenConfirm] = useState(false)
+  const [openSuccess, setOpenSuccess] = useState(false)
 
   const toggleSelection = () => setIsSelected(!isSelected)
 
@@ -34,6 +38,7 @@ const UpdateBookingRoomCard = ({ room = null, token, booking_id, hotel_id }) => 
         check_in_date: checkIn,
         check_out_date: checkOut
       })
+      setOpenSuccess(true)
     } catch (error) {
       console.log(error)
       alert("Error updating booking")
@@ -216,6 +221,9 @@ const UpdateBookingRoomCard = ({ room = null, token, booking_id, hotel_id }) => 
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* MUI Show Success Dialog */}
+      <SuccessDialog open={openSuccess} textshow="Update Booking Successful"/>
     </div>
   )
 }
