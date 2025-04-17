@@ -22,6 +22,7 @@ export const BookingForms = ({
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [file, setFile] = useState(null);
   const [openSuccess, setOpenSuccess] = useState(false);
 
 
@@ -125,8 +126,8 @@ export const BookingForms = ({
     }
   };
 
-  return (
-    <div className="w-full h-screen p-8 hdcard_white max-w-[500px] mt-20">
+  return (  
+    <div className="w-full h-screen p-6 hdcard_white max-w-[500px] mt-20">
       <h2 className="text-2xl font-bold main_text mb-4">Book This Room</h2>
 
       <p className="text-sm sub_text mb-4">
