@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Import Database
 import connectDB from './config/mongo.js';
@@ -13,6 +16,7 @@ import bookingRoutes from './routes/bookingRoutes.js';
 import hotelRoutes from './routes/hotelRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
 import accountRoutes from './routes/accountRoutes.js'
+import uploadRoute from './routes/uploadRoutes.js';
 
 // -------------------------- Configuration -------------------------- //
 dotenv.config();
@@ -26,6 +30,8 @@ const io = new Server(server, {
       credentials: true
     }
 });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(cors({
@@ -42,7 +48,10 @@ app.use("/api/booking", bookingRoutes);
 app.use("/api/hotel", hotelRoutes);
 app.use("/api/room", roomRoutes);
 app.use("/api/account",accountRoutes);
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/api', uploadRoute); // example: /api/upload
 
+app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // -------------------------- Socket.io Setup -------------------------- //
 

@@ -63,6 +63,7 @@ export async function createBooking({
   checkOutDate,   // camelCase parameter
   numPeople,      // camelCase parameter
   total_price,
+  receiptUrl,
 }) {
   try {
     const res = await fetch(`${URL}/api/booking/pending`, {
@@ -80,6 +81,7 @@ export async function createBooking({
         check_in_date: checkInDate,   // Convert to snake_case
         check_out_date: checkOutDate, // Convert to snake_cas
         total_price,
+        receiptUrl,
       }),
     });
     

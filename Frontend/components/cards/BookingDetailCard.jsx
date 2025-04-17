@@ -32,7 +32,6 @@ export const BookingDetailCard = () => {
     };
     fetchRoom();
   }, [roomId,bookingId]);
-
   return (
     <div className="px-2 relative top-20 w-[40%] hdcard_white overflow-hidden">
       <div className="p-6" style={{ fontSize: "14px" }}>
@@ -87,6 +86,8 @@ export const BookingDetailCard = () => {
           </tbody>
         </table>
 
+
+        <img alt="receipt" src={booking?.receiptUrl}/>
         <p className="mt-6 bg-yellow-100 p-5 rounded-xl text-gray-700 text-center">
           Please review the booking details before proceeding to manage it.
         </p>
