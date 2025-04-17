@@ -113,8 +113,8 @@ export const BookingForms = ({
     }
   };
 
-  return (
-    <div className="w-full h-[95vh] p-8 hdcard_white max-w-[500px] mt-20">
+  return (  
+    <div className="w-full h-screen p-6 hdcard_white max-w-[500px] mt-20">
       <h2 className="text-2xl font-bold main_text mb-4">Book This Room</h2>
 
       <p className="text-sm sub_text mb-4">
@@ -170,7 +170,7 @@ export const BookingForms = ({
         )}
 
         {/* Detail of Booking */}
-        <div className='mt-20 mb-10'>
+        <div className='mb-10'>
           <h2 className="text-2xl font-bold main_text mb-2">Confirmation Detail of Booking</h2>
           <p className="text-sm sub_text mb-4">
             <span className="font-semibold text-red-500 underline">Make sure</span> before starting your booking.
@@ -204,7 +204,7 @@ export const BookingForms = ({
           
           <button
           type="submit"
-          className="w-full main_bg text-white py-2 rounded hover:main_bg transition duration-200"
+          className="w-full main_bg text-white py-1 rounded hover:main_bg transition duration-200"
           style={{borderRadius:"20px"}}
         >
           {loading ? "Processing..." : "Book Now"}
