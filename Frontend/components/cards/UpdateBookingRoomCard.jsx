@@ -13,7 +13,7 @@ import { CheckCircle } from '@node_modules/@mui/icons-material'
 import { green } from '@node_modules/@mui/material/colors'
 import { SuccessDialog } from './SuccessDialog'
 
-const UpdateBookingRoomCard = ({ room = null, token, booking_id, hotel_id }) => {
+const UpdateBookingRoomCard = ({ room = null, token, booking_id, hotel_id}) => {
   const [isSelected, setIsSelected] = useState(false)
   const [numPeople, setNumPeople] = useState(1)
   const [checkIn, setCheckIn] = useState('')

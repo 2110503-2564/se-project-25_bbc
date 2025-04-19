@@ -120,7 +120,7 @@ export async function updateBooking({
         room_number: room_number,
         num_people: num_people,
         check_in_date: check_in_date,
-        check_out_date: check_out_date
+        check_out_date: check_out_date,
       })
     });
 

@@ -11,27 +11,30 @@ export const BookingDetailCard = () => {
 
   const bookingId = searchParams.get("booking_id") || "";
   const name = searchParams.get("name") || "";
-  const hotelId = searchParams.get("hotel_id") || "";
-  const roomId = searchParams.get("room_id") || "";
-  const numPeople = searchParams.get("num") || "";
 
-  const [booking,setBooking] = useState(null);
+  const [booking, setBooking] = useState(null);
   const [hotel, setHotel] = useState(null);
   const [room, setRoom] = useState(null);
-
+  
   useEffect(() => {
-    const fetchRoom = async () => {
-        const token = localStorage.getItem('token');
-        if (!roomId || !token || !bookingId) return;
-        const roomData = await searchRoom(`_id=${roomId}`);
-        const hotelData = await searchHotel(`_id=${hotelId}`);
-        const bookingData = await getBooking({token,query:`_id=${bookingId}`})
-        setHotel(hotelData.hotels[0]);
-        setRoom(roomData.rooms[0]);
-        setBooking(bookingData.bookings[0]);
+    const fetchDetails = async () => {
+      const token = localStorage.getItem("token");
+      if (!bookingId || !token) return;
+  
+      const bookingRes = await getBooking({ token, query: `_id=${bookingId}` });
+      const booking = bookingRes.bookings[0];
+      const hotelRes = await searchHotel(`_id=${booking.hotel_id}`);
+      const roomRes = await searchRoom(`_id=${booking.room_id}`);
+  
+      setBooking(booking);
+      setHotel(hotelRes.hotels[0]);
+      setRoom(roomRes.rooms[0]);
     };
-    fetchRoom();
-  }, [roomId,bookingId]);
+  
+    fetchDetails();
+  }, [bookingId]);
+
+
   return (
     <div className="px-2 relative top-20 w-[40%] hdcard_white overflow-hidden">
       <div className="p-6" style={{ fontSize: "14px" }}>
@@ -63,7 +66,7 @@ export const BookingDetailCard = () => {
             </tr>
             <tr>
               <td className="font-semibold py-1">Current People:</td>
-              <td>{numPeople} guests</td>
+              <td>{booking?.num_people} guests</td>
             </tr>
             <tr>
               <td className="font-semibold py-1">Rate:</td>

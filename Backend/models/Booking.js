@@ -59,7 +59,7 @@ const bookSchema = new mongoose.Schema({
     },
     receiptUrl: {
         type: String,
-        required: true
+        required: false
     },
 }, { timestamps: true });
 
