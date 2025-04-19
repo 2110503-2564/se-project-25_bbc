@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { searchRoom } from "@api/room";
 import { getBooking } from "@api/booking";
 import { searchHotel } from "@api/hotel";
+import DeletedBookButton from "@components/buttons/DeletedBookButton";
 
 export const BookingDetailCard = () => {
   const searchParams = useSearchParams();
@@ -19,7 +20,6 @@ export const BookingDetailCard = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       const token = localStorage.getItem("token");
-      if (!bookingId || !token) return;
   
       const bookingRes = await getBooking({ token, query: `_id=${bookingId}` });
       const booking = bookingRes.bookings[0];
@@ -36,7 +36,7 @@ export const BookingDetailCard = () => {
 
 
   return (
-    <div className="px-2 relative top-20 w-[40%] hdcard_white overflow-hidden">
+    <div className="px-2 relative top-20 lg:w-[40%] lg:h-screen hdcard_white overflow-hidden">
       <div className="p-6" style={{ fontSize: "14px" }}>
         <h2 className="text-2xl font-bold mb-10 capitalize text-gray-500 text-center">
           Current Booking Details
@@ -110,6 +110,13 @@ export const BookingDetailCard = () => {
         <p className="mt-6 bg-yellow-100 p-5 rounded-xl text-gray-700 text-center">
           Please review the booking details before proceeding to manage it.
         </p>
+        
+        {/* Deleted Booking Button */}
+        <div className="mt-2">
+          <DeletedBookButton booking_id={bookingId}/>
+        </div>
+        
+
       </div>
     </div>
   );

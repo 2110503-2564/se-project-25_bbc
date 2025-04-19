@@ -15,8 +15,8 @@ const page = async({ params }) => {
   // console.log(roomData.rooms[0]);
 
   return (
-    <div className='bg-gradient-to-b from-blue-500 to-white min-h-screen'>
-      <div className='flex row justify-center'>
+    <div className='bg-gradient-to-b from-blue-500 to-white min-h-screen justify-center'>
+      <div className='p-4 flex flex-col gap-2 items-center lg:items-start lg:flex-row lg:justify-center lg:gap-0'>
         <RoomDetailCard room={roomData.rooms[0]} hotelName={hotelName}/>
         <BookingForms 
         hotel_id={hotelData.hotels[0]._id}
