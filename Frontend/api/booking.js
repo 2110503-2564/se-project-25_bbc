@@ -25,6 +25,31 @@ export async function searchBookings({
   }
 }
 
+export async function searchBookingsPopulateAccountId({
+  token
+}){
+  try{
+    const res = await fetch(`${URL}/api/booking/search?populate=account_id`,{
+      method:"GET",
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const data = await res.json();
+
+    if(!res.ok){
+      throw new Error(`Error fecth bookings with message: ${data.message}`);
+    }
+
+    return data ;
+
+  }catch (error) {
+    console.error("Search Booking error:", error);
+    throw error;
+  }
+}
+
 export async function getBooking({
   token,
   query = ""
@@ -137,33 +162,32 @@ export async function updateBooking({
   }
 }
 
-export async function deleteBooking(
-  token,
-  booking_id,
-  hotel_id
-){
-  try{
+export async function deleteBooking(token, booking_id, hotel_id) {
+  try {
+    const requestBody = {
+      booking_id: booking_id,
+      ...(hotel_id && { hotel_id }), // Only include hotel_id if it exists
+    };
+
     const res = await fetch(`${URL}/api/booking/${booking_id}`, {
       method: "DELETE",
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        booking_id:booking_id,
-        hotel_id: hotel_id,
-      })
+      body: JSON.stringify(requestBody),
     });
 
     const data = await res.json();
     console.log(data);
 
-    if(!res.ok){
+    if (!res.ok) {
       throw new Error(data.message || "Failed to delete booking");
     }
 
-  }catch(error) {
-    console.log("Delete booking error:", error);
+    return data; // Consider returning the response data for further use
+  } catch (error) {
+    console.error("Delete booking error:", error); // Prefer `console.error` for errors
     throw error;
   }
 }

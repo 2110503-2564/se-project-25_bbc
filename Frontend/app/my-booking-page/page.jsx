@@ -1,12 +1,13 @@
 import { cookies } from 'next/headers'
 import { searchBookings } from '@api/booking'
+import { searchBookingsPopulateAccountId } from '@api/booking'
 import { UserProfileTab } from '@components/cards/UserProfileTab'
 import { BookingList } from '@components/lists/BookingList'
 
 const Page = async () => {
   const cookieStore = await cookies()
   const token = cookieStore.get('token')?.value
-  const bookings = token ? await searchBookings(token) : null
+  const bookings = token ? await searchBookingsPopulateAccountId(token) : null
   // console.log(bookings);
 
   return (

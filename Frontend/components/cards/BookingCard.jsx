@@ -17,7 +17,7 @@ export const BookingCard = ({ booking }) => {
           try {
             const hotelData = await searchHotel(`_id=${booking.hotel_id}`);
             const roomData = await searchRoom(`_id=${booking.room_id}`);
-      
+            
             if (hotelData?.hotels?.length > 0) setHotel(hotelData.hotels[0]);
             if (roomData?.rooms?.length > 0) setRoom(roomData.rooms[0]);
           } catch (error) {
@@ -35,7 +35,7 @@ export const BookingCard = ({ booking }) => {
             <tbody>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Name:</td>
-                <td>{booking.userName}</td>
+                <td>{booking.account_id.first_name} {booking.account_id.last_name}</td>
               </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Hotel:</td>
@@ -82,7 +82,16 @@ export const BookingCard = ({ booking }) => {
           </table>
       
           <div className="mt-4 flex justify-end flex-row">
-            <Link href={`/my-booking-page/manage-booking-page?booking_id=${booking._id}&name=${booking.userName}&hotel_id=${hotel?._id}&room_id=${room?._id}&num=${booking.num_people}`}>
+          <Link href={{
+            pathname: '/my-booking-page/manage-booking-page',
+            query: {
+              booking_id: booking._id,
+              name: `${booking.account_id.first_name} ${booking.account_id.last_name}`,
+              hotel_id: hotel?._id,
+              room_id: room?._id,
+              num: booking.num_people
+            }
+          }}>
               <button className="bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 transition-all flex items-center"
                 style={{borderRadius:"20px"}}
               >

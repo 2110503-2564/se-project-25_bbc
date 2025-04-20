@@ -125,7 +125,6 @@ export const BookingList = ({ bookings }) => {
         filteredBookings.map(booking => (
           <BookingCard key={booking._id} booking={{
             ...booking,
-            userName: `${user.account.first_name} ${user.account.last_name}`,
           }} />
         ))
       ) : (
