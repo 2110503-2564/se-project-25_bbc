@@ -36,7 +36,8 @@ export default function NotiForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="m-[10px]">
+    <form onSubmit={handleSubmit} className="m-[10px]"
+    >
       <div>
         <input
           type="text"
@@ -46,12 +47,13 @@ export default function NotiForm() {
           onChange={handleChange}
           style={{
             width:"100%",
-            borderRadius: "20px",
+            borderRadius: "10px",
             boxSizing: "border-box",
             paddingLeft: "20px",
             paddingRight: "20px",
+            backgroundColor: "white",
           }}
-          className="mt-1 mb-[20px] block w-full border-none card_bg2 rounded p-2"
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
           placeholder="Title"
         />
       </div>
@@ -65,12 +67,13 @@ export default function NotiForm() {
           onChange={handleChange}
           style={{
             width:"100%",
-            borderRadius: "20px",
+            borderRadius: "10px",
             boxSizing: "border-box",
             paddingLeft: "20px",
             paddingRight: "20px",
+            backgroundColor: "white",
           }}
-          className="mt-1 mb-[20px] block w-full border-none card_bg2 rounded p-2"
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
           placeholder="Detail"
         />
       </div>
@@ -84,12 +87,13 @@ export default function NotiForm() {
           onChange={handleChange}
           style={{
             width:"100%",
-            borderRadius: "20px",
+            borderRadius: "10px",
             boxSizing: "border-box",
             paddingLeft: "20px",
             paddingRight: "20px",
+            backgroundColor: "white",
           }}
-          className="mt-1 mb-[20px] block w-full border-none card_bg2 rounded p-2"
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
         />
       </div>
 
@@ -102,12 +106,13 @@ export default function NotiForm() {
           onChange={handleChange}
           style={{
             width:"100%",
-            borderRadius: "20px",
+            borderRadius: "10px",
             boxSizing: "border-box",
             paddingLeft: "20px",
             paddingRight: "20px",
+            backgroundColor: "white",
           }}
-          className="mt-1 mb-[20px] block w-full border-none card_bg2 rounded p-2"
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
         >
           <option value="promotion">promotion</option>
           <option value="emergency">emergency</option>
