@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import Image from "@node_modules/next/image";
 import { ChatContext } from "@providers/chatProvider";
+import Link from "@node_modules/next/link";
 
 const ChatBox = () => {
   const { isShow, setIsShow, socket } = useContext(ChatContext);
@@ -13,6 +14,7 @@ const ChatBox = () => {
   const [hasJoinedChat, setHasJoinedChat] = useState(false);
   const [inChatMode, setInChatMode] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [token, setToken] = useState(null);
 
   const [account_id, setAccountId] = useState("");
   const [hotel_id, setHotelId] = useState("");
@@ -25,6 +27,8 @@ const ChatBox = () => {
     setAccountId(login?.account?.id);
     setRole(login?.account?.role);
     setHotelId(login?.account?.hotel_id);
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
   }, []);
 
   useEffect(() => {
@@ -41,6 +45,7 @@ const ChatBox = () => {
 
     socket.on("my_chat", ({ chats, notifications }) => {
       setChats(chats);
+      console.log("chats", chats);
       SetNotifications(notifications);
     });
 
@@ -143,6 +148,56 @@ const ChatBox = () => {
 
   if (!chats) return <div>Loading...</div>;
 
+  if (! token)  return (
+    <div
+      className="hdcard_white border border-gray-300"
+      style={{
+        borderRadius: "30px",
+        position: "fixed",
+        width: "300px",
+        top: "70px",
+        bottom: "60px",
+        right: "20px",
+        zIndex: "800",
+        overflow: "hidden",
+        transition: "all 0.5s cubic-bezier(0.34, 1.15, 0.64, 1)",
+        pointerEvents: isShow ? "all" : "none",
+        scale: isShow ? 1 : 0.1,
+        transformOrigin: "bottom right",
+        opacity: isShow ? 1 : 0,
+      }}
+    >
+      <div
+        className="sub_text2"
+        style={{
+          position: "absolute",
+          top: "0",
+          left: "0",
+          right: "0",
+          height: "30px",
+          textAlign: "center",
+          backgroundColor: "white",
+          fontSize: "12px",
+          padding: "4px",
+        }}
+      >
+        Customer Support
+      </div>
+      <Link href="/auth/signin">
+      <div style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        textAlign: "center",
+        width:"100%",
+      }}>
+        <span className="main_bg" style={{color:"white", padding:"5px", paddingLeft:"10px", paddingRight:"10px", borderRadius:"10px"}}>Sign-In</span> to <span className="main_text">Chat</span> with us
+      </div>
+      </Link>
+    </div>
+  )
+  
   return (
     <div
       className="hdcard_white border border-gray-300"
@@ -178,7 +233,6 @@ const ChatBox = () => {
       >
         Customer Support
       </div>
-
       {/* Show room selection if no room is selected */}
       {!chat ? (
         <div
@@ -272,6 +326,7 @@ const ChatBox = () => {
                       display: "flex",
                       alignItems: "center",
                       overflow: "hidden",
+                      position: "relative",
                     }}
                   >
                     <Image
@@ -280,23 +335,35 @@ const ChatBox = () => {
                       width={40}
                       height={40}
                       style={{
-                        objectFit: "cover",
-                        marginRight: "10px",
-                        borderRadius: "20px",
-                        flexShrink: "0",
-                        backgroundColor: "gray",
+                        width: '40px',
+                        height: '40px',
+                        objectFit: 'cover',
+                        marginRight: '10px',
+                        borderRadius: '50%',
+                        flexShrink: '0',
+                        backgroundColor: 'gray',
                       }}
                     />
                     <span
                       style={{
                         fontSize: "14px",
                         overflow: "hidden",
-                        whiteSpace: "nowrap",
                         textOverflow: "ellipsis",
+                        marginRight:"0px",
+                        width: "calc(100% - 70px)",
+                        flexShrink:"0"
                       }}
                     >
-                      {room.hotel_id.name} <br /> - Chat Room
+                      {role === "hotel_admin" ? room.account_id.full_name : room.hotel_id.name} 
                     </span>
+                    <img
+                  src="/icons/chevron-black.svg"
+                  style={{
+                    width: "25px",
+                    rotate: "180deg",
+                    opacity: "0.2",
+                  }}
+                />
                   </li>
                 ))}
               </ul>
