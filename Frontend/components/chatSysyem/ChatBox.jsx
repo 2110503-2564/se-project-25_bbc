@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import Image from "@node_modules/next/image";
 import { ChatContext } from "@providers/chatProvider";
+import Link from "@node_modules/next/link";
 
 const ChatBox = () => {
   const { isShow, setIsShow, socket } = useContext(ChatContext);
@@ -182,9 +183,18 @@ const ChatBox = () => {
       >
         Customer Support
       </div>
-      <div>
-        Sign-In 
+      <Link href="/auth/signin">
+      <div style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        textAlign: "center",
+        width:"100%",
+      }}>
+        <span className="main_bg" style={{color:"white", padding:"5px", paddingLeft:"10px", paddingRight:"10px", borderRadius:"10px"}}>Sign-In</span> to <span className="main_text">Chat</span> with us
       </div>
+      </Link>
     </div>
   )
   
