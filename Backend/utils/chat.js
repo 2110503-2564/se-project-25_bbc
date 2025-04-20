@@ -1,5 +1,7 @@
 import Chat from '../models/Chat.js';
 import Message from '../models/Message.js';
+import Notification from '../models/Notification.js';
+import Booking from '../models/Booking.js';
 import { getSocketInstance } from '../config/socket.js';
 
 export const initializeChatSocket = () => {
@@ -11,8 +13,28 @@ export const initializeChatSocket = () => {
 
     io.on('connection', (socket) => {
 
-        socket.on("join_account_room", (account_id) => {
-            socket.join(`account_${account_id}`);
+        socket.on("join_account_all" , () => {
+            socket.join("account_all");
+        });
+
+        socket.on("join_account_booking", async (account_id) => {
+            try {
+                const hotelIds = await Booking.distinct("hotel_id", {
+                    account_id: account_id,
+                    status: "finished"
+                });
+        
+                if (!hotelIds.length) return;
+        
+                hotelIds.forEach(hotelId => socket.join(`hotel_${hotelId}`));
+        
+            } catch (err) {
+                console.error("Error while joining booking hotel rooms:", err);
+            }
+        });
+
+        socket.on("join_account_id", (account_id) => {
+            socket.join(`account_id_${account_id}`);
         });
 
         socket.on("join_hotel_room", (hotel_id) => {
@@ -22,7 +44,23 @@ export const initializeChatSocket = () => {
         socket.on('search_chat', async ({ account_id, hotel_id, role }) => {
             try {
                 const chats = await searchChat({ account_id, hotel_id, role });
-                socket.emit('my_chat', chats);
+
+                const hasFinishedBooking = await Booking.exists({
+                    account_id,
+                    status: "finished"
+                });
+        
+                let notifications;
+                if (hasFinishedBooking) {
+                    notifications = await Notification.find({ hotel_id }).populate('hotel_id');
+                } else {
+                    notifications = await Notification.find({
+                        hotel_id,
+                        type: { $ne: "emergency" }
+                    }).populate('hotel_id');
+                }
+        
+                socket.emit('my_chat', { chats, notifications });
             } catch (err) {
                 console.error('Error searching chat room:', err);
             }

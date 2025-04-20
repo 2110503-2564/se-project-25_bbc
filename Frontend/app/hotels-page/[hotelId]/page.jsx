@@ -7,13 +7,13 @@ import Image from "@node_modules/next/image";
 import RoomList from "@components/lists/RoomList";
 
 const page = async ({ params }) => {
-  const cookieStore = cookies()
+  const cookieStore = cookies();
   const token = await cookieStore.get('token')?.value
 
   const { hotelId } = await params;
   const hotelData = await searchHotel(`_id=${hotelId}`);
   const roomData = await searchRoom(`hotel_id=${hotelId}`);
-  
+
   await insertChat(token , hotelId);
 
   const hotel = hotelData.hotels[0];
