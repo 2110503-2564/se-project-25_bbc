@@ -71,9 +71,9 @@ const ChatBox = () => {
       setMessages((prevMessages) => [...prevMessages, incomingMessage])
     );
 
-    socket.on("receive_promotion", (incomingPromotion) => {
-      SetNotifications((prev) => [...prev, incomingPromotion]);
-      if (!inChatMode) return; // Already seeing it
+    socket.on("receive_notification", (incomingNotification) => {
+      SetNotifications((prev) => [...prev, incomingNotification]);
+      if (!inChatMode) return; 
       setUnreadCount((prevCount) => prevCount + 1);
     });
 
@@ -141,7 +141,7 @@ const ChatBox = () => {
     }
   };
 
-  if (!chats) return <div>Loading</div>;
+  if (!chats) return <div>Loading...</div>;
 
   return (
     <div
@@ -307,11 +307,13 @@ const ChatBox = () => {
                     news: "main_bg",
                     emergency: "red_bg",
                     promotion: "green_bg",
+                    booking: "pink_bg"
                   };
                   const typeEmojis = {
                     news: "📰",
                     emergency: "🚨",
                     promotion: "🏷️",
+                    booking: "📅",
                   };
                   const bgClass = typeColors[notification.type] || "main_bg";
                   const emoji = typeEmojis[notification.type] || "🔔";
