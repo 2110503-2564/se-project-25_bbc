@@ -26,7 +26,7 @@ export const initializeChatSocket = () => {
         
                 if (!hotelIds.length) return;
         
-                hotelIds.forEach(hotelId => socket.join(`hotel_${hotelId}`));
+                hotelIds.forEach(hotelId => socket.join(`account_hotel_${hotelId}`));
         
             } catch (err) {
                 console.error("Error while joining booking hotel rooms:", err);
@@ -34,7 +34,7 @@ export const initializeChatSocket = () => {
         });
 
         socket.on("join_account_id", (account_id) => {
-            socket.join(`account_id_${account_id}`);
+            socket.join(`account_${account_id}`);
         });
 
         socket.on("join_hotel_room", (hotel_id) => {
@@ -51,13 +51,27 @@ export const initializeChatSocket = () => {
                 });
         
                 let notifications;
-                if (hasFinishedBooking) {
-                    notifications = await Notification.find({ hotel_id }).populate('hotel_id');
-                } else {
+                if (account_id && hasFinishedBooking) {
                     notifications = await Notification.find({
-                        hotel_id,
-                        type: { $ne: "emergency" }
-                    }).populate('hotel_id');
+                        $or: [
+                          { type: { $ne: "booking" } }, 
+                          { type: { $ne: "emergency" } }, 
+                          {
+                            type: "booking", 
+                            account_id
+                          },
+                        ],
+                      }).populate("hotel_id");
+                } else if(account_id){
+                    notifications = await Notification.find({
+                        $or: [
+                          { type: { $ne: "booking" } }, 
+                          {
+                            type: "booking", 
+                            account_id
+                          },
+                        ],
+                    }).populate("hotel_id");
                 }
         
                 socket.emit('my_chat', { chats, notifications });

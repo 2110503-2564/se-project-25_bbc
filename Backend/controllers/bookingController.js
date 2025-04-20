@@ -1,6 +1,8 @@
 import Booking from "../models/Booking.js";
 import Room from "../models/Room.js";
-
+import Hotel from "../models/Hotel.js";
+import Notification from "../models/Notification.js";
+import { getSocketInstance } from '../config/socket.js';
 
 export const searchBooking = async (req , res) => {
     try {
@@ -102,6 +104,17 @@ export const acceptedBooking = async (req, res) => {
 
         if(!booking) return res.status(404).json({ success: false, message: "Booking not found." }); 
 
+        const io = getSocketInstance();
+        const hotel = await Hotel.findById(hotel_id);
+        const notification = await Notification.create({
+            hotel_id : hotel_id,
+            account_id : booking.account_id,
+            head : `Booking accepted!`,
+            detail : `Your Booking at ${hotel.name} was accepted`,
+            type : "booking"
+        })
+        io.to(`account_${booking.account_id.toString()}`).emit("receive_notification" , notification);
+
         res.status(200).json({ success: true, booking });
 
     } catch (error) {
@@ -128,6 +141,16 @@ export const rejectedBooking = async (req, res) => {
 
         if(!booking) return res.status(404).json({ success: false, message: "Booking not found." }); 
 
+        const io = getSocketInstance();
+        const hotel = await Hotel.findById(hotel_id);
+        const notification = await Notification.create({
+            hotel_id : hotel_id,
+            account_id : booking.account_id,
+            head : `Booking rejected!`,
+            detail : `Your Booking at ${hotel.name} was rejected`,
+            type : "booking"
+        })
+        io.to(`account_${booking.account_id.toString()}`).emit("receive_notification" , notification);
         res.status(200).json({ success: true, booking });
 
     } catch (error) {
@@ -208,6 +231,17 @@ export const finishedBooking = async (req, res) => {
 
         if(!booking) return res.status(404).json({ success: false, message: "Booking not found." }); 
 
+        const io = getSocketInstance();
+        const hotel = await Hotel.findById(hotel_id);
+        const notification = await Notification.create({
+            hotel_id : hotel_id,
+            account_id : booking.account_id,
+            head : `Booking finished!`,
+            detail : `Your Booking at ${hotel.name} was finished`,
+            type : "booking"
+        })
+        io.to(`account_${booking.account_id.toString()}`).emit("receive_notification" , notification);
+        
         res.status(200).json({ success: true, booking });
 
     } catch (error) {

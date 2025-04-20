@@ -78,9 +78,9 @@ const ChatBox = () => {
       setMessages((prevMessages) => [...prevMessages, incomingMessage])
     );
 
-    socket.on("receive_promotion", (incomingPromotion) => {
-      SetNotifications((prev) => [...prev, incomingPromotion]);
-      if (!inChatMode) return; // Already seeing it
+    socket.on("receive_notification", (incomingNotification) => {
+      SetNotifications((prev) => [...prev, incomingNotification]);
+      if (!inChatMode) return; 
       setUnreadCount((prevCount) => prevCount + 1);
     });
 
@@ -148,7 +148,7 @@ const ChatBox = () => {
     }
   };
 
-  if (!chats) return <div>Loading</div>;
+  if (!chats) return <div>Loading...</div>;
 
   if (! token)  return (
     <div
@@ -302,14 +302,15 @@ const ChatBox = () => {
             </div>
           </div>
           <div
-            className="hide_scrollbar"
+            className="hide_scrollbar card_bg2"
             style={{
               position: "absolute",
               top: "80px",
-              bottom: "80px",
+              bottom: "10px",
+              borderRadius:"20px",
               paddingBottom: "50px",
-              left: "5px",
-              right: "5px",
+              left: "10px",
+              right: "10px",
               overflowY: "scroll",
             }}
           >
@@ -376,12 +377,14 @@ const ChatBox = () => {
                   const typeColors = {
                     news: "main_bg",
                     emergency: "red_bg",
-                    promotion: "green_bg",
+                    promotion: "main_bg",
+                    booking: "un_bg"
                   };
                   const typeEmojis = {
                     news: "📰",
                     emergency: "🚨",
                     promotion: "🏷️",
+                    booking: "📅",
                   };
                   const bgClass = typeColors[notification.type] || "main_bg";
                   const emoji = typeEmojis[notification.type] || "🔔";

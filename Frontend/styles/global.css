@@ -9,6 +9,7 @@
   --un-color: #b9b9b9;
   --red-color: #EF4444;
   --green-color: #22C55E;
+  --pink-color: #f97cd2;
   --font-size: 16px;
 }
 
@@ -55,6 +56,9 @@ body{
 }
 .green_bg{
   background-color: var(--green-color);
+}
+.pink_bg{
+  background-color: var(--pink-color);
 }
 
 .backdrop-blur {
@@ -143,4 +147,10 @@ body{
 }
 .animate-fade-out {
   animation: fade-out 0.5s ease-out;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }

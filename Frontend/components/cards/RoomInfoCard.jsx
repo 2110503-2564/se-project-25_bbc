@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 export const RoomInfoCard = ({ room, isSelected, onToggle }) => (
-  <div className="flex w-full">
+  <div className="flex w-full bg-gray-100 shadow-lg">
     <div className="relative w-1/3 min-w-[150px] h-[250px]">
       <Image src={room.image_url} alt={room.type} fill className="object-cover" />
     </div>
@@ -16,9 +16,10 @@ export const RoomInfoCard = ({ room, isSelected, onToggle }) => (
       </div>
       <button
         onClick={onToggle}
-        className={`mt-4 py-2 px-4 rounded-md font-semibold text-white ${
-          isSelected ? 'bg-gray-500' : 'bg-blue-500'
-        }`}
+        className={`mt-4 py-2 px-4 rounded-md font-semibold text-white transition-colors duration-200 ${isSelected
+            ? 'bg-gray-500 hover:bg-gray-600'
+            : 'bg-blue-500 hover:bg-blue-600'
+          }`}
       >
         {isSelected ? 'Cancel' : 'Select This Room'}
       </button>
