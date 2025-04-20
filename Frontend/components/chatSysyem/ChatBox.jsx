@@ -11,6 +11,7 @@ const ChatBox = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [hasJoinedChat, setHasJoinedChat] = useState(false);
+  const [inChatMode, setInChatMode] = useState(true);
 
   const [account_id, setAccountId] = useState('');
   const [hotel_id, setHotelId] = useState('');
@@ -146,7 +147,19 @@ const ChatBox = () => {
         <div style={{ marginTop: '40px', padding: '10px', height: 'calc(100% - 50px)', overflowY: 'auto',
           borderTop: "1px solid #d1d5db60"
          }}>
-          <ul style={{ listStyleType: 'none', padding: '0', margin: '0' }}>
+          <div
+            style={{width:"100%", height:"30px", margin:"0", position:"relative", fontSize:"14px"}}
+          >
+            <div onClick={()=>{setInChatMode(true)}} className={`${inChatMode ? "main_text" : ""}`} style={{position:"absolute", width:"50%", left:"0", textAlign:"center"}}>Chat</div>
+            <div onClick={()=>{setInChatMode(false)}} className={`${inChatMode ? "" : "main_text"}`} style={{position:"absolute", width:"50%", right:"0", textAlign:"center"}}>Notification</div>
+          </div>
+          <div 
+          className='hide_scrollbar'
+          style={{ position:"absolute", top:"80px", bottom:"80px", paddingBottom:"50px", left:"5px", right:"5px", overflowY: 'scroll' }}>
+          {/* Display chat rooms or nontifiaction */}
+          {
+            inChatMode ? (
+              <ul style={{ listStyleType: 'none', padding: '0', margin: '0' }}>
             {chats?.map((room) => (
               <li
                 key={room._id}
@@ -181,6 +194,12 @@ const ChatBox = () => {
               </li>
             ))}
           </ul>
+            ) : (
+              <></>
+            )
+          }
+          
+          </div>
         </div>
       ) : (
         // Show chat once a room is selected
