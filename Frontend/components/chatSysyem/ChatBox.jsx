@@ -3,6 +3,8 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import Image from "@node_modules/next/image";
 import { ChatContext } from "@providers/chatProvider";
 import Link from "@node_modules/next/link";
+import { sendNoti } from "@api/noti";
+import NotiForm from "./NotiForm";
 
 const ChatBox = () => {
   const { isShow, setIsShow, socket } = useContext(ChatContext);
@@ -279,7 +281,7 @@ const ChatBox = () => {
                 textAlign: "center",
               }}
             >
-              Notification
+              {role === "hotel_admin" ? "Publish" : "Notification"}
               {unreadCount > 0 && (
                 <span
                   style={{
@@ -369,7 +371,8 @@ const ChatBox = () => {
               </ul>
             ) : (
               <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
-                {notifications?.map((notification, index) => {
+
+                {role === "user" ? notifications?.map((notification, index) => {
                   const typeColors = {
                     news: "main_bg",
                     emergency: "red_bg",
@@ -460,7 +463,9 @@ const ChatBox = () => {
                       )}
                     </li>
                   );
-                })}
+                }) : (<div>
+                <NotiForm/>
+                </div>)}
               </ul>
             )}
           </div>
