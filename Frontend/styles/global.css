@@ -148,3 +148,9 @@ body{
 .animate-fade-out {
   animation: fade-out 0.5s ease-out;
 }
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

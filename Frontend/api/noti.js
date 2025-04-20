@@ -2,7 +2,7 @@ const URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const sendNoti = async (token = "" , head, detail, expire, type) => {
   try {
-    const res = await fetch(`${URL}/api/chat/promotion`, {
+    const res = await fetch(`${URL}/api/chat/notification`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
