@@ -12,7 +12,7 @@ export default function BookingPageClient({ booking, hotels, rooms}){
     }
 
     return (
-        <div className='bg-gradient-to-b from-blue-500 to-white min-h-screen flex p-4'>
+      <div className="bg-gradient-to-b from-blue-500 to-white min-h-screen p-4 flex flex-col gap-2 items-center lg:flex-row lg:gap-0 lg:items-start">
           <BookingDetailCard booking={booking} key={refreshTrigger} />
           <UpdateBookingForms
             bookings={booking}

@@ -4,7 +4,7 @@ export const RoomDetailCard = ({ room = null ,hotelName=""}) => {
     if (!room) return null;
   
     return (
-      <div className="relative left-0 top-20 w-[30%] h-screen mx-2 hdcard_white overflow-hidden">
+      <div className="relative left-0 top-20 max-w-[500px] lg:w-[30%] h-screen lg:mx-2 hdcard_white overflow-hidden">
         {/* Room Image */}
         <div className="relative w-full h-60">
           <Image

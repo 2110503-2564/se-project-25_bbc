@@ -136,3 +136,34 @@ export async function updateBooking({
     throw error;
   }
 }
+
+export async function deleteBooking(
+  token,
+  booking_id,
+  hotel_id
+){
+  try{
+    const res = await fetch(`${URL}/api/booking/${booking_id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        booking_id:booking_id,
+        hotel_id: hotel_id,
+      })
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if(!res.ok){
+      throw new Error(data.message || "Failed to delete booking");
+    }
+
+  }catch(error) {
+    console.log("Delete booking error:", error);
+    throw error;
+  }
+}

@@ -4,8 +4,8 @@ import { UserProfileTab } from '@components/cards/UserProfileTab'
 import { BookingList } from '@components/lists/BookingList'
 
 const Page = async () => {
-  const cookieStore = cookies()
-  const token = await cookieStore.get('token')?.value
+  const cookieStore = await cookies()
+  const token = cookieStore.get('token')?.value
   const bookings = token ? await searchBookings(token) : null
   // console.log(bookings);
 

@@ -10,7 +10,7 @@ const ChatBox = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [hasJoinedChat, setHasJoinedChat] = useState(false);
-  const [activeTab, setActiveTab] = useState("chat");
+  const [inChatMode, setInChatMode] = useState(true);
 
   const [account_id, setAccountId] = useState("");
   const [hotel_id, setHotelId] = useState("");
@@ -158,116 +158,28 @@ const ChatBox = () => {
         Customer Support
       </div>
 
-      {/* Header */}
-      {!chat && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "10px",
-            paddingInline: "12px",
-            position: "absolute",
-            top: "30px",
-            left: "0",
-            fontSize: "14px",
-          }}
-        >
-          <button
-            onClick={() => setActiveTab("chat")}
-            className={`px-3 py-1 rounded-full text-sm ${
-              activeTab === "chat"
-                ? "main_bg text-white"
-                : "bg-gray-100 text-gray-700"
-            }`}
+      {/* Show room selection if no room is selected */}
+      {!chat ? (
+        <div style={{ marginTop: '40px', padding: '10px', height: 'calc(100% - 50px)', overflowY: 'auto',
+          borderTop: "1px solid #d1d5db60"
+         }}>
+          <div
+            style={{width:"100%", height:"30px", margin:"0", position:"relative", fontSize:"14px"}}
           >
-            Chat
-          </button>
-          <button
-            onClick={() => setActiveTab("notification")}
-            className={`px-3 py-1 rounded-full text-sm ${
-              activeTab === "notification"
-                ? "main_bg text-white"
-                : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            Notifications
-          </button>
-        </div>
-      )}
-
-      <div>
-        {activeTab === "chat" ? (
-          !chat ? (
-            <div
-              style={{
-                marginTop: "70px",
-                padding: "4px",
-                height: "calc(100% - 50px)",
-                overflowY: "auto",
-                borderTop: "1px solid #d1d5db60",
-              }}
-            >
-              <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
-                {chats?.map((room) => (
-                  <li
-                    key={room._id}
-                    onClick={() => handleRoomSelection(room)}
-                    style={{
-                      cursor: "pointer",
-                      margin: "10px 0",
-                      padding: "8px",
-                      borderRadius: "5px",
-                      display: "flex",
-                      alignItems: "center",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src={room.hotel_image_url}
-                      alt={room.hotel_name}
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        objectFit: "cover",
-                        marginRight: "10px",
-                        borderRadius: "5px",
-                        flexShrink: "0",
-                        borderRadius: "20px",
-                        backgroundColor: "gray",
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontSize: "14px",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {room.hotel_id.name} <br /> - Chat Room
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : (
-            // Show chat once a room is selected
-            <div
-              style={{
-                top: "60px",
-                padding: "10px",
-                position: "absolute",
-                bottom: "0",
-                left: "0",
-                right: "0",
-                borderTop: "1px solid #d1d5db60",
-              }}
-            >
-              <div
-                id="chatBox"
-                className="hide_scrollbar"
-                ref={chatBoxRef}
+            <div onClick={()=>{setInChatMode(true)}} className={`${inChatMode ? "main_text" : ""}`} style={{position:"absolute", width:"50%", left:"0", textAlign:"center"}}>Chat</div>
+            <div onClick={()=>{setInChatMode(false)}} className={`${inChatMode ? "" : "main_text"}`} style={{position:"absolute", width:"50%", right:"0", textAlign:"center"}}>Notification</div>
+          </div>
+          <div 
+          className='hide_scrollbar'
+          style={{ position:"absolute", top:"80px", bottom:"80px", paddingBottom:"50px", left:"5px", right:"5px", overflowY: 'scroll' }}>
+          {/* Display chat rooms or nontifiaction */}
+          {
+            inChatMode ? (
+              <ul style={{ listStyleType: 'none', padding: '0', margin: '0' }}>
+            {chats?.map((room) => (
+              <li
+                key={room._id}
+                onClick={() => handleRoomSelection(room)}
                 style={{
                   position: "absolute",
                   top: "0",
@@ -325,7 +237,30 @@ const ChatBox = () => {
                     width: "25px",
                   }}
                 />
-              </div>
+                <span style={{ fontSize: '14px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                  {room.hotel_id.name} <br/> - Chat Room
+                </span>
+              </li>
+            ))}
+          </ul>
+            ) : (
+              <></>
+            )
+          }
+          
+          </div>
+        </div>
+      ) : (
+        // Show chat once a room is selected
+        <div style={{ top: '40px', padding: '10px', position:"absolute", bottom:"0", left:"0", right:"0" ,
+            borderTop: "1px solid #d1d5db60"
+        }}>
+          <div id="chatBox" 
+          className='hide_scrollbar'
+          ref={chatBoxRef}
+          style={{ position:"absolute", top:"0", bottom:"80px", paddingBottom:"50px", left:"5px", right:"5px", overflowY: 'scroll' }}>
+            {/* Display messages as chat bubbles */}
+            {messages.map((msg, index) => (
               <div
                 className="card_bg2"
                 style={{
