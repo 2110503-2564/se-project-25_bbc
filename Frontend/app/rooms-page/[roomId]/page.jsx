@@ -5,7 +5,7 @@ import { searchHotel } from '@api/hotel';
 import { BookingForms } from '@components/forms/BookingForms';
 
 const page = async({ params }) => {
-  const { roomId } = params;
+  const { roomId } = await params;
   
   const roomData = await searchRoom(`_id=${roomId}`);
   const hotelData = await searchHotel(`_id=${roomData.rooms[0].hotel_id}`)

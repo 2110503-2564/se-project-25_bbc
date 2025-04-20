@@ -3,12 +3,15 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
-import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Import Database
 import connectDB from './config/mongo.js';
+
+// Import Socket
+import { setSocketInstance } from './config/socket.js';
+import { initializeChatSocket } from './utils/chat.js';
 
 // Import Routes
 import authRoutes from './routes/authRoutes.js';
@@ -16,6 +19,7 @@ import bookingRoutes from './routes/bookingRoutes.js';
 import hotelRoutes from './routes/hotelRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
 import accountRoutes from './routes/accountRoutes.js'
+import chatRoutes from './routes/chatRoutes.js';
 import uploadRoute from './routes/uploadRoutes.js';
 
 // -------------------------- Configuration -------------------------- //
@@ -30,6 +34,7 @@ const io = new Server(server, {
       credentials: true
     }
 });
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -48,48 +53,12 @@ app.use("/api/booking", bookingRoutes);
 app.use("/api/hotel", hotelRoutes);
 app.use("/api/room", roomRoutes);
 app.use("/api/account",accountRoutes);
+app.use("/api/chat",chatRoutes);
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api', uploadRoute); // example: /api/upload
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
-// -------------------------- Socket.io Setup -------------------------- //
-
-import { searchChat , handleNewMessage , getMessageHistory, findChatRoom } from './services/chat.js';
-
-io.on('connection', (socket) => {
-
-    socket.on('search_chat', async ({ account_id , hotel_id }) => {
-        try {
-            const chats = await searchChat(account_id , hotel_id);
-            socket.emit('my_chat', chats);
-        } catch (err) {
-            console.error('Error searching chat room:', err);
-        }
-    });
-
-    socket.on('join_chat', async ({ account_id, hotel_id, chat_id }) => {
-        const chatId = chat_id || await findChatRoom({ account_id , hotel_id });
-        socket.join(chatId);
-        try {
-            const messageHistory = await getMessageHistory(chatId);
-            socket.emit('message_history', { messageHistory });
-        } catch (err) {
-            console.error('Error loading message history for admin:', err);
-        }
-    });
-
-    socket.on('send_message', async ({ from, chat_id, text }) => {
-        try {
-            const message = await handleNewMessage(from, chat_id, text);
-            io.to(chat_id).emit('receive_message', message);
-        } catch (err) {
-            console.error('send_message error:', err);
-            socket.emit('message_error', 'Something went wrong');
-        }
-    });
-
-});
 
 // -------------------------- Start the Server -------------------------- //
 
@@ -98,6 +67,9 @@ const PORT = process.env.PORT || 8000;
 const initializeServer = async () =>{
     try{
         console.log('🚀 Starting C-Canteen backend server...');
+
+        setSocketInstance(io);
+        initializeChatSocket(); 
         
         // MongoDB Connection
         console.log('🔗 Connecting to MongoDB...');
@@ -113,3 +85,4 @@ const initializeServer = async () =>{
 }
 
 initializeServer();
+
