@@ -36,11 +36,11 @@ export const UpdateBookingForms = ({
 
     return (
         <div className="px-2 relative top-20 w-full h-screen lg:w-[60%] mx-2 hdcard_white overflow-hidden">
-            <div className="p-6" style={{ fontSize: "14px" }}>
+            <div className="p-6 h-full" style={{ fontSize: "14px" }}>
                 <h2 className="text-2xl font-bold mb-10 capitalize text-blue-500 text-center">
                     Update Booking
                 </h2>
-                <div className="space-y-3 max-h-[700px] overflow-y-auto">
+                <div className="space-y-3 overflow-y-auto flex-1 max-h-[calc(100vh-200px)] pr-2">
                     {filteredRooms && filteredRooms.length > 0 ? (
                         filteredRooms.map((room) => (
                             <div
