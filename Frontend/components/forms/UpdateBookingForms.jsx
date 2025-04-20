@@ -40,20 +40,20 @@ export const UpdateBookingForms = ({
                 <h2 className="text-2xl font-bold mb-10 capitalize text-blue-500 text-center">
                     Update Booking
                 </h2>
-                <div className="space-y-3">
+                <div className="space-y-3 max-h-[700px] overflow-y-auto">
                     {filteredRooms && filteredRooms.length > 0 ? (
                         filteredRooms.map((room) => (
                             <div
                                 key={room._id}
                                 className="text-center w-full animate-fade-in"
                             >
-                                <UpdateBookingRoomCard 
-                                    room={room} 
-                                    token={token} 
-                                    booking_id={bookingId} 
-                                    hotel_id={hotelId} 
-                                    className="w-full">
-                                </UpdateBookingRoomCard>
+                                <UpdateBookingRoomCard
+                                    room={room}
+                                    token={token}
+                                    booking_id={bookingId}
+                                    hotel_id={hotelId}
+                                    className="w-full"
+                                />
                             </div>
                         ))
                     ) : (
