@@ -28,7 +28,7 @@ const HotelSelectCard = ({
               alt={hotel.name}
               width={500} 
               height={500} 
-              layout="responsive" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               quality={75} 
               loading="lazy" 
             />
