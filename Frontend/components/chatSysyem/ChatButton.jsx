@@ -17,12 +17,10 @@ const ChatButton = () => {
     <div 
       onClick={toggleChat}
       className='hdcard_white align_item_center clickButton'
-      style={{position:"fixed", bottom:"20px", right:"20px", width:"35px", height:"35px", borderRadius:"40px",
-        rotate: isShow ? "180deg" : "0deg"
-
+      style={{position:"fixed", bottom:"20px", right:"20px", width:"38px", height:"38px", borderRadius:"40px"
       }}
     >
-      <img src='/icons/CHAT LOGO.svg' style={{width:"20px"}}/>
+      <img src='/icons/CHAT LOGO.svg' style={{width:"24px"}}/>
     </div>
   )
 }
