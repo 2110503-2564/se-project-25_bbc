@@ -50,6 +50,32 @@ export async function searchBookingsPopulateAccountId({
   }
 }
 
+export async function searchBookingsPopulateFields({ token, populateFields = [] }) {
+  // Join the fields into a query string to pass to the API
+  const populateQuery = populateFields.length ? `populate=${populateFields.join(',')}` : '';
+
+  try {
+    const res = await fetch(`${URL}/api/booking/search?${populateQuery}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(`Error fetching bookings with message: ${data.message}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Search Booking error:', error);
+    throw error;
+  }
+}
+
+
 export async function getBooking({
   token,
   query = ""

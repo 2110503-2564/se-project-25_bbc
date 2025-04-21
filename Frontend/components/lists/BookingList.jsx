@@ -10,27 +10,46 @@ export const BookingList = ({ bookings }) => {
   const [sortOrder, setSortOrder] = useState('desc') // 'asc' or 'desc'
   const [sortField, setSortField] = useState('createdAt') // default sort field
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const storedLogin = localStorage.getItem("res_login")
-    if (storedLogin) {
-      const parsedUser = JSON.parse(storedLogin)
-      setUser(parsedUser)
-    }
-  }, [])
+      const storedLogin = localStorage.getItem("res_login");
+      // Simulating a delay to show the loading state
+      setTimeout(() => {
+        if (storedLogin) {
+          const parsedUser = JSON.parse(storedLogin);
+          setUser(parsedUser);
+        }
+        setLoading(false);
+      }, 1000);
+  }, []);
 
   useEffect(() => {
-    if (user && bookings?.bookings) {
+    if (user && bookings) { // Removed ?.bookings since the data is now direct array
       const role = user.account.role
       const userId = user.account.id
       const hotelId = user.account.hotel_id
 
-      const matched = bookings.bookings.filter(booking => {
-        console.log(booking);
+      let matched = bookings.bookings.filter(booking => {
         if (role === 'super_admin') return true
-        if (role === 'hotel_admin') return booking.hotel_id === hotelId
-        return booking.account_id.id === userId
+        if (role === 'hotel_admin') return booking.hotel_id._id === hotelId
+        return booking.account_id._id === userId
       })
+
+      if(searchTerm){
+        matched = matched.filter(booking => {
+          return(
+            booking.hotel_id.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            booking.account_id.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            booking.account_id.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            booking.room_id.room_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            booking.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            booking._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            booking.createdAt.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        })
+      }
 
       const sorted = matched.sort((a, b) => {
         const dateA = new Date(a[sortField])
@@ -40,7 +59,7 @@ export const BookingList = ({ bookings }) => {
 
       setFilteredBookings(sorted)
     }
-  }, [user, bookings, sortOrder, sortField])
+  }, [user, bookings, sortOrder, sortField ,searchTerm])
 
   const toggleSortOrder = () => {
     setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'))
@@ -52,16 +71,41 @@ export const BookingList = ({ bookings }) => {
   }
 
   const resetSorting = () => {
-    setSortField(null) // reset to default sort field
-    setSortOrder('asc') // reset to ascending order
+    setSortField('createdAt') // reset to default sort field
+    setSortOrder('desc') // reset to ascending order
   }
+
+  if(loading) return null ;
+
+  if(!user) return null;
 
   return (
     <div className="w-full p-6 bg-white rounded-lg shadow-lg relative top-20 mb-20">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-semibold main_text text-3xl mt-5">
-          {user?.account.role === 'user' ? 'Your Booking' : 'All Booking'}
-        </h2>
+        <div className='space-y-2'>
+          <h2 className="font-semibold main_text text-3xl mt-5">
+            {user?.account.role === 'user' ? 'Your Booking' : 'All Booking'}
+          </h2>
+          <div className='relative flex items-center space-x-2'>
+            <input type="text" 
+            className='card_bg2'
+            placeholder='Search Bookings'
+            value={searchTerm}
+            onChange={(e)=>setSearchTerm(e.target.value)}
+            style={{
+              padding:'8px',
+              paddingLeft:'20px',
+              paddingRight:'20px',
+              width:'100%',
+              maxWidth:'400px',
+              borderRadius:'6px'
+            }}
+            />
+         </div>
+        </div>
+        
+
+        
 
         {/* Filter UI */}
         <div className="relative flex items-center space-x-2" style={{ width:'60px'}}>
@@ -110,27 +154,27 @@ export const BookingList = ({ bookings }) => {
 
       {/* Sort field display with reset option */}
       {
-        sortField && (
-        <div className="mb-4">
+        sortField && sortField !== 'createdAt' && (
+          <div className="mb-4">
             <div className="flex items-center space-x-2">
-            <p className="font-medium text-gray-600">
-              Sorting by: 
-              <span className="font-semibold text-blue-500">
-                {
-                  sortField === 'check_in_date' ? 'Check-in Date' :
-                  sortField === 'check_out_date' ? 'Check-out Date' :
-                  'Created At'
-                }
-              </span>
-            </p>
-            <button
+              <p className="font-medium text-gray-600">
+                Sorting by: 
+                <span className="font-semibold text-blue-500">
+                  {
+                    sortField === 'check_in_date' ? 'Check-in Date' :
+                    sortField === 'check_out_date' ? 'Check-out Date' :
+                    ''
+                  }
+                </span>
+              </p>
+              <button
                 onClick={resetSorting}
                 className="text-sm font-bold text-red-500 cursor-pointer"
-            >
+              >
                 X
-            </button>
+              </button>
             </div>
-        </div>
+          </div>
         )
       }
       
