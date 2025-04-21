@@ -7,8 +7,8 @@ import Image from 'next/image'
 export const BookingList = ({ bookings }) => {
   const [user, setUser] = useState(null)
   const [filteredBookings, setFilteredBookings] = useState([])
-  const [sortOrder, setSortOrder] = useState('asc') // 'asc' or 'desc'
-  const [sortField, setSortField] = useState(null) // default sort field
+  const [sortOrder, setSortOrder] = useState('desc') // 'asc' or 'desc'
+  const [sortField, setSortField] = useState('createdAt') // default sort field
   const [dropdownOpen, setDropdownOpen] = useState(false)
 
   useEffect(() => {
@@ -26,6 +26,7 @@ export const BookingList = ({ bookings }) => {
       const hotelId = user.account.hotel_id
 
       const matched = bookings.bookings.filter(booking => {
+        console.log(booking);
         if (role === 'super_admin') return true
         if (role === 'hotel_admin') return booking.hotel_id === hotelId
         return booking.account_id.id === userId
@@ -96,6 +97,12 @@ export const BookingList = ({ bookings }) => {
               >
                 Check-out Date
               </button>
+              <button
+                className="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700 w-full text-left"
+                onClick={() => handleSortFieldChange('createdAt')}
+              >
+                Created At
+              </button>
             </div>
           )}
         </div>
@@ -107,7 +114,14 @@ export const BookingList = ({ bookings }) => {
         <div className="mb-4">
             <div className="flex items-center space-x-2">
             <p className="font-medium text-gray-600">
-                Sorting by: <span className="font-semibold text-blue-500">{sortField === 'check_in_date' ? 'Check-in Date' : 'Check-out Date'}</span>
+              Sorting by: 
+              <span className="font-semibold text-blue-500">
+                {
+                  sortField === 'check_in_date' ? 'Check-in Date' :
+                  sortField === 'check_out_date' ? 'Check-out Date' :
+                  'Created At'
+                }
+              </span>
             </p>
             <button
                 onClick={resetSorting}

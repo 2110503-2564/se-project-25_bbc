@@ -74,6 +74,10 @@ export const BookingCard = ({ booking }) => {
                         </span>
                     </td>
                 </tr>
+                <tr>
+                  <td className="font-semibold main_text pr-4 py-1">Created at:</td>
+                  <td>{new Date(booking.createdAt).toLocaleDateString()}</td>
+                </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Booking ID:</td>
                 <td>{booking._id}</td>
