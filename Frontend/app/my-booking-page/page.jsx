@@ -11,7 +11,7 @@ const Page = async () => {
   // console.log(bookings);
 
   return (
-    <div className='bg-gradient-to-b from-blue-500 to-white min-h-screen flex p-4 mb-20'>
+    <div className="bg-gradient-to-b from-blue-500 to-white min-h-screen flex flex-col p-2 lg:flex-row gap-2 items-center lg:items-start lg:gap-0 mb-20">
       <UserProfileTab />
       <BookingList bookings={bookings} />
     </div>
