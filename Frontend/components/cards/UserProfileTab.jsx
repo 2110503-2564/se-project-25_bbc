@@ -44,8 +44,8 @@ export const UserProfileTab = () => {
   } 
   
   return (
-    <div className='relative left-0 top-22 mb-2 lg:mb-0 lg:w-[30%] lg:h-screen lg:mr-2 lg:sticky hdcard_white overflow-hidden p-6'>
-      <h2 className='font-semibold main_text text-3xl mt-5'>Profile</h2>
+    <div className='relative left-0 top-22 mb-2 lg:mb-0 lg:w-[30%] lg:h-screen md:w-[50%] lg:mr-2 lg:sticky hdcard_white overflow-hidden p-5'>
+      <h2 className='font-semibold text-3xl mt-5'>Profile</h2>
       <div className='flex flex-col items-center justify-center text-center mt-5'>
         <Image
           src="/icons/profile-user-blue.png"
@@ -53,8 +53,8 @@ export const UserProfileTab = () => {
           width={100}
           height={100}
         />
-        <h2 className='font-semibold text-[20px] mt-5'>Welcome</h2>
-        <h2 className='font-semibold  text-[20px]'>
+        <h2 className='font-semibold sub_text text-[20px] mt-5'>Welcome</h2>
+        <h2 className='font-semibold sub_text  text-[20px]'>
           {user && (
             <>
               <span className="text-red-500 capitalize">

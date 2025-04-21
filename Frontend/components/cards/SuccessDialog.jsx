@@ -40,10 +40,10 @@ export const SuccessDialog = ({ open, onClose, textshow, reloadOnClose = true })
           color="primary"
           onClick={handleClose}
           sx={{
-            borderRadius: '999px',
+            borderRadius: 2,
             textTransform: 'none',
-            px: 4,
-            py: 1.5,
+            px: 3,
+            py: 1,
             fontSize: '0.875rem',
             boxShadow: 'none',
             backgroundColor: '#3B82F6',

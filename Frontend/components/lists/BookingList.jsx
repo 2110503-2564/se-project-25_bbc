@@ -170,9 +170,9 @@ export const BookingList = ({ bookings }) => {
               <button
                 onClick={resetSorting}
                 className="text-sm font-bold text-red-500 cursor-pointer"
-              >
-                X
-              </button>
+            >
+                <img src='/icons/x-3.svg' style={{width:"18px"}}/>
+            </button>
             </div>
           </div>
         )
