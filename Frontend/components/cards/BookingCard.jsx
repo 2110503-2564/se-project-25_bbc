@@ -12,27 +12,27 @@ export const BookingCard = ({ booking }) => {
   const account = booking.account_id;
 
   return (
-    <div className="border border-gray-200 rounded-lg p-6 mb-4 bg-white text-gray-600">
+    <div className="card_bg2 rounded-lg p-6 mb-4 bg-white text-gray-600">
       <div className="grid grid-cols-[120px_1fr] gap-y-2 text-sm text-gray-600">
-        <div className="font-semibold text-blue-500">Name:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">Name:</div>
         <div className="ml-[150px]">{account.first_name} {account.last_name}</div>
 
-        <div className="font-semibold text-blue-500">Hotel:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">Hotel:</div>
         <div className="ml-[150px]">{hotel?.name}</div>
 
-        <div className="font-semibold text-blue-500">Room:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">Room:</div>
         <div className="ml-[150px]">{room?.room_number}</div>
 
-        <div className="font-semibold text-blue-500">People:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">People:</div>
         <div className="ml-[150px]">{booking.num_people}</div>
 
-        <div className="font-semibold text-blue-500">Check-in:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">Check-in:</div>
         <div className="ml-[150px]">{new Date(booking.check_in_date).toLocaleDateString()}</div>
 
-        <div className="font-semibold text-blue-500">Check-out:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">Check-out:</div>
         <div className="ml-[150px]">{new Date(booking.check_out_date).toLocaleDateString()}</div>
 
-        <div className="font-semibold text-blue-500">Status:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">Status:</div>
         <div className="ml-[150px]">
           <span className={`font-semibold capitalize px-2 py-1 rounded 
             ${["pending", "finished"].includes(booking.status)
@@ -45,10 +45,10 @@ export const BookingCard = ({ booking }) => {
           </span>
         </div>
 
-        <div className="font-semibold text-blue-500">Created at:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">Created at:</div>
         <div className="ml-[150px]">{new Date(booking.createdAt).toLocaleDateString()}</div>
 
-        <div className="font-semibold text-blue-500">Booking ID:</div>
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">Booking ID:</div>
         <div className="ml-[150px]">{booking._id}</div>
       </div>
 
@@ -63,8 +63,7 @@ export const BookingCard = ({ booking }) => {
             num: booking.num_people
           }
         }}>
-          <button className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center"
-            style={{ borderRadius: "20px" }}
+          <button className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all rounded-md flex items-center"
           >
             <p>Manage Booking</p>
             <Image
