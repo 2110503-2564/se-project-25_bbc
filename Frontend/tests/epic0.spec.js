@@ -4,7 +4,7 @@ test.describe('Hotel Booking User Stories', () => {
   test.beforeEach(async ({ page }) => {
     // Common login steps for both tests
     await page.goto('http://localhost:3000/');
-    await page.getByRole('link', { name: 'Sign-In' }).click();
+    await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
     await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
     await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('tan@user.com');
     await page.getByRole('textbox', { name: 'password' }).click();
@@ -41,7 +41,7 @@ test.describe('Super Admin User Stories', () => {
   test.beforeEach(async ({ page }) => {
     // Common login steps for both tests
     await page.goto('http://localhost:3000/');
-    await page.getByRole('link', { name: 'Sign-In' }).click();
+    await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
     await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
     await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('tan@super.com');
     await page.getByRole('textbox', { name: 'password' }).click();

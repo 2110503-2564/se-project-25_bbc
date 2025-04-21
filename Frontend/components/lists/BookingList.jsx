@@ -28,7 +28,7 @@ export const BookingList = ({ bookings }) => {
       const matched = bookings.bookings.filter(booking => {
         if (role === 'super_admin') return true
         if (role === 'hotel_admin') return booking.hotel_id === hotelId
-        return booking.account_id === userId
+        return booking.account_id.id === userId
       })
 
       const sorted = matched.sort((a, b) => {
