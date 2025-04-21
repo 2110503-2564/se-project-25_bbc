@@ -10,6 +10,23 @@ const Menubar = () => {
   const [token, setToken] = useState(null);
   const [user,setUser] = useState(null);
 
+  // for resposive design
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const checkWidth = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkWidth();
+    window.addEventListener('resize', checkWidth);
+    return () => window.removeEventListener('resize', checkWidth);
+  }, []);
+
+  const handleMenuToggle = () => {
+    setMenuOpen(!menuOpen);
+  };
+  // for scroll
   useEffect(() => {
     const handleScroll = () => {
       setAtTop(window.scrollY < 50);
@@ -83,9 +100,37 @@ const Menubar = () => {
             paddingRight: '0px', // optional padding
           }}
         >
+          {!isMobile && (
+          <>
           <TextButton text='Hotels' linkString='/hotels-page' />
           <TextButton text='My-booking' linkString='/my-booking-page' />
-
+          </>
+          )}
+          {isMobile && (
+            <>
+            <div onClick={handleMenuToggle} style={{ height: "100%", width: "55px", display:"inline-block", position:"relative" }}>
+            <img
+              src='/icons/menu-2.svg'
+              style={{
+                height: '25px',
+                marginLeft: "14px",
+                marginTop: "11px",
+                display: 'inline-block',
+                position: "absolute",
+                left: "4.5px",
+                top: "0px"
+              }}
+              alt="Logo"
+            />
+            {menuOpen && (
+              <div style={{backgroundColor:"white", position:"absolute", top:"50px", right:"0px", width:"140px", borderRadius:"10px", paddingBottom:"5px", boxShadow: "0px 2px 20px rgba(0, 0, 0, 0.132)"}}>
+                <TextButton text='Hotels' linkString='/hotels-page' />
+                <div style={{width:"100%", height:"1px", backgroundColor:"rgba(0,0,0,0.2)", position:"absolute", left:"0", right:"0", top:"42px"}}></div>
+                <TextButton text='My-booking' linkString='/my-booking-page' />
+              </div>
+            )}
+          </div></>
+          )}
           {mounted && token ? (
             <TextButton text='Sign-out' linkString='/' onClick={handleSignOut} showBox={true} />
           ) : mounted ? (
