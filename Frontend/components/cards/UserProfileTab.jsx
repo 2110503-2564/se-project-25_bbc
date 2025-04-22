@@ -57,7 +57,7 @@ export const UserProfileTab = () => {
         <h2 className='font-semibold sub_text  text-[20px]'>
           {user && (
             <>
-              <span className="text-red-500 capitalize">
+              <span className="main_text capitalize">
                 {['hotel_admin', 'super_admin'].includes(user.account.role) ? user.account.role.replace('_', ' ') : ''}
               </span>{' '}
               {user.account.first_name} {user.account.last_name}
