@@ -1,15 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { searchHotel } from "@api/hotel";
-import { searchRoom } from "@api/room";
 import { changeBookingStatus } from "@api/booking";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export const BookingCard = ({ booking }) => {
-  const [hotel, setHotel] = useState(null);
-  const [room, setRoom] = useState(null);
+  const [hotel, setHotel] = useState(booking.hotel_id);
+  const [room, setRoom] = useState(booking.room_id);
   const [status, setStatus] = useState(booking.status);
   const [isClient, setIsClient] = useState(false);
   const [user, setUser] = useState(null);
@@ -25,21 +23,6 @@ export const BookingCard = ({ booking }) => {
       setUser(parsedUser);
     }
   }, []);
-
-  useEffect(() => {
-    const fetchDetails = async () => {
-      try {
-        const hotelData = await searchHotel(`_id=${booking.hotel_id._id}`);
-        const roomData = await searchRoom(`_id=${booking.room_id._id}`);
-        if (hotelData?.hotels?.length > 0) setHotel(hotelData.hotels[0]);
-        if (roomData?.rooms?.length > 0) setRoom(roomData.rooms[0]);
-      } catch (error) {
-        console.error("Error fetching hotel or room:", error);
-      }
-    };
-
-    fetchDetails();
-  }, [booking.hotel_id, booking.room_id]);
 
   // Function to update booking status
   const handleUpdateStatus = async (newStatus) => {

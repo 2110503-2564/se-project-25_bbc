@@ -181,9 +181,7 @@ export const BookingList = ({ bookings }) => {
 
       {filteredBookings.length > 0 ? (
         filteredBookings.map(booking => (
-          <BookingCard key={booking._id} booking={{
-            ...booking,
-          }} />
+          <BookingCard key={booking._id} booking={booking} />
         ))
       ) : (
         <p className="text-gray-600">No bookings found.</p>
