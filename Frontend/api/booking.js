@@ -191,3 +191,50 @@ export async function deleteBooking(token, booking_id, hotel_id) {
     throw error;
   }
 }
+
+export async function changeBookingStatus({ token, booking_id, new_status }) {
+  try {
+    let url = `${URL}/api/booking/${booking_id}`;
+    switch (new_status) {
+      case 'accepted':
+        url = `${URL}/api/booking/accept/${booking_id}`;
+        break;
+      case 'rejected':
+        url = `${URL}/api/booking/reject/${booking_id}`;
+        break;
+      case 'confirmed':
+        url = `${URL}/api/booking/confirm/${booking_id}`;
+        break;
+      case 'finished':
+        url = `${URL}/api/booking/finish/${booking_id}`;
+        break;
+      default:
+        throw new Error('Invalid status');
+    }
+
+    console.log("📦 changeBookingStatus → URL:", url);
+    console.log("📦 changeBookingStatus → token:", token);
+    console.log("📦 changeBookingStatus → booking_id:", booking_id);
+
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ status: new_status })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Response not OK", data);
+      throw new Error(data.message || "Failed to update booking status");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Change Booking Status Error:", error);
+    throw error;
+  }
+}
