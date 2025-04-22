@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const RoomInfoCard = ({ room, isSelected, onToggle }) => (
-  <div className="flex w-full bg-gray-100 shadow-lg">
+  <div className="flex w-full card_bg2 shadow-lg">
     <div className="relative w-1/3 min-w-[150px] h-[250px]">
       <Image
         src={room.image_url}

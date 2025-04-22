@@ -84,7 +84,6 @@ import {
           <Button
             onClick={onConfirm}
             variant="contained"
-            color="primary"
             sx={{
               borderRadius: 2,
               textTransform: 'none',
@@ -92,6 +91,7 @@ import {
               px: 3,
               py: 1,
               boxShadow: 'none',
+              backgroundColor:'#3C82F6'
             }}
           >
             Confirm

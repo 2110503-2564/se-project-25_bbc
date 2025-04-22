@@ -42,7 +42,15 @@ const HotelSelectCard = ({
           className='main_text' 
           style={{fontSize:"12px", fontWeight:"200", lineHeight:"0px"}}
         >
-        {hotel.tel}
+        <div style={{ display: "inline-block", marginRight: "3px", marginBottom: "-1px" }}>
+          <img src='/icons/phone.svg' width="12px" />
+        </div>
+        {hotel.tel} <br/>
+        <div style={{ display: "inline-block", marginRight: "3px", marginBottom: "-1px" }}>
+          <img src='/icons/map-pin-3.svg' width="12px" />
+        </div>
+        {hotel.address.city}, &nbsp; 
+        {hotel.address.street_name} 
         </span>
       </div> 
     </div>

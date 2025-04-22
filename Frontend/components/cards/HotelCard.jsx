@@ -11,6 +11,7 @@ const HotelCard = ({
       style={{ 
         width:"30vw",
         height:"100%",
+        minWidth:"250px",
         position:"relative",
         flexShrink:0,
         scrollSnapAlign:"center",
@@ -33,12 +34,26 @@ const HotelCard = ({
         className=''
         style={{fontWeight:"600", position:"absolute", top:"calc(60% + 20px)", left:"8px", right:"8px", textAlign:"left"}}>
         {hotel.name}
-        <br/>
+
         <span 
           className='main_text' 
           style={{fontSize:"12px", fontWeight:"200", lineHeight:"0px"}}
         >
-        {hotel.tel}
+         <br/>
+        <span 
+          className='main_text' 
+          style={{fontSize:"12px", fontWeight:"200", lineHeight:"0px"}}
+        >
+        <div style={{ display: "inline-block", marginRight: "3px", marginBottom: "-1px" }}>
+          <img src='/icons/phone.svg' width="12px" />
+        </div>
+        {hotel.tel} <br/>
+        <div style={{ display: "inline-block", marginRight: "3px", marginBottom: "-1px" }}>
+          <img src='/icons/map-pin-3.svg' width="12px" />
+        </div>
+        {hotel.address.city}, &nbsp; 
+        {hotel.address.street_name} 
+        </span>
         </span>
       </div> 
     </div>
