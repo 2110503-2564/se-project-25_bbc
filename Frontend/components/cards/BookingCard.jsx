@@ -29,8 +29,8 @@ export const BookingCard = ({ booking }) => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const hotelData = await searchHotel(`_id=${booking.hotel_id}`);
-        const roomData = await searchRoom(`_id=${booking.room_id}`);
+        const hotelData = await searchHotel(`_id=${booking.hotel_id._id}`);
+        const roomData = await searchRoom(`_id=${booking.room_id._id}`);
         if (hotelData?.hotels?.length > 0) setHotel(hotelData.hotels[0]);
         if (roomData?.rooms?.length > 0) setRoom(roomData.rooms[0]);
       } catch (error) {
