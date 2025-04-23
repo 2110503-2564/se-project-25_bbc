@@ -16,20 +16,36 @@ export const UpdateBookingForms = ({
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        const hotelIdFromUrl = params.get("hotel_id");
         const bookingIdFromUrl = params.get("booking_id")
         const storedToken = localStorage.getItem("token");
 
-        setHotelId(hotelIdFromUrl);
         setBookingId(bookingIdFromUrl);
         setToken(storedToken);
 
-        if (hotelIdFromUrl && rooms && rooms.length > 0) {
-            const filtered = rooms.filter(room => room.hotel_id === hotelIdFromUrl);
-            setFilteredRooms(filtered);
-        } else {
-            setFilteredRooms(rooms); // fallback to all if no hotel_id
-        }
+        const fetchBooking = async () => {
+            if (bookingIdFromUrl && storedToken) {
+                try {
+                    const bookingData = await getBooking({
+                        token: storedToken,
+                        query: `_id=${bookingIdFromUrl}`
+                    });
+                    const hotelIdFromBooking = bookingData.bookings[0]?.hotel_id;
+    
+                    setHotelId(hotelIdFromBooking);
+    
+                    if (hotelIdFromBooking && rooms && rooms.length > 0) {
+                        const filtered = rooms.filter(room => room.hotel_id === hotelIdFromBooking);
+                        setFilteredRooms(filtered);
+                    } else {
+                        setFilteredRooms(rooms); // fallback to all if no match
+                    }
+                } catch (err) {
+                    console.error("Error fetching booking:", err);
+                }
+            }
+        };
+    
+        fetchBooking();
     }, [rooms]);
     console.log(rooms)
     console.log(hotels)
@@ -40,7 +56,7 @@ export const UpdateBookingForms = ({
                 <h2 className="text-2xl font-bold mb-10 capitalize text-blue-500 text-center">
                     Update Booking
                 </h2>
-                <div className="space-y-3 overflow-y-auto flex-1 max-h-[calc(100vh-200px)] pr-2">
+                <div className="space-y-3 overflow-y-auto flex-1 max-h-[calc(100vh-200px)] pr-2 rounded-md">
                     {filteredRooms && filteredRooms.length > 0 ? (
                         filteredRooms.map((room) => (
                             <div
