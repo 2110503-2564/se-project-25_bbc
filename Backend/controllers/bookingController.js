@@ -96,79 +96,37 @@ export const createBooking = async (req, res) => {
 };
 
 export const acceptedBooking = async (req, res) => {
-    try {
-        const hotel_id = req.user.role === "hotel_admin" ? req.user.hotel_id : req.body.hotel_id;
-
-        if (req.user.role === "hotel_admin" && req.user.hotel_id.toString() !== req.body.booking.hotel_id.toString())
-            return res.status(403).json({ success: false, message: "You do not have permission to accept this booking." });
-
-        // ใช้ booking_id จาก req.params
-        const booking = await Booking.findOneAndUpdate(
-            { _id: req.params.booking_id, hotel_id },  // ใช้ booking_id จาก URL
-            { status: "accepted" },
-            { new: true, runValidators: true }
-        );
-
-        if (!booking) return res.status(404).json({ success: false, message: "Booking not found." });
-
-        const io = getSocketInstance();
-        const hotel = await Hotel.findById(hotel_id);
-
-        if (!hotel) return res.status(404).json({ success: false, message: "Hotel not found." });
-
-        const notification = await Notification.create({
-            hotel_id: hotel_id,
-            account_id: booking.account_id,
-            head: `Booking accepted!`,
-            detail: `Your Booking at ${hotel.name} was accepted`,
-            type: "booking"
-        });
-
-        io.to(`account_${booking.account_id.toString()}`).emit("receive_notification", notification);
-
-        res.status(200).json({ success: true, booking });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: error.message });
-    }
-};
-
-export const rejectedBooking = async (req, res) => {
   try {
-    const hotel_id = req.user.role === "hotel_admin" ? req.user.hotel_id : req.body.hotel_id;
+    const booking = await Booking.findById(req.params.booking_id);
+    if (!booking) return res.status(404).json({ success: false, message: "Booking not found." });
+
+    const hotel_id = booking.hotel_id.toString();
 
     if (
       req.user.role === "hotel_admin" &&
-      req.user.hotel_id.toString() !== req.body.booking.hotel_id.toString()
+      req.user.hotel_id.toString() !== hotel_id
     ) {
       return res.status(403).json({
         success: false,
-        message: "You do not have permission to reject this booking.",
+        message: "You do not have permission to accept this booking.",
       });
     }
 
-    const booking = await Booking.findOneAndUpdate(
-      { _id: req.params.booking_id, hotel_id },
-      { status: "rejected" },
-      { new: true, runValidators: true }
-    );
+    booking.status = "accepted";
+    await booking.save();
 
-    if (!booking)
-      return res.status(404).json({ success: false, message: "Booking not found." });
-
-    const io = getSocketInstance();
     const hotel = await Hotel.findById(hotel_id);
     if (!hotel) return res.status(404).json({ success: false, message: "Hotel not found." });
 
     const notification = await Notification.create({
-      hotel_id,
+      hotel_id: hotel_id,
       account_id: booking.account_id,
-      head: `Booking rejected!`,
-      detail: `Your Booking at ${hotel.name} was rejected`,
+      head: `Booking accepted!`,
+      detail: `Your Booking at ${hotel.name} was accepted`,
       type: "booking",
     });
 
+    const io = getSocketInstance();
     io.to(`account_${booking.account_id.toString()}`).emit("receive_notification", notification);
 
     res.status(200).json({ success: true, booking });
@@ -178,6 +136,53 @@ export const rejectedBooking = async (req, res) => {
   }
 };
 
+export const rejectedBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.booking_id);
+    if (!booking) {
+      return res.status(404).json({ success: false, message: "Booking not found." });
+    }
+
+    const hotel_id = booking.hotel_id.toString();
+
+    if (
+      req.user.role === "hotel_admin" &&
+      req.user.hotel_id.toString() !== hotel_id
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "You do not have permission to reject this booking.",
+      });
+    }
+
+    booking.status = "rejected";
+    await booking.save();
+
+    const hotel = await Hotel.findById(hotel_id);
+    if (!hotel) {
+      return res.status(404).json({ success: false, message: "Hotel not found." });
+    }
+
+    const notification = await Notification.create({
+      hotel_id,
+      account_id: booking.account_id,
+      head: `Booking rejected!`,
+      detail: `Your booking at ${hotel.name} was rejected.`,
+      type: "booking",
+    });
+
+    const io = getSocketInstance();
+    io.to(`account_${booking.account_id.toString()}`).emit(
+      "receive_notification",
+      notification
+    );
+
+    res.status(200).json({ success: true, booking });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
 
 export const confirmedBooking = async (req, res) => {
   try {
