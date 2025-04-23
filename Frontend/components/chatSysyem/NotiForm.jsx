@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { sendNoti } from "@api/noti";
 
 export default function NotiForm() {
+  const [showDate, setShowDate] = useState(true);
   const [formData, setFormData] = useState({
     head: '',
     detail: '',
@@ -17,6 +18,11 @@ export default function NotiForm() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleSelectChange = (e) => {
+    const { value } = e.target;
+    setShowDate(value === "promotion");
   };
 
   const handleSubmit = async (e) => {
@@ -77,7 +83,7 @@ export default function NotiForm() {
           placeholder="Detail"
         />
       </div>
-
+      {showDate && (
       <div>
         <input
           type="datetime-local"
@@ -96,14 +102,14 @@ export default function NotiForm() {
           className="mt-1 mb-[20px] block w-full border-none rounded p-2"
         />
       </div>
-
+      )}
       <div>
 
         <select
           id="type"
           name="type"
           value={formData.type}
-          onChange={handleChange}
+          onChange={(e) => {handleChange(e); handleSelectChange(e)}}
           style={{
             width:"100%",
             borderRadius: "10px",
