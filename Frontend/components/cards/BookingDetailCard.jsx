@@ -41,10 +41,10 @@ export const BookingDetailCard = () => {
   return (
     <div className="px-2 relative top-20 lg:w-[40%] lg:h-screen hdcard_white overflow-hidden">
       <div className="p-6" style={{ fontSize: "14px" }}>
-        <h2 className="text-2xl font-bold mb-10 capitalize text-center">
+        <h2 className="text-2xl font-bold mb-10 relative capitalize text-center">
           Current Booking Details
         </h2>
-
+       
         <table className="w-full table-fixed text-left">
           <tbody className="text-sm text-gray-700">
             <tr>
@@ -109,7 +109,7 @@ export const BookingDetailCard = () => {
         </table>
 
 
-        <img alt="receipt" style={{borderRadius:"10px"}} className="border border-gray-300 card_bg2 " width={300} height={400} src={booking?.receiptUrl?.replace('http:/', 'http://')}/>
+        <img alt="receipt" style={{borderRadius:"10px", marginTop:"10px"}} className="border border-gray-300 card_bg2 " width={150} height={200} src={booking?.receiptUrl?.replace('http:/', 'http://')}/>
         <p className="mt-6 bg-yellow-100 p-5 rounded-xl text-gray-700 text-center">
           Please review the booking details before proceeding to manage it.
         </p>
@@ -119,8 +119,9 @@ export const BookingDetailCard = () => {
           <DeletedBookButton booking_id={bookingId}/>
         </div>
         
+        </div>
 
-      </div>
+    
     </div>
   );
 };
