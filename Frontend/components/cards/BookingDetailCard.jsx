@@ -6,6 +6,8 @@ import { searchRoom } from "@api/room";
 import { getBooking } from "@api/booking";
 import { searchHotel } from "@api/hotel";
 import DeletedBookButton from "@components/buttons/DeletedBookButton";
+import Image from "@node_modules/next/image";
+import { borderRadius } from "@node_modules/@mui/system";
 
 export const BookingDetailCard = () => {
   const searchParams = useSearchParams();
@@ -23,6 +25,7 @@ export const BookingDetailCard = () => {
   
       const bookingRes = await getBooking({ token, query: `_id=${bookingId}` });
       const booking = bookingRes.bookings[0];
+      console.log("Book:",booking)
       const hotelRes = await searchHotel(`_id=${booking.hotel_id}`);
       const roomRes = await searchRoom(`_id=${booking.room_id}`);
   
@@ -106,7 +109,7 @@ export const BookingDetailCard = () => {
         </table>
 
 
-        <img alt="receipt" src={booking?.receiptUrl}/>
+        <img alt="receipt" style={{borderRadius:"10px"}} className="border border-gray-300 card_bg2 " width={300} height={400} src={booking?.receiptUrl?.replace('http:/', 'http://')}/>
         <p className="mt-6 bg-yellow-100 p-5 rounded-xl text-gray-700 text-center">
           Please review the booking details before proceeding to manage it.
         </p>

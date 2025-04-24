@@ -123,9 +123,9 @@ const Menubar = () => {
               alt="Logo"
             />
             {menuOpen && (
-              <div style={{backgroundColor:"white", position:"absolute", top:"50px", right:"0px", width:"140px", borderRadius:"10px", paddingBottom:"5px", boxShadow: "0px 2px 20px rgba(0, 0, 0, 0.132)"}}>
+              <div className='border border-gray-300' style={{backgroundColor:"white", position:"absolute", top:"50px", right:"0px", width:"140px", borderRadius:"10px", paddingBottom:"5px", boxShadow: "0px 2px 20px rgba(0, 0, 0, 0.132)"}}>
                 <TextButton text='Hotels' linkString='/hotels-page' />
-                <div style={{width:"100%", height:"1px", backgroundColor:"rgba(0,0,0,0.2)", position:"absolute", left:"0", right:"0", top:"42px"}}></div>
+                <div style={{width:"100%", height:"1px", backgroundColor:"rgba(0,0,0,0.1)", position:"absolute", left:"0", right:"0", top:"42px"}}></div>
                 <TextButton text='My-booking' linkString='/my-booking-page' />
               </div>
             )}
