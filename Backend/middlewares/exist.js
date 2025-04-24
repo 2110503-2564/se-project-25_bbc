@@ -1,6 +1,33 @@
 import Booking from "../models/Booking.js";
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
+import Account from "../models/Account.js";
+
+export const accountExist = async (req, res, next) => {
+    try {
+        const { email, tel } = req.body;
+
+        const existingAccount = await Account.findOne({
+            $or: [{ email }, { tel }]
+        });
+
+        if (existingAccount) {
+            return res.status(409).json({
+                success: false,
+                message: "Account with provided email or telephone already exists"
+            });
+        }
+
+        next();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Error checking account existence",
+            error: error.message
+        });
+    }
+};
 
 export const hotelExist = async(req, res, next) => {
 

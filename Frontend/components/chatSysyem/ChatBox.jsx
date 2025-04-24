@@ -281,7 +281,7 @@ const ChatBox = () => {
                 textAlign: "center",
               }}
             >
-              {role === "hotel_admin" ? "Publish" : "Notification"}
+              {role === "hotel_admin" || role === "super_admin" ? "Publish" : "Notification"}
               {unreadCount > 0 && (
                 <span
                   style={{
@@ -357,7 +357,7 @@ const ChatBox = () => {
                         flexShrink:"0"
                       }}
                     >
-                      {role === "hotel_admin" ? room.account_id.full_name : room.hotel_id.name} 
+                      {role === "hotel_admin" || role === "super_admin"? room.account_id.full_name : room.hotel_id.name} 
                     </span>
                     <img
                   src="/icons/chevron-black.svg"
