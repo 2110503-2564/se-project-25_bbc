@@ -83,7 +83,7 @@ export const BookingList = ({ bookings }) => {
     <div className="w-full p-6 hdcard_white shadow-lg relative top-20 mb-20">
       <div className="flex justify-between items-center mb-4">
         <div className='space-y-2'>
-          <h2 className="font-semibold main_text text-3xl mt-5">
+          <h2 className="font-semibold main_text text-2xl mt-5">
             {user?.account.role === 'user' ? 'Your Booking' : 'All Booking'}
           </h2>
           <div className='relative flex items-center space-x-2'>

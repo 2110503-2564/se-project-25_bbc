@@ -1,4 +1,5 @@
 import express from 'express';
+import upload from '../config/upload.js';
 import { protect , authorize } from '../middlewares/auth.js';
 import { roomExist , hotelExist , bookingExist } from '../middlewares/exist.js';
 import * as bookingController from '../controllers/bookingController.js';
@@ -8,7 +9,8 @@ const router = express.Router();
 // -------------------------- Booking Routes -------------------------- //
 
 router.get('/search' , bookingController.searchBooking);
-router.post('/pending' , protect , roomExist , hotelExist , bookingController.createBooking);
+router.post('/pending' , protect, upload.single('file') , roomExist , hotelExist , bookingController.createBooking);
+router.post('/paid', protect, upload.single('file') , roomExist , hotelExist , bookingController.createBooking);
 
 router.put('/accept/:booking_id', protect, authorize('hotel_admin', 'super_admin'), bookingExist, bookingController.acceptedBooking);
 router.put('/reject/:booking_id' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.rejectedBooking);

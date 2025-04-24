@@ -20,7 +20,6 @@ import hotelRoutes from './routes/hotelRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
 import accountRoutes from './routes/accountRoutes.js'
 import chatRoutes from './routes/chatRoutes.js';
-import uploadRoute from './routes/uploadRoutes.js';
 
 // -------------------------- Configuration -------------------------- //
 dotenv.config();
@@ -52,13 +51,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/booking", bookingRoutes);
 app.use("/api/hotel", hotelRoutes);
 app.use("/api/room", roomRoutes);
-app.use("/api/account",accountRoutes);
-app.use("/api/chat",chatRoutes);
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-app.use('/api', uploadRoute); // example: /api/upload
-
-app.use('/static', express.static(path.join(__dirname, 'public')));
-
+app.use("/api/account", accountRoutes);
+app.use("/api/chat", chatRoutes);
+app.use('/uploads', express.static('public/uploads'));
 
 // -------------------------- Start the Server -------------------------- //
 
