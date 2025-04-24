@@ -59,6 +59,14 @@ export const BookingCard = ({ booking }) => {
     }
   };
 
+  const handlePayment = () => {
+    if (isClient) {
+      router.push(
+        `/my-booking-page/payment-page?booking_id=${booking._id}`
+      )
+    }
+  }
+
   if (!isClient) return null;
 
   const userRole = user?.account?.role;
@@ -162,7 +170,7 @@ export const BookingCard = ({ booking }) => {
           )}
 
         <button
-          onClick={()=>{}}
+          onClick={handlePayment}
           className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center rounded-md"
         >
           <p>Payment</p>

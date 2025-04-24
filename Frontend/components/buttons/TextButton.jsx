@@ -27,6 +27,7 @@ const TextButton = ({
         fontSize:"15px",
         fontWeight:"400",
         borderRadius:"20px",
+        fontWeight:"500",
         backgroundColor:`${showBox ? "black" : "transparent"}`,
         color:`${showBox ? "white" : "black"}`,
       }}

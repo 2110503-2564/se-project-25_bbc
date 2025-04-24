@@ -215,17 +215,17 @@ export const BookingForms = ({
             </tbody>
           </table>
 
-          <div className='main_text font-semibold'>Upload receipt</div>
+          <div className='card_bg2 p-2 rounded-lg mt-3'>
+          <div className=' main_text font-semibold'>Upload receipt</div>
             <input type="file" name="photo" onChange={(e) => {setFile(e.target.files[0]);}} />
-      
+          </div>
          
         </div>
          <button
           type="submit"
-          className="w-full main_bg text-white py-1 rounded hover:main_bg transition duration-200"
-          style={{borderRadius:"20px"}}
+          className="bg-blue-500 text-white px-4 w-full py-2 hover:bg-blue-600 transition-all text-center  rounded-md"
         >
-          {loading ? "Processing..." : "Book Now"}
+          <p>{loading ? "Processing..." : "Book Now"}</p>
         </button>
       </form>
       
