@@ -104,41 +104,20 @@ export async function getBooking({
 }
 
 
-export async function createBooking({
-  token,
-  account_id,
-  hotel_id,
-  room_id,
-  status = "pending",
-  checkInDate,    // camelCase parameter
-  checkOutDate,   // camelCase parameter
-  numPeople,      // camelCase parameter
-  total_price,
-  receiptUrl,
-}) {
+export async function createBooking(token , formData) {
   try {
+
+    console.log(formData);
+
     const res = await fetch(`${URL}/api/booking/pending`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        account_id,
-        hotel_id,
-        room_id,
-        status,
-        num_people: numPeople,       // Convert to snake_case
-        check_in_date: checkInDate,   // Convert to snake_case
-        check_out_date: checkOutDate, // Convert to snake_cas
-        total_price,
-        receiptUrl,
-      }),
+      body: formData,
     });
-    
-    const data = await res.json();
-    console.log(data);
 
+    const data = await res.json();
     if (!res.ok) {
       throw new Error(data.message || "Failed to create booking");
     }
@@ -149,6 +128,7 @@ export async function createBooking({
     throw error;
   }
 }
+
 
 export async function updateBooking({
   token,

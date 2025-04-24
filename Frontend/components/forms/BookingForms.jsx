@@ -25,7 +25,6 @@ export const BookingForms = ({
   const [file, setFile] = useState(null);
   const [openSuccess, setOpenSuccess] = useState(false);
 
-
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedLogin = localStorage.getItem("res_login");
@@ -84,17 +83,6 @@ export const BookingForms = ({
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
     const dayDifference = (checkOut - checkIn) / (1000 * 60 * 60 * 24);
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const res = await fetch('http://localhost:8000/api/public/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    const data = await res.json();
-    const imageUrl = (`http://localhost:8000${data.path}`);
-    console.log(imageUrl);
 
     if (dayDifference > 3) {
       setErrorMessage("Booking cannot exceed 4 days");
@@ -103,18 +91,18 @@ export const BookingForms = ({
     }
 
     try {
-      await createBooking({
-        token: token,
-        account_id: user.account.id,
-        hotel_id: hotel_id,
-        room_id: room_id,
-        status: status,
-        checkInDate: checkInDate,
-        checkOutDate: checkOutDate,
-        numPeople: numPeople,
-        total_price: total_price,
-        receiptUrl: imageUrl,
-      });
+      const formData = new FormData();
+      formData.append("account_id", user.account.id);
+      formData.append("hotel_id", hotel_id);
+      formData.append("room_id", room_id);
+      formData.append("status", "pending");
+      formData.append("check_in_date", checkInDate);
+      formData.append("check_out_date", checkOutDate);
+      formData.append("num_people", numPeople);
+      formData.append("total_price", total_price);
+      formData.append("file", file); 
+
+      await createBooking(token , formData);
 
       setSuccessfulMessage("Booking Successful");
       setOpenSuccess(true);

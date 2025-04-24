@@ -1,3 +1,4 @@
+import path from 'path';
 import Booking from "../models/Booking.js";
 import Room from "../models/Room.js";
 import Hotel from "../models/Hotel.js";
@@ -57,12 +58,10 @@ export const createBooking = async (req, res) => {
       req.body;
 
     if (req.body.room.hotel_id.toString() !== req.body.hotel_id.toString())
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "This room does not belong to the specified hotel.",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "This room does not belong to the specified hotel.",
+      });
 
     const overlapping = await Booking.findOne({
       hotel_id,
@@ -78,13 +77,16 @@ export const createBooking = async (req, res) => {
     });
 
     if (overlapping)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message:
-            "You already have a booking for this room during the selected time.",
-        });
+      return res.status(400).json({
+        success: false,
+        message:
+          "You already have a booking for this room during the selected time.",
+      });
+
+    if (req.file) {
+      const filePath = path.join(`${process.env.HOST}:${process.env.PORT}` , "uploads", req.file.filename);
+      req.body.receiptUrl = filePath;
+    }
 
     const booking = await Booking.create(req.body);
 
@@ -98,7 +100,10 @@ export const createBooking = async (req, res) => {
 export const acceptedBooking = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.booking_id);
-    if (!booking) return res.status(404).json({ success: false, message: "Booking not found." });
+    if (!booking)
+      return res
+        .status(404)
+        .json({ success: false, message: "Booking not found." });
 
     const hotel_id = booking.hotel_id.toString();
 
@@ -116,7 +121,10 @@ export const acceptedBooking = async (req, res) => {
     await booking.save();
 
     const hotel = await Hotel.findById(hotel_id);
-    if (!hotel) return res.status(404).json({ success: false, message: "Hotel not found." });
+    if (!hotel)
+      return res
+        .status(404)
+        .json({ success: false, message: "Hotel not found." });
 
     const notification = await Notification.create({
       hotel_id: hotel_id,
@@ -127,7 +135,10 @@ export const acceptedBooking = async (req, res) => {
     });
 
     const io = getSocketInstance();
-    io.to(`account_${booking.account_id.toString()}`).emit("receive_notification", notification);
+    io.to(`account_${booking.account_id.toString()}`).emit(
+      "receive_notification",
+      notification
+    );
 
     res.status(200).json({ success: true, booking });
   } catch (error) {
@@ -140,7 +151,9 @@ export const rejectedBooking = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.booking_id);
     if (!booking) {
-      return res.status(404).json({ success: false, message: "Booking not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Booking not found." });
     }
 
     const hotel_id = booking.hotel_id.toString();
@@ -160,7 +173,9 @@ export const rejectedBooking = async (req, res) => {
 
     const hotel = await Hotel.findById(hotel_id);
     if (!hotel) {
-      return res.status(404).json({ success: false, message: "Hotel not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Hotel not found." });
     }
 
     const notification = await Notification.create({
@@ -244,12 +259,10 @@ export const finishedBooking = async (req, res) => {
       req.user.role === "hotel_admin" &&
       req.user.hotel_id.toString() !== req.body.booking.hotel_id.toString()
     )
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "You do not have permission to finish this booking.",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "You do not have permission to finish this booking.",
+      });
 
     const booking = await Booking.findOneAndUpdate(
       { _id: req.body.booking_id, hotel_id },
@@ -291,12 +304,10 @@ export const deleteBooking = async (req, res) => {
       req.user.role === "hotel_admin" &&
       req.user.hotel_id.toString() !== req.body.booking.hotel_id.toString()
     )
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "You do not have permission to delete this booking.",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "You do not have permission to delete this booking.",
+      });
 
     const booking = await Booking.findOneAndDelete({
       _id: req.body.booking_id,
