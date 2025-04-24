@@ -21,6 +21,12 @@ import roomRoutes from './routes/roomRoutes.js';
 import accountRoutes from './routes/accountRoutes.js'
 import chatRoutes from './routes/chatRoutes.js';
 
+// import Swagger
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express'
+import { title } from 'process';
+import { version } from 'os';
+
 // -------------------------- Configuration -------------------------- //
 dotenv.config();
 const app = express();
@@ -54,6 +60,21 @@ app.use("/api/room", roomRoutes);
 app.use("/api/account", accountRoutes);
 app.use("/api/chat", chatRoutes);
 app.use('/uploads', express.static('public/uploads'));
+
+// Swagger
+const swaggerOptions = {
+    swaggerDefinition:{
+        openapi:'3.0.0',
+        info:{
+            title:'Library API',
+            version:'1.0.0',
+            description:'Hotel Booking BBC API'
+        }
+    },
+    apis:['./routes/*.js'],
+}
+const swaggerDocs=swaggerJSDoc(swaggerOptions);
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocs));
 
 // -------------------------- Start the Server -------------------------- //
 
