@@ -59,6 +59,14 @@ export const BookingCard = ({ booking }) => {
     }
   };
 
+  const handlePayment = () => {
+    if (isClient) {
+      router.push(
+        `/my-booking-page/payment-page?booking_id=${booking._id}`
+      )
+    }
+  }
+
   if (!isClient) return null;
 
   const userRole = user?.account?.role;
@@ -210,6 +218,70 @@ export const BookingCard = ({ booking }) => {
             />
           </button>
         </div>
+
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">
+          Created at
+        </div>
+        <div className="ml-[150px] bg-white rounded-[5px] pl-[10px] pt-[5px]">
+          {new Date(booking.createdAt).toLocaleDateString()}
+        </div>
+
+        <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">
+          Booking ID
+        </div>
+        <div className="ml-[150px] bg-white rounded-[5px] pl-[10px] pt-[5px]">{booking._id}</div>
+      </div>
+
+      <div className="mt-4 flex justify-end flex-row space-x-2">
+        {["hotel_admin", "super_admin"].includes(userRole) &&
+          status !== "accepted" &&
+          status !== "rejected" &&
+          status !== "finished" && (
+            <>
+              <button
+                onClick={() => handleUpdateStatus("accepted")}
+                className="bg-green-500 text-white px-4 py-2 hover:bg-green-600 transition-all flex items-center rounded-md"
+              >
+                <p>Accept</p>
+              </button>
+
+              <button
+                onClick={() => handleUpdateStatus("rejected")}
+                className="bg-red-500 text-white px-4 py-2 hover:bg-red-600 transition-all flex items-center rounded-md"
+              >
+                <p>Reject</p>
+              </button>
+            </>
+          )}
+
+        <button
+          onClick={handlePayment}
+          className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center rounded-md"
+        >
+          <p>Payment</p>
+          <img
+            src="/icons/wallet-cards.svg"
+            alt="wallet"
+            width={15}
+            height={15}
+            className="ml-2"
+          />
+        </button>
+
+        <button
+          onClick={handleManageBooking}
+          className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center rounded-md"
+        >
+          <p>Manage Booking</p>
+          <img
+            src="/icons/pencil.svg"
+            alt="pencil-white"
+            width={15}
+            height={15}
+            className="ml-2"
+          />
+        </button>
+        
       </div>
     </div>
   );

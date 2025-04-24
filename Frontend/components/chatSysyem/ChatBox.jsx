@@ -373,7 +373,7 @@ const ChatBox = () => {
             ) : (
               <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
 
-                {role === "user" ? notifications?.map((notification, index) => {
+                {role === "user" ? [...notifications].reverse().map((notification, index) => {
                   const typeColors = {
                     news: "main_bg",
                     emergency: "red_bg",
