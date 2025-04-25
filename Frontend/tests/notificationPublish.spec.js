@@ -1,0 +1,32 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('http://localhost:3000/');
+  await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('1111111111');
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).press('Tab');
+  await page.getByRole('textbox', { name: 'password' }).fill('123456');
+  await page.getByRole('button', { name: 'Sign-In' }).click();
+  await page.locator('.hdcard_white > img').click();
+  await page.getByText('Publish').click();
+  await page.getByRole('textbox', { name: 'Title' }).click();
+  await page.getByRole('textbox', { name: 'Title' }).fill('asadfsdfasdfsad');
+  await page.getByRole('textbox', { name: 'Detail' }).click();
+  await page.getByRole('textbox', { name: 'Detail' }).fill('sadffdsafsa');
+  await page.locator('#expire').click();
+  await page.locator('#expire').fill('2025-04-20T10:00');
+  await page.getByRole('button', { name: 'Publish' }).click();
+  await page.getByRole('link', { name: 'Sign-out' }).click();
+  await page.locator('.hdcard_white > img').click();
+  await page.locator('span').filter({ hasText: 'Sign-In' }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('oak@user.com');
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).press('Tab');
+  await page.getByRole('textbox', { name: 'password' }).fill('123456');
+  await page.getByRole('button', { name: 'Sign-In' }).click();
+  await page.locator('.hdcard_white > img').click();
+  await page.getByText('Notification').click();
+  await expect(page.getByText('🏷️ asadfsdfasdfsadf')).toBeVisible();
+  await page.getByText('🏷️ asadfsdfasdfsadf🏨 Brakus').click();
+});

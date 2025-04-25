@@ -6,6 +6,7 @@ import { searchRoom } from "@api/room";
 import { getBooking } from "@api/booking";
 import { searchHotel } from "@api/hotel";
 import DeletedBookButton from "@components/buttons/DeletedBookButton";
+import UpdateStatusButton from "@components/buttons/UpdateStatusButton";
 
 export const BookingDetailCard = () => {
   const searchParams = useSearchParams();
@@ -107,10 +108,16 @@ export const BookingDetailCard = () => {
 
 
         <img alt="receipt" src={booking?.receiptUrl}/>
+
         <p className="mt-6 bg-yellow-100 p-5 rounded-xl text-gray-700 text-center">
           Please review the booking details before proceeding to manage it.
         </p>
         
+        <div className="mt-2">
+          <UpdateStatusButton booking_id={bookingId}/>
+          
+        </div>
+
         {/* Deleted Booking Button */}
         <div className="mt-2">
           <DeletedBookButton booking_id={bookingId}/>
