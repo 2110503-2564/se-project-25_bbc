@@ -30,7 +30,7 @@ const page = async ({ searchParams }) => {
     console.log(roomData.rooms);
 
     return (
-        <div className='bg-gradient-to-b from-blue-500 to-white min-h-screen flex p-4'>
+        <div style={{marginBottom:"200px"}} className='bg-gradient-to-b from-blue-500 to-white min-h-screen flex p-4'>
             <BookingPageClient
                 booking={bookingData.bookings[0]}
                 hotels={hotelData.hotels}

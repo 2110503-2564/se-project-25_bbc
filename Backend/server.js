@@ -20,7 +20,12 @@ import hotelRoutes from './routes/hotelRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
 import accountRoutes from './routes/accountRoutes.js'
 import chatRoutes from './routes/chatRoutes.js';
-import uploadRoute from './routes/uploadRoutes.js';
+
+// import Swagger
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express'
+import { title } from 'process';
+import { version } from 'os';
 
 // -------------------------- Configuration -------------------------- //
 dotenv.config();
@@ -52,13 +57,24 @@ app.use("/api/auth", authRoutes);
 app.use("/api/booking", bookingRoutes);
 app.use("/api/hotel", hotelRoutes);
 app.use("/api/room", roomRoutes);
-app.use("/api/account",accountRoutes);
-app.use("/api/chat",chatRoutes);
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-app.use('/api', uploadRoute); // example: /api/upload
+app.use("/api/account", accountRoutes);
+app.use("/api/chat", chatRoutes);
+app.use('/uploads', express.static('public/uploads'));
 
-app.use('/static', express.static(path.join(__dirname, 'public')));
-
+// Swagger
+const swaggerOptions = {
+    swaggerDefinition:{
+        openapi:'3.0.0',
+        info:{
+            title:'Library API',
+            version:'1.0.0',
+            description:'Hotel Booking BBC API'
+        }
+    },
+    apis:['./routes/*.js'],
+}
+const swaggerDocs=swaggerJSDoc(swaggerOptions);
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocs));
 
 // -------------------------- Start the Server -------------------------- //
 

@@ -5,6 +5,7 @@ import { RoomInfoCard } from './RoomInfoCard'
 import { RoomSelectionForm } from '@components/forms/RoomSelectionForm'
 import { SuccessDialog } from './SuccessDialog'
 import { updateBooking } from '@api/booking'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const UpdateBookingRoomCard = ({ room, token, booking_id, hotel_id }) => {
   const [isSelected, setIsSelected] = useState(false)
@@ -41,18 +42,29 @@ const UpdateBookingRoomCard = ({ room, token, booking_id, hotel_id }) => {
         onToggle={() => setIsSelected(!isSelected)}
       />
 
-      {isSelected && (
-        <RoomSelectionForm
-          capacity={room.capacity}
-          numPeople={numPeople}
-          setNumPeople={setNumPeople}
-          checkIn={checkIn}
-          setCheckIn={setCheckIn}
-          checkOut={checkOut}
-          setCheckOut={setCheckOut}
-          onUpdateClick={() => setOpenConfirm(true)}
-        />
-      )}
+      <AnimatePresence>
+        {isSelected && (
+          <motion.div
+            key="room-selection-form"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            style={{ overflow: 'hidden' }}
+          >
+            <RoomSelectionForm
+              capacity={room.capacity}
+              numPeople={numPeople}
+              setNumPeople={setNumPeople}
+              checkIn={checkIn}
+              setCheckIn={setCheckIn}
+              checkOut={checkOut}
+              setCheckOut={setCheckOut}
+              onUpdateClick={() => setOpenConfirm(true)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <DialogConfirm
         open={openConfirm}

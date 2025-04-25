@@ -1,5 +1,5 @@
 # Use official Node.js image
-FROM node:20
+FROM node:22
 
 # Set working directory
 WORKDIR /app
@@ -13,11 +13,8 @@ RUN npm install
 # Copy the entire frontend project
 COPY . .
 
-# Build Next.js application
-RUN npm run build
-
 # Expose frontend port
 EXPOSE 3000
 
 # Start Next.js server
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]

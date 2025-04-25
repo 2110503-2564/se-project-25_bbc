@@ -281,7 +281,7 @@ const ChatBox = () => {
                 textAlign: "center",
               }}
             >
-              {role === "hotel_admin" ? "Publish" : "Notification"}
+              {role === "hotel_admin" || role === "super_admin" ? "Publish" : "Notification"}
               {unreadCount > 0 && (
                 <span
                   style={{
@@ -302,14 +302,15 @@ const ChatBox = () => {
             </div>
           </div>
           <div
-            className="hide_scrollbar"
+            className="hide_scrollbar card_bg2"
             style={{
               position: "absolute",
               top: "80px",
-              bottom: "80px",
+              bottom: "10px",
+              borderRadius:"20px",
               paddingBottom: "50px",
-              left: "5px",
-              right: "5px",
+              left: "10px",
+              right: "10px",
               overflowY: "scroll",
             }}
           >
@@ -356,7 +357,7 @@ const ChatBox = () => {
                         flexShrink:"0"
                       }}
                     >
-                      {role === "hotel_admin" ? room.account_id.full_name : room.hotel_id.name} 
+                      {role === "hotel_admin" || role === "super_admin"? room.account_id.full_name : room.hotel_id.name} 
                     </span>
                     <img
                   src="/icons/chevron-black.svg"
@@ -372,12 +373,12 @@ const ChatBox = () => {
             ) : (
               <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
 
-                {role === "user" ? notifications?.map((notification, index) => {
+                {role === "user" ? [...notifications].reverse().map((notification, index) => {
                   const typeColors = {
                     news: "main_bg",
                     emergency: "red_bg",
-                    promotion: "green_bg",
-                    booking: "pink_bg"
+                    promotion: "main_bg",
+                    booking: "un_bg"
                   };
                   const typeEmojis = {
                     news: "📰",

@@ -24,7 +24,7 @@ export default function SigninBox() {
           localStorage.setItem("token", response.token);
           localStorage.setItem('res_login',JSON.stringify(response));
           document.cookie = `token=${response.token}; path=/; max-age=36000`;
-          window.location.href = "/" // Reload the page to apply the token and direct to home page
+          window.location.href = "/" 
         }
       } else {
         setError("Login failed. Please check your User ID.");

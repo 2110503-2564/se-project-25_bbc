@@ -1,5 +1,5 @@
 import express from 'express';
-import upload from '../utils/upload.js'; // path to the multer config
+import upload from '../config/upload.js'; // path to the multer config
 
 const router = express.Router();
 
