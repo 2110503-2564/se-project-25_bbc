@@ -10,7 +10,7 @@ export async function searchBookings({
         Authorization: `Bearer ${token}`
       }
     })
-
+    
     const data = await res.json();
 
     if(!res.ok){
@@ -290,12 +290,12 @@ export async function uploadReceiptImage({
 }) {
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("booking_id", booking_id);
 
   const response = await fetch(`${URL}/api/booking/receipt/${booking_id}`, {
     method: "POST",
     headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${token}`
     },
     body: formData,
   });

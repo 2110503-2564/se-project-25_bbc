@@ -16,7 +16,7 @@ export const BookingCard = ({ booking }) => {
 
   useEffect(() => {
     setIsClient(true);
-
+    console.log("Booking:", booking);
     const storedLogin = localStorage.getItem("res_login");
     if (storedLogin) {
       const parsedUser = JSON.parse(storedLogin);
@@ -62,7 +62,7 @@ export const BookingCard = ({ booking }) => {
   const handlePayment = () => {
     if (isClient) {
       router.push(
-        `/my-booking-page/payment-page?booking_id=${booking._id}`
+        `/my-booking-page/payment-page?tel=${hotel.tel}&booking_id=${booking._id}&total_price=${booking.total_price}&status=${booking.status}`
       )
     }
   }
