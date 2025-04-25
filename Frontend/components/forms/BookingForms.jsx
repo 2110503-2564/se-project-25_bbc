@@ -1,8 +1,9 @@
 'use client';
 
-import { createBooking } from '@api/booking';
+import { createBooking , uploadReceiptImage } from '@api/booking';
 import { use, useEffect, useState } from 'react';
 import { SuccessDialog } from '@components/cards/SuccessDialog';
+import PromptPayQR from '@components/payment/PromptPayQR';
 
 export const BookingForms = ({
   hotel_id,
@@ -11,6 +12,7 @@ export const BookingForms = ({
   status = "pending",
   roomCapacity,
   hotelName,
+  tel,
   room
 }) => {
   const [checkInDate, setCheckInDate] = useState('');
@@ -32,6 +34,7 @@ export const BookingForms = ({
       const parsedLogin = JSON.parse(storedLogin);
       setToken(storedToken);
       setUser(parsedLogin);
+      
     } catch (err) {
       console.error("Failed to parse login info:", err);
     }
@@ -204,6 +207,7 @@ export const BookingForms = ({
           </table>
 
           <div className='card_bg2 p-2 rounded-lg mt-3'>
+            <PromptPayQR phone={tel} amount={totalPrice}/>
           <div className=' main_text font-semibold'>Upload receipt</div>
             <input type="file" name="photo" onChange={(e) => {setFile(e.target.files[0]);}} />
           </div>

@@ -25,6 +25,7 @@ const page = async({ params }) => {
         capacity={roomData.rooms[0].capacity}
         hotelName={hotelData.hotels[0].name}
         room={roomData.rooms[0]}
+        tel={hotelData.hotels[0].tel}
         />
       </div>
     </div>

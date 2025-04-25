@@ -244,3 +244,28 @@ export async function changeBookingStatus({ token, booking_id, new_status }) {
     throw error;
   }
 }
+
+export async function uploadReceiptImage({
+  booking_id,
+  file,
+  token,
+}) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${URL}/api/booking/receipt/${booking_id}`, {
+    method: "POST",
+    headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+    },
+    body: formData,
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || "Upload failed");
+  }
+
+  return data;
+}

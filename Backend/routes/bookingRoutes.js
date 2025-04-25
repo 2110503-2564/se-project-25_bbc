@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/search' , bookingController.searchBooking);
 router.post('/pending' , protect, upload.single('file') , roomExist , hotelExist , bookingController.createBooking);
-router.post('/paid', protect, upload.single('file') , roomExist , hotelExist , bookingController.createBooking);
+router.post('/receipt/:booking_id', protect, upload.single('file') , bookingExist , bookingController.uploadReceipt);
 
 router.put('/accept/:booking_id', protect, authorize('hotel_admin', 'super_admin'), bookingExist, bookingController.acceptedBooking);
 router.put('/reject/:booking_id' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.rejectedBooking);

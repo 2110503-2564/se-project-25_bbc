@@ -24,8 +24,6 @@ import chatRoutes from './routes/chatRoutes.js';
 // import Swagger
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express'
-import { title } from 'process';
-import { version } from 'os';
 
 // -------------------------- Configuration -------------------------- //
 dotenv.config();

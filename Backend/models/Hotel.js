@@ -44,7 +44,8 @@ const hotelSchema = new mongoose.Schema({
             required: [true, 'Please add a longtitude']
         }
     },
-    image_url: { type: String , default: "" }
+    image_url: { type: String , default: "" },
+    payment_qr: { type: String }
 },{
     toJSON: {virtuals: true},
     toObject: {virtuals: true},

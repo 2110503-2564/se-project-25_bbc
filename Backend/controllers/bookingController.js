@@ -1,4 +1,3 @@
-import path from 'path';
 import Booking from "../models/Booking.js";
 import Room from "../models/Room.js";
 import Hotel from "../models/Hotel.js";
@@ -46,6 +45,30 @@ export const searchBooking = async (req, res) => {
   }
 };
 
+export const uploadReceipt = async (req, res) => {
+  try{
+    if(!req.file) return res.status(404).json({ success: false, message: "File not found." });
+    
+    const filePath = `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`;
+    req.body.receiptUrl = filePath;
+
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.booking_id,
+      { $set: { receiptUrl: filePath } },
+      { new: true , runValidators: true}
+    );
+
+    return res.status(201).json({
+      success: true,
+      booking
+    });
+
+  } catch(error){
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
 export const createBooking = async (req, res) => {
   try {
     req.body.account_id =
@@ -84,7 +107,7 @@ export const createBooking = async (req, res) => {
       });
 
     if (req.file) {
-      const filePath = path.join(`${process.env.HOST}:${process.env.PORT}` , "uploads", req.file.filename);
+      const filePath = `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`;
       req.body.receiptUrl = filePath;
     }
 
