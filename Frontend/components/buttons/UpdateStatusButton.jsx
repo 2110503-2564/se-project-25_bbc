@@ -57,7 +57,7 @@ const UpdateStatusButton = ({booking_id}) => {
     }
 
     const handleSuccessClose = () => {
-        router.push('/my-booking-page');
+        setOpenSuccess(false);
     }
 
     return (
@@ -195,7 +195,7 @@ const UpdateStatusButton = ({booking_id}) => {
             open={openSuccess}
             onClose={handleSuccessClose}
             textshow="Booking update successfully!"
-            reloadOnClose={false}
+            reloadOnClose={true}
         />
         </>
     )

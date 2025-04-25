@@ -7,6 +7,7 @@ import { getBooking } from "@api/booking";
 import { searchHotel } from "@api/hotel";
 import DeletedBookButton from "@components/buttons/DeletedBookButton";
 import UpdateStatusButton from "@components/buttons/UpdateStatusButton";
+import CancelBookButton from "@components/buttons/CancelBookButton";
 import Image from "@node_modules/next/image";
 import { borderRadius } from "@node_modules/@mui/system";
 
@@ -19,10 +20,18 @@ export const BookingDetailCard = () => {
   const [hotel, setHotel] = useState(null);
   const [room, setRoom] = useState(null);
   const [name, setName] = useState(null);
+  const [user, setUser] = useState(null);
   
   useEffect(() => {
     const fetchDetails = async () => {
       const token = localStorage.getItem("token");
+
+      const storedLogin = localStorage.getItem("res_login");
+      if (storedLogin) {
+        const parsedUser = JSON.parse(storedLogin);
+        setUser(parsedUser);
+        // console.log("User from Booking Detail Card",user,parsedUser);
+      }
   
       const bookingRes = await getBooking({ token, query: `_id=${bookingId}` });
       const bookingWithPopulate = await getBooking({token,query:`_id=${bookingId}&&populate=account_id`});
@@ -35,6 +44,8 @@ export const BookingDetailCard = () => {
       setHotel(hotelRes.hotels[0]);
       setRoom(roomRes.rooms[0]);
       setName(bookingWithPopulate.bookings[0].account_id.first_name + ' '  + bookingWithPopulate.bookings[0].account_id.last_name )
+      
+      // console.log("Hotel",hotelRes.hotels[0])
     };
   
     fetchDetails();
@@ -112,20 +123,33 @@ export const BookingDetailCard = () => {
         </table>
 
 
-        <img alt="receipt" style={{borderRadius:"10px", marginTop:"10px"}} className="border border-gray-300 card_bg2 " width={150} height={200} src={booking?.receiptUrl?.replace('http:/', 'http://')}/>
+        {
+          console.log(booking?.receiptUrl?.replace('http:/', 'http://'))
+        }
+        <img alt="receipt" style={{borderRadius:"10px", marginTop:"10px"}} className="border border-gray-300 card_bg2 " width={150} height={200} src={booking?.receiptUrl?.replace(/\\/g, '/').replace('http:/', 'http://')}/>
         <p className="mt-6 bg-yellow-100 p-5 rounded-xl text-gray-700 text-center">
           Please review the booking details before proceeding to manage it.
         </p>
         
         <div className="mt-2">
           <UpdateStatusButton booking_id={bookingId}/>
-          
         </div>
+        {
+          (user?.account.role === 'user') && (
+            <div className="mt-2">
+              <CancelBookButton booking_id={bookingId}/>
+            </div>
+          )
+        } 
 
         {/* Deleted Booking Button */}
-        <div className="mt-2">
-          <DeletedBookButton booking_id={bookingId}/>
-        </div>
+        {
+          (user?.account.role === 'hotel_admin' || user?.account.role === 'super_admin') && (
+            <div className="mt-2">
+            <DeletedBookButton booking_id={bookingId}/>
+          </div>
+          )
+        }
         
         </div>
 

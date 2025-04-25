@@ -257,7 +257,7 @@ export const canceledBooking = async (req, res) => {
       req.user.role === "hotel_admin" ? req.user.hotel_id : req.body.hotel_id;
 
     const booking = await Booking.findOneAndUpdate(
-      { _id: req.body.booking_id, account_id, hotel_id },
+      { _id: req.body.booking_id},
       { status: "canceled" },
       { new: true, runValidators: true }
     );

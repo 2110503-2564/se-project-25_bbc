@@ -81,7 +81,7 @@ export async function getBooking({
   query = ""
 }) {
   try {
-    console.log(token)
+    // console.log(token)
     const res = await fetch(`${URL}/api/booking/search?${query}`, {
       method: "GET",
       headers: {
@@ -252,6 +252,9 @@ export async function changeBookingStatus({ token, booking_id, new_status }) {
       case 'finished':
         url = `${URL}/api/booking/finish/${booking_id}`;
         break;
+      case 'canceled':
+        url = `${URL}/api/booking/cancel/${booking_id}`;
+        break;
       default:
         throw new Error('Invalid status');
     }
@@ -266,7 +269,10 @@ export async function changeBookingStatus({ token, booking_id, new_status }) {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ status: new_status })
+      body: JSON.stringify({
+         booking_id:booking_id,
+         status: new_status 
+        })
     });
 
     const data = await res.json();
