@@ -13,25 +13,27 @@ export const BookingDetailCard = () => {
   const searchParams = useSearchParams();
 
   const bookingId = searchParams.get("booking_id") || "";
-  const name = searchParams.get("name") || "";
 
   const [booking, setBooking] = useState(null);
   const [hotel, setHotel] = useState(null);
   const [room, setRoom] = useState(null);
+  const [name, setName] = useState(null);
   
   useEffect(() => {
     const fetchDetails = async () => {
       const token = localStorage.getItem("token");
   
       const bookingRes = await getBooking({ token, query: `_id=${bookingId}` });
+      const bookingWithPopulate = await getBooking({token,query:`_id=${bookingId}&&populate=account_id`});
       const booking = bookingRes.bookings[0];
-      console.log("Book:",booking)
+      // console.log("Book:",bookingWithPopulate)
       const hotelRes = await searchHotel(`_id=${booking.hotel_id}`);
       const roomRes = await searchRoom(`_id=${booking.room_id}`);
   
       setBooking(booking);
       setHotel(hotelRes.hotels[0]);
       setRoom(roomRes.rooms[0]);
+      setName(bookingWithPopulate.bookings[0].account_id.first_name + ' '  + bookingWithPopulate.bookings[0].account_id.last_name )
     };
   
     fetchDetails();
