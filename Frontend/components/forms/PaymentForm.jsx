@@ -40,7 +40,7 @@ export const PaymentForm = ({
       </p>
 
       <div style={{position:"relative", overflow:"hidden", height:"450px"}} className="rounded-lg card_bg2 p-6 mb-4 bg-white text-gray-600">
-        <PromptPayQR phone={tel} size={150} amount={totalPrice} />
+        <PromptPayQR phone={tel} size={500} amount={totalPrice} />
       </div>
       <div className='card_bg2 p-2 rounded-lg mt-3 mb-3'>
           <div className=' main_text font-semibold'>Upload receipt</div>

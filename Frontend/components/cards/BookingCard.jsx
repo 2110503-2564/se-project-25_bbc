@@ -189,7 +189,7 @@ export const BookingCard = ({ booking }) => {
               </button>
             </>
           )}
-
+        {booking.receiptUrl === "" ? (
         <button
           onClick={handlePayment}
           className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center rounded-md"
@@ -203,6 +203,21 @@ export const BookingCard = ({ booking }) => {
             className="ml-2"
           />
         </button>
+        ) : (
+          <button
+    
+          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 transition-all flex items-center rounded-md"
+        >
+          <p>Paied</p>
+          <img
+            src="/icons/wallet-cards.svg"
+            alt="wallet"
+            width={15}
+            height={15}
+            className="ml-2"
+          />
+        </button>
+        )}
 
         <button
           onClick={handleManageBooking}
