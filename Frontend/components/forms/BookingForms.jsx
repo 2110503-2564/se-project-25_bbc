@@ -118,7 +118,7 @@ export const BookingForms = ({
   };
 
   return (  
-    <div className="w-full h-screen p-6 hdcard_white max-w-[500px] mt-20">
+    <div style={{overflowY:"scroll"}} className="w-full hide_scrollbar h-screen p-6 hdcard_white max-w-[500px] mt-20">
       <h2 className="text-2xl font-bold main_text mb-4">Book This Room</h2>
 
       <p className="text-sm sub_text mb-4">
@@ -206,11 +206,13 @@ export const BookingForms = ({
             </tbody>
           </table>
 
-          <div className='card_bg2 p-2 rounded-lg mt-3'>
-            <PromptPayQR phone={tel} amount={totalPrice}/>
-          <div className=' main_text font-semibold'>Upload receipt</div>
-            <input type="file" name="photo" onChange={(e) => {setFile(e.target.files[0]);}} />
-          </div>
+          <div className='card_bg2 p-2 flex justify-center  rounded-lg mt-3'>
+            <PromptPayQR phone={tel} size={120} amount={totalPrice}/>
+            <div className='ml-2'>
+              <div className=' main_text font-semibold'>Upload receipt</div>
+                <input type="file" name="photo" onChange={(e) => {setFile(e.target.files[0]);}} />
+              </div>
+            </div>
          
         </div>
          <button
