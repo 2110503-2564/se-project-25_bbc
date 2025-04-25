@@ -140,6 +140,8 @@ export async function updateBooking({
   check_out_date
 }){
   try {
+    console.log("Update booking:", booking_id, hotel_id, room_number, num_people, check_in_date, check_out_date);
+    console
     const res = await fetch(`${URL}/api/booking/${booking_id}`, {
       method: "PUT",
       headers: {
@@ -167,6 +169,42 @@ export async function updateBooking({
     throw error;
   }
 }
+
+export async function updateBookingStatus(
+  token,
+  booking_id,
+  hotel_id,
+  room_id,
+  status,
+){
+  try {
+    console.log("Update booking status:", booking_id, hotel_id, room_id, status);
+    const res = await fetch(`${URL}/api/booking/${status}/${booking_id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        booking_id: booking_id,
+        room_id: room_id,
+        hotel_id: hotel_id,
+      })
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to update booking status");
+    }
+
+  } catch(error) {
+    console.log("Update booking status error:", error);
+    throw error;
+  }
+}
+
 
 export async function deleteBooking(token, booking_id, hotel_id) {
   try {

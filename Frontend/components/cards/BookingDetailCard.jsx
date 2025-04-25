@@ -6,6 +6,7 @@ import { searchRoom } from "@api/room";
 import { getBooking } from "@api/booking";
 import { searchHotel } from "@api/hotel";
 import DeletedBookButton from "@components/buttons/DeletedBookButton";
+import UpdateStatusButton from "@components/buttons/UpdateStatusButton";
 import Image from "@node_modules/next/image";
 import { borderRadius } from "@node_modules/@mui/system";
 
@@ -116,6 +117,11 @@ export const BookingDetailCard = () => {
           Please review the booking details before proceeding to manage it.
         </p>
         
+        <div className="mt-2">
+          <UpdateStatusButton booking_id={bookingId}/>
+          
+        </div>
+
         {/* Deleted Booking Button */}
         <div className="mt-2">
           <DeletedBookButton booking_id={bookingId}/>
