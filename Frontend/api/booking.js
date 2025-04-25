@@ -179,7 +179,7 @@ export async function updateBookingStatus(
 ){
   try {
     console.log("Update booking status:", booking_id, hotel_id, room_id, status);
-    const res = await fetch(`${URL}/api/booking/${status}`, {
+    const res = await fetch(`${URL}/api/booking/${status}/${booking_id}`, {
       method: "PUT",
       headers: {
         "Authorization": `Bearer ${token}`,

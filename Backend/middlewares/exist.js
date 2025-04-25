@@ -39,7 +39,7 @@ export const hotelExist = async(req, res, next) => {
         req.body.hotel = hotel;
         next();
     } catch (err) {
-        res.status(500).json({message : "Existence validation error" , error : err.message});
+        res.status(500).json({message : "Hotel existence validation error" , error : err.message});
     }
 }
 
@@ -53,7 +53,7 @@ export const roomExist = async(req, res, next) => {
         req.body.room = room;
         next();
     } catch (err) {
-        res.status(500).json({message : "Existence validation error" , error : err.message});
+        res.status(500).json({message : "Room existence validation error" , error : err.message});
     }
 }
 
@@ -80,7 +80,7 @@ export const bookingExist = async (req, res, next) => {
     } catch (err) {
         console.log("🔥 Error in bookingExist middleware:", err.message);
         res.status(500).json({
-            message: "Existence validation error",
+            message: "Booking existence validation error",
             error: err.message
         });
     }
