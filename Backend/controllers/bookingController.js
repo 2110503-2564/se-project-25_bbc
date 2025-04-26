@@ -333,7 +333,7 @@ export const deleteBooking = async (req, res) => {
       });
 
     const booking = await Booking.findOneAndDelete({
-      _id: req.body.booking_id,
+      _id: hotel_id,
     });
 
     if (!booking)
