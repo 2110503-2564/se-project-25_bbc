@@ -131,9 +131,9 @@ export const BookingDetailCard = () => {
           Please review the booking details before proceeding to manage it.
         </p>
         
-        <div className="mt-2">
+        {(user?.account.role === 'hotel_admin' || user?.account.role === 'super_admin') && (<div className="mt-2">
           <UpdateStatusButton booking_id={bookingId}/>
-        </div>
+        </div>)}
         {
           (user?.account.role === 'user') && (
             <div className="mt-2">

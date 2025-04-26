@@ -208,7 +208,7 @@ export const BookingCard = ({ booking }) => {
     
           className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 transition-all flex items-center rounded-md"
         >
-          <p>Paied</p>
+          <p>Paid</p>
           <img
             src="/icons/wallet-cards.svg"
             alt="wallet"
