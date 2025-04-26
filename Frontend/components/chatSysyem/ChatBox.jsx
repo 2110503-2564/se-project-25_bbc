@@ -5,6 +5,7 @@ import { ChatContext } from "@providers/chatProvider";
 import Link from "@node_modules/next/link";
 import { sendNoti } from "@api/noti";
 import NotiForm from "./NotiForm";
+import { playSound } from "./Playsounds";
 
 const ChatBox = () => {
   const { isShow, setIsShow, socket } = useContext(ChatContext);
@@ -74,14 +75,24 @@ const ChatBox = () => {
       setHasJoinedChat(true); // Set flag
     });
 
-    socket.on("receive_message", (incomingMessage) =>
-      setMessages((prevMessages) => [...prevMessages, incomingMessage])
-    );
+    socket.on("receive_message", (incomingMessage) => {
+      setMessages((prevMessages) => [...prevMessages, incomingMessage]);
+      
+      playSound("/sounds/Chatnoti.mp3"); 
+  
+    });
 
     socket.on("receive_notification", (incomingNotification) => {
       SetNotifications((prev) => [...prev, incomingNotification]);
       if (!inChatMode) return; 
       setUnreadCount((prevCount) => prevCount + 1);
+
+      if (incomingNotification.type === "promotion") {
+        playSound("/sounds/Promotionnoti.mp3");
+      } else if (incomingNotification.type === "emergency") {
+        playSound("/sounds/Emernoti.mp3");
+      }
+
     });
 
     return () => {
