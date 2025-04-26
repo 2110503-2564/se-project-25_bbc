@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import http from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
@@ -41,11 +43,32 @@ const io = new Server(server, {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware
+// -------------------------- Security Middlewares -------------------------- //
+
+// Set security headers
+app.use(helmet());
+
+// Limit repeated requests to public APIs
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 min
+    max: 600,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Too many requests, please try again later.',
+    keyGenerator: (req, res) => {
+      if (req.user && req.user.id) 
+        return req.user.id;
+      return req.ip;
+    }
+});
+app.use('/api', limiter);
+
+// Enable CORS
 app.use(cors({
-    origin: process.env.FRONTEND_URL, 
+    origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
@@ -59,20 +82,20 @@ app.use("/api/account", accountRoutes);
 app.use("/api/chat", chatRoutes);
 app.use('/uploads', express.static('public/uploads'));
 
-// Swagger
+// Swagger Documentation
 const swaggerOptions = {
-    swaggerDefinition:{
-        openapi:'3.0.0',
-        info:{
-            title:'Library API',
-            version:'1.0.0',
-            description:'Hotel Booking BBC API'
-        }
-    },
-    apis:['./routes/*.js'],
-}
-const swaggerDocs=swaggerJSDoc(swaggerOptions);
-app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocs));
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Library API',
+      version: '1.0.0',
+      description: 'Hotel Booking BBC API'
+    }
+  },
+  apis: ['./routes/*.js'],
+};
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // -------------------------- Start the Server -------------------------- //
 

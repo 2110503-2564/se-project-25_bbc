@@ -1,0 +1,33 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('http://localhost:3000/');
+  await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('oak@user.com');
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).press('Tab');
+  await page.getByRole('textbox', { name: 'password' }).fill('123456');
+  await page.getByRole('button', { name: 'Sign-In' }).click();
+  await page.getByRole('link', { name: 'My-booking' }).click();
+  await page.getByRole('link', { name: 'Hotels' }).click();
+  await page.getByRole('link', { name: 'Denesik - MacGyver Hotel' }).click();
+  await page.getByText('Book').nth(3).click();
+  await page.locator('div').filter({ hasText: /^Check-in Date$/ }).getByRole('textbox').fill('2025-04-27');
+  await page.locator('div').filter({ hasText: /^Check-out Date$/ }).getByRole('textbox').fill('2025-04-30');
+  await expect(page.getByRole('img', { name: 'PromptPay QR' })).toBeVisible();
+  await page.getByRole('button', { name: 'Choose File' }).click();
+  await expect(page.getByRole('button', { name: 'Choose File' })).toBeVisible();
+  await page.getByRole('button', { name: 'Book Now' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(page.getByRole('paragraph')).toContainText('Booking Successful');
+  await page.getByRole('button', { name: 'Back' }).click();
+  await page.getByRole('link', { name: 'My-booking' }).click();
+  await page.getByRole('button', { name: 'Payment wallet' }).first().click();
+  await expect(page.getByRole('img', { name: 'PromptPay QR' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Choose File' })).toBeVisible();
+  await page.getByRole('button', { name: 'Confirm' }).click();
+  await page.getByRole('button', { name: 'Open issues overlay' }).click();
+  await page.getByRole('link', { name: 'My-booking' }).click();
+  await page.locator('button:nth-child(2)').first().click();
+  await expect(page.getByRole('img', { name: 'receipt' })).toBeVisible();
+});
