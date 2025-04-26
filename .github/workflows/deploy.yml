@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: Checkout repository
       uses: actions/checkout@v3
 
     - name: Set up SSH
@@ -21,8 +21,11 @@ jobs:
         ssh-keyscan -H ${{ secrets.GCE_HOST }} >> ~/.ssh/known_hosts
 
     - name: Deploy via SSH
+      env:
+        GCE_USER: ${{ secrets.GCE_USER }}
+        GCE_HOST: ${{ secrets.GCE_HOST }}
       run: |
-        ssh ${{ secrets.GCE_USER }}@${{ secrets.GCE_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no $GCE_USER@$GCE_HOST << 'EOF'
           cd ~/BBC_Software
           git pull origin main
           docker-compose down
