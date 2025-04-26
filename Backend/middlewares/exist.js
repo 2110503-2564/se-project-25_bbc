@@ -2,6 +2,7 @@ import Booking from "../models/Booking.js";
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
 import Account from "../models/Account.js";
+import Promocode from "../models/PromoCode.js";
 
 export const accountExist = async (req, res, next) => {
     try {
@@ -85,3 +86,17 @@ export const bookingExist = async (req, res, next) => {
         });
     }
 };
+
+export const promoCodeExist = async(req, res, next) => {
+
+    const promo_id = req.params.promo_id || req.body.promo_id;
+
+    try {
+        const promoCode = await Promocode.findById(promo_id);
+        if (!promoCode) return res.status(404).json({ message: `Cannot find promoCode with id: ${promoCode}` });
+        req.body.promoCode = promoCode;
+        next();
+    } catch (err) {
+        res.status(500).json({message : "PromoCpde existence validation error" , error : err.message});
+    }
+}

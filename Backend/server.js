@@ -22,6 +22,7 @@ import hotelRoutes from './routes/hotelRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
 import accountRoutes from './routes/accountRoutes.js'
 import chatRoutes from './routes/chatRoutes.js';
+import promoRoutes from './routes/promoCodeRoute.js'
 
 // import Swagger
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -80,6 +81,7 @@ app.use("/api/hotel", hotelRoutes);
 app.use("/api/room", roomRoutes);
 app.use("/api/account", accountRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/promo", promoRoutes);
 app.use('/uploads', express.static('public/uploads'));
 
 // Swagger Documentation
