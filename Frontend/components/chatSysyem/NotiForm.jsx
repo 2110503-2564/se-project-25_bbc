@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sendNoti } from "@api/noti";
+import { playSound } from './Playsounds';
 
 export default function NotiForm() {
   const [showDate, setShowDate] = useState(true);
@@ -36,6 +37,14 @@ export default function NotiForm() {
       formData.expire,
       formData.type
     )
+
+    if (response?.success&&formData.type==="promotion") {
+      playSound("/sounds/Promotionnoti.mp3"); 
+    }
+
+    if (response?.success&&formData.type==="emergency") {
+      playSound("/sounds/Emernoti.mp3"); 
+    }
 
     console.log(response);
     
