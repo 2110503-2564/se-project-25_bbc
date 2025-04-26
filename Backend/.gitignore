@@ -32,3 +32,6 @@ coverage/
 
 # Keys
 keys/
+
+# image
+public/
