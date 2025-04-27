@@ -65,12 +65,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Enable CORS
-app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
+app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
@@ -82,7 +77,11 @@ app.use("/api/room", roomRoutes);
 app.use("/api/account", accountRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/promo", promoRoutes);
-app.use('/uploads', express.static('public/uploads'));
+app.use('/uploads', express.static('public/uploads', {
+  setHeaders: (res, path, stat) => {
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+  }
+}));
 
 // Swagger Documentation
 const swaggerOptions = {
