@@ -33,6 +33,11 @@ const promoCodeSchema = new mongoose.Schema(
     discountValue: {
       type: Number,
       required: true
+    },
+    usedBy: {
+      type: mongoose.Schema.ObjectId , 
+      ref: 'Account',
+      default: []
     }
   },
   {
