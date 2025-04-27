@@ -14,7 +14,6 @@ router.post('/receipt/:booking_id', protect, upload.single('file') , bookingExis
 
 router.put('/accept/:booking_id', protect, authorize('hotel_admin', 'super_admin'), bookingExist, bookingController.acceptedBooking);
 router.put('/reject/:booking_id' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.rejectedBooking);
-router.put('/confirm/:booking_id' , protect , bookingExist , bookingController.confirmedBooking);
 router.put('/finish/:booking_id' , protect , authorize('hotel_admin' , 'super_admin') , bookingExist , bookingController.finishedBooking);
 router.put('/:booking_id', protect, authorize('hotel_admin' , 'super_admin', 'user') , bookingExist , bookingController.updateBooking)
 router.put('/cancel/:booking_id',protect,authorize('hotel_admin','super_admin','user'),bookingExist,bookingController.canceledBooking);
