@@ -7,6 +7,7 @@ const promoCodeSchema = new mongoose.Schema(
       ref: 'Hotel',
       required: true 
     },
+    detail: { type: String },
     code: {
       type: String,
       required: [true , 'Please add a code name'], 
