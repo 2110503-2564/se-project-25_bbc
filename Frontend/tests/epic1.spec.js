@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 
 test('admin interacts with chat box and sees user message', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('https://hiddenhotel.it.com/');
   await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
   await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('1111111111');
   await page.getByRole('textbox', { name: 'password' }).fill('123456');
@@ -28,7 +28,7 @@ test('admin interacts with chat box and sees user message', async ({ page }) => 
 });
 
 test('non signed-in users are prompted to log in before chatting', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('https://hiddenhotel.it.com/');
   await page.locator('.hdcard_white > img').click();
   await expect(page.locator('body')).toContainText('Sign-In to Chat with us');
   await page.locator('span').filter({ hasText: 'Sign-In' }).click();
@@ -39,7 +39,7 @@ test('non signed-in users are prompted to log in before chatting', async ({ page
 });
 
 test('admin publishes a promotion notification and user sees it', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('https://hiddenhotel.it.com/');
   await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
   await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('1111111111');
   await page.getByRole('textbox', { name: 'password' }).fill('123456');
@@ -64,7 +64,7 @@ test('admin publishes a promotion notification and user sees it', async ({ page 
 });
 
 test('admin publishes a emergency notification and user sees it', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('https://hiddenhotel.it.com/');
   await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
   await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('1111111111');
   await page.getByRole('textbox', { name: 'password' }).fill('123456');
@@ -88,7 +88,7 @@ test('admin publishes a emergency notification and user sees it', async ({ page 
 });
 
 test('user views notifications after sign-in', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('https://hiddenhotel.it.com/');
   await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
   await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
   await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('oak@user.com');

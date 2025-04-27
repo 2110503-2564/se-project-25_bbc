@@ -104,7 +104,7 @@ const PORT = process.env.PORT || 8000;
 
 const initializeServer = async () =>{
     try{
-        console.log('🚀 Starting C-Canteen backend server...');
+        console.log('🚀 Starting BBC backend server...');
 
         setSocketInstance(io);
         initializeChatSocket(); 
