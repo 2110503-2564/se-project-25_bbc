@@ -10,35 +10,32 @@ export const createPromocode = async (req, res) => {
   }
 };
 
-export const usePromocode = async (req, res) => {
-    try {
-      const { code } = req.body;
-  
-      const promoCode = await Promocode.findOne({ code });
-  
-      // Check if expired
-      if (new Date() > promoCode.expire) {
-        return res.status(400).json({ success: false, message: "Promo code has expired" });
-      }
-  
-      // Check usage limit
-      if (promoCode.limit !== null && promoCode.usage >= promoCode.limit) {
-        return res.status(400).json({ success: false, message: "Promo code usage limit exceeded" });
-      }
-  
-      promoCode.usage += 1;
-      await promo.save();
-  
-      return res.status(200).json({
-        success: true,
-        message: "Promo code applied successfully",
-        promoCode
-      });
-  
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: error.message });
+export const checkPromocode = async (req, res) => {
+  try {
+    const { code } = req.body;
+
+    const promoCode = await Promocode.findOne({ code });
+
+    // Check if expired
+    if (new Date() > promoCode.expire) {
+      return res.status(400).json({ success: false, message: "Promo code has expired" });
     }
+
+    // Check usage limit
+    if (promoCode.limit !== null && promoCode.usage >= promoCode.limit) {
+      return res.status(400).json({ success: false, message: "Promo code usage limit exceeded" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Promo code verified successfully",
+      promoCode
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
 
 export const searchPromocodes = async (req, res) => {
