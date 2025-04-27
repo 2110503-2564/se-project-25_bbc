@@ -16,9 +16,6 @@ services:
       - "3000:3000"
     env_file:
       - ./Frontend/.env.local
-    volumes:
-    - ./Frontend:/app
-    command: sh -c "npm run build && npm start"
     depends_on:
       - backend
     restart: always
