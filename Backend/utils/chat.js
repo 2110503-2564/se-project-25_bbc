@@ -37,7 +37,7 @@ export const initializeChatSocket = () => {
             socket.join(`account_${account_id}`);
         });
 
-        socket.on("join_hotel_room", (hotel_id) => {
+        socket.on("join_hcotel_room", (hotel_id) => {
             socket.join(`hotel_${hotel_id}`);
         });
 
