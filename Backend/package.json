@@ -4,6 +4,7 @@
   "main": "server.js",
   "scripts": {
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
+    "test-coverage" : "node --experimental-vm-modules ./node_modules/.bin/jest --watchAll --coverage",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
