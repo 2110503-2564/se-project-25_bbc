@@ -29,6 +29,6 @@ jobs:
           cd ~/BBC_Software
           git pull origin main
           docker-compose down
-          docker system prune -af
+          docker image prune -f
           docker-compose up -d --build
         EOF
