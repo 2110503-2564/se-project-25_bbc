@@ -11,6 +11,7 @@ router.get("/search", promoCodeController.searchPromocodes);
 
 router.post("/create", protect , authorize('hotel_admin' , 'super_admin') , promoCodeController.createPromocode);
 router.post("/check", protect , promoCodeController.checkPromocode);
+router.post("/use", protect , promoCodeController.usePromocode);
 
 router.put("/:promo_id", protect , authorize('hotel_admin' , 'super_admin'), promoCodeExist , promoCodeController.updatePromocode);
 
