@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/search", promoCodeController.searchPromocodes);
 
 router.post("/create", protect , authorize('hotel_admin' , 'super_admin') , promoCodeController.createPromocode);
-router.post("/check", protect , promoCodeExist , promoCodeController.checkPromocode);
+router.post("/check", protect , promoCodeController.checkPromocode);
 
 router.put("/:promo_id", protect , authorize('hotel_admin' , 'super_admin'), promoCodeExist , promoCodeController.updatePromocode);
 

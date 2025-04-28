@@ -3,15 +3,15 @@ import mongoose from "mongoose";
 const promoCodeSchema = new mongoose.Schema(
   {
     hotel_id: {
-      type: mongoose.Schema.ObjectId, 
-      ref: 'Hotel',
-      required: true 
+      type: mongoose.Schema.ObjectId,
+      ref: "Hotel",
+      required: true,
     },
     detail: { type: String },
     code: {
       type: String,
-      required: [true , 'Please add a code name'], 
-      unique: true
+      required: [true, "Please add a code name"],
+      unique: true,
     },
     usage: {
       type: Number,
@@ -22,24 +22,23 @@ const promoCodeSchema = new mongoose.Schema(
       required: true,
       default: null,
     },
-    expire:{
+    expire: {
       type: Date,
-      required: true
+      required: true,
     },
     discountType: {
       type: String,
-      enum: ['percentage', 'fixed'],
-      required: true
+      enum: ["percentage", "fixed"],
+      required: true,
     },
     discountValue: {
       type: Number,
-      required: true
+      required: true,
     },
     usedBy: {
-      type: mongoose.Schema.ObjectId , 
-      ref: 'Account',
-      default: []
-    }
+      type: [ { type: mongoose.Schema.ObjectId, ref: "Account" } ],
+      default: [],
+    }    
   },
   {
     timestamps: true,
