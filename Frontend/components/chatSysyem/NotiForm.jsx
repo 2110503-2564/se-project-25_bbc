@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { sendNoti } from "@api/noti";
+import { sendNoti, sendPromoCode } from "@api/noti";
 import { playSound } from './Playsounds';
 
 export default function NotiForm() {
@@ -9,10 +9,18 @@ export default function NotiForm() {
     detail: '',
     expire: '',
     type: 'promotion',
+    code: '',
+    codeType: 'percentage',
+    codeLimit: '',
+    codeValue: '',
+
   });
 
   const token = localStorage.getItem("token");
-
+  const res_login = localStorage.getItem("res_login");
+  //console.log("Login response:", JSON.parse(res_login));
+  const hotel_id = JSON.parse(res_login).account.hotel_id;
+  //console.log("Hotel ID:", hotel_id);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -23,12 +31,37 @@ export default function NotiForm() {
 
   const handleSelectChange = (e) => {
     const { value } = e.target;
-    setShowDate(value === "promotion");
+    setShowDate(value !== "emergency");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.type === "promotion code") {
+      const response = await sendPromoCode(
+      token,
+        hotel_id,
+        formData.detail,
+        formData.expire,
+        formData.type,
+        formData.code,
+        formData.codeType,
+        formData.codeLimit,
+        formData.codeValue
+      );
+
+      if (response?.success&&formData.type==="promotion") {
+        playSound("/sounds/Promotionnoti.mp3"); 
+      }
+  
+      if (response?.success&&formData.type==="emergency") {
+        playSound("/sounds/Emernoti.mp3"); 
+      }
+  
+      console.log(response);
+    }
     
+    else {
     const response = await 
     sendNoti(
       token,
@@ -47,12 +80,16 @@ export default function NotiForm() {
     }
 
     console.log(response);
+    }
+
+    
     
   };
 
   return (
     <form onSubmit={handleSubmit} className="m-[10px]"
     >
+      {formData.type!== "promotion code" && (
       <div>
         <input
           type="text"
@@ -72,7 +109,81 @@ export default function NotiForm() {
           placeholder="Title"
         />
       </div>
-
+        )}
+      {formData.type==="promotion code" && (
+        <div>
+        <input
+          type="text"
+          id="code"
+          name="code"
+          value={formData.code}
+          onChange={handleChange}
+          style={{
+            width:"100%",
+            borderRadius: "10px",
+            boxSizing: "border-box",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            backgroundColor: "white",
+          }}
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
+          placeholder="Code"
+        />
+        <input
+          type="number"
+          id="codeValue"
+          name="codeValue"
+          value={formData.codeValue}
+          onChange={handleChange}
+          style={{
+            width:"100%",
+            borderRadius: "10px",
+            boxSizing: "border-box",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            backgroundColor: "white",
+          }}
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
+          placeholder="Value"
+        />
+        <input
+          type="number"
+          id="codeLimit"
+          name="codeLimit"
+          value={formData.codeLimit}
+          onChange={handleChange}
+          style={{
+            width:"100%",
+            borderRadius: "10px",
+            boxSizing: "border-box",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            backgroundColor: "white",
+          }}
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
+          placeholder="Limit"
+        />
+         <select
+          id="codeType"
+          name="codeType"
+          value={formData.codeType}
+          onChange={handleChange}
+          style={{
+            width:"100%",
+            borderRadius: "10px",
+            boxSizing: "border-box",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            backgroundColor: "white",
+          }}
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
+        >
+          <option value="percentage">percentage</option>
+          <option value="fixed">fixed</option>
+        </select>
+      </div>
+      
+      )}
       <div>
         <input
           type="text"
@@ -131,6 +242,7 @@ export default function NotiForm() {
         >
           <option value="promotion">promotion</option>
           <option value="emergency">emergency</option>
+          <option value="promotion code">promotion code</option>
         </select>
       </div>
 
