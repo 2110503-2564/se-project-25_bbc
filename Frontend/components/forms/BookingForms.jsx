@@ -20,6 +20,7 @@ export const BookingForms = ({
   const [checkOutDate, setCheckOutDate] = useState("");
   const [numPeople, setNumPeople] = useState(1);
   const [totalPrice, setTotalPrice] = useState(room.rate_per_night);
+  const [originalPrice, setOriginalPrice] = useState(room.rate_per_night);
   const [successfulMessage, setSuccessfulMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,17 +47,18 @@ export const BookingForms = ({
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
     const dayDifference = (checkOut - checkIn) / (1000 * 60 * 60 * 24);
-    setTotalPrice(
-      (room.rate_per_night * (dayDifference ? dayDifference : 1)).toFixed(2)
-    );
+    const calculatedPrice = room.rate_per_night * (dayDifference ? dayDifference : 1);
+    setOriginalPrice(calculatedPrice);
+    setTotalPrice((calculatedPrice - discount).toFixed(2));
   }, [checkInDate, checkOutDate]);
 
   const handlePromocodeCheck = async () => {
+    setErrorMessage("");
+    setSuccessfulMessage("");
     if (!promocode) {
       setErrorMessage("Please enter a promocode.");
       return;
     }
-    setErrorMessage(""); // Clear error message
     setLoading(true);
 
     try {
@@ -64,11 +66,13 @@ export const BookingForms = ({
       if (response && response.success) {
         const appliedDiscount = response.promoCode?.discountValue || 0;
         setDiscount(appliedDiscount);
-        const newTotalPrice = (totalPrice - appliedDiscount).toFixed(2); // Apply the discount
+        const newTotalPrice = (originalPrice - appliedDiscount).toFixed(2);
         setTotalPrice(newTotalPrice);
         setSuccessfulMessage(`Promocode applied! Discount: ${appliedDiscount}`);
       } else {
         setErrorMessage(response.message || "Invalid promocode");
+        setTotalPrice(originalPrice);
+        setDiscount(0);
       }
     } catch (error) {
       console.log("Error checking promocode:", error);
@@ -274,7 +278,21 @@ export const BookingForms = ({
                 <td className="font-semibold main_text pr-4 py-1">
                   Total Price*:
                 </td>
-                <td className="sub_text font-light">{`${totalPrice} $`}</td>
+                <td className="sub_text font-light">
+                  {discount > 0 ? (
+                    <>
+                      <span className="line-through text-red-500">
+                        ${originalPrice}
+                      </span>
+                      &nbsp;&nbsp;&nbsp;
+                      <span className="font-semibold text-black">
+                        ${totalPrice}{" "}
+                      </span>
+                    </>
+                  ) : (
+                    `${totalPrice} $`
+                  )}
+                </td>
               </tr>
             </tbody>
           </table>
