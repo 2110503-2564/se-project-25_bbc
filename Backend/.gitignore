@@ -36,6 +36,6 @@ keys/
 # image
 public/
 
-# jest
-__test__/
-__mockuptests__/
+# # jest
+# __test__/
+# __mockuptests__/
