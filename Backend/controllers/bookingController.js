@@ -322,6 +322,7 @@ export const finishedBooking = async (req, res) => {
 export const deleteBooking = async (req, res) => {
   try {
     const hotel_id = req.user.hotel_id || req.body.hotel_id;
+    const booking_id = req.body.booking_id || req.params.booking_id
 
     if (
       req.user.role === "hotel_admin" &&
@@ -333,7 +334,7 @@ export const deleteBooking = async (req, res) => {
       });
 
     const booking = await Booking.findOneAndDelete({
-      _id: hotel_id,
+      _id: booking_id,
     });
 
     if (!booking)
