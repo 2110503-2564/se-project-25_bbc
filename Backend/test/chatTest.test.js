@@ -44,7 +44,6 @@ test("TC3 findChatRoom", async () => {
 
     const chat = await findChatRoom({ account_id, hotel_id });
     
-    
     expect(chat.hotel_id.toString()).toBe(hotel_id);
     expect(chat.account_id.toString()).toBe(account_id);
 
@@ -83,7 +82,7 @@ test("TC6 handleNewMessage failed", async () => {
 
 });
 
-test("TC7 getMassageHistory", async () => {
+test("TC7 getMessageHistory", async () => {
     const chat_id = "6804f1a38e09ab3b28f675e8";
 
     const messages = await getMessageHistory( chat_id );
@@ -94,7 +93,7 @@ test("TC7 getMassageHistory", async () => {
 
 });
 
-test("TC8 getMassageHistory failed", async () => {
+test("TC8 getMessageHistory failed", async () => {
     const chat_id = "6804f1a38e09aasdb3b28f675e8as";
 
     await expect(getMessageHistory( chat_id )).rejects.toThrow('Error fetching message history');
