@@ -35,7 +35,7 @@ describe('Chat Module Black Box Tests', () => {
         });
 
         it('TC2: Throws error for invalid search criteria', async () => {
-            await expect(searchChat({ account_id, role: 'user' })).rejects.toThrow();
+            await expect(searchChat({ hotel_id, role: 'hotel_id' })).rejects.toThrow();
         });
     });
 
