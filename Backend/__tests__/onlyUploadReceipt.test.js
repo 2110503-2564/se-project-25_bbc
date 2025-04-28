@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { uploadReceipt } from '../controllers/bookingController.js';
+import { uploadReceipt } from '../controllers/booking/uploadReceipt.js';
 import Booking from '../models/Booking.js';
 
 const createMockResponse = () => {
