@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { sendNoti, sendPromoCode } from "@api/noti";
 import { playSound } from './Playsounds';
 
+
 export default function NotiForm() {
   const [showDate, setShowDate] = useState(true);
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function NotiForm() {
     codeValue: '',
 
   });
+  const [successMessage, setSuccessMessage] = useState('');
 
   const token = localStorage.getItem("token");
   const res_login = localStorage.getItem("res_login");
@@ -50,13 +52,6 @@ export default function NotiForm() {
         formData.codeValue
       );
 
-      if (response?.success&&formData.type==="promotion") {
-        playSound("/sounds/Promotionnoti.mp3"); 
-      }
-  
-      if (response?.success&&formData.type==="emergency") {
-        playSound("/sounds/Emernoti.mp3"); 
-      }
   
       console.log(response);
     }
@@ -72,11 +67,13 @@ export default function NotiForm() {
     )
 
     if (response?.success&&formData.type==="promotion") {
-      playSound("/sounds/Promotionnoti.mp3"); 
+      playSound("/sounds/Promotionnoti.mp3");
+      setSuccessMessage('Publish Promotion'); 
     }
 
     if (response?.success&&formData.type==="emergency") {
-      playSound("/sounds/Emernoti.mp3"); 
+      playSound("/sounds/Emernoti.mp3");
+      setSuccessMessage('Publish Emergency'); 
     }
 
     console.log(response);
@@ -256,6 +253,11 @@ export default function NotiForm() {
       >
         Publish
       </button>
+      {successMessage && (
+       <div className="text-green-600 text-center text-sm mt-4">
+       {successMessage}
+      </div>
+      )}
     </form>
   );
 }
