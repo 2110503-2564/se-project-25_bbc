@@ -2,6 +2,7 @@ import Promocode from "../models/PromoCode.js";
 
 export const createPromocode = async (req, res) => {
   try {
+    req.body.hotel_id = req.user.hotel_id || req.body.hotel_id;
     const promoCode = await Promocode.create(req.body);
     return res.status(201).json({ success: true, promoCode });
   } catch (error) {
@@ -16,14 +17,16 @@ export const checkPromocode = async (req, res) => {
 
     const promoCode = await Promocode.findOne({ code });
 
+    if(!promoCode) return res.status(404).json({ success: false, message: "Promo code not found." });
+
     // Check if expired
     if (new Date() > promoCode.expire) {
-      return res.status(400).json({ success: false, message: "Promo code has expired" });
+      return res.status(400).json({ success: false, message: "Promo code has expired." });
     }
 
     // Check usage limit
     if (promoCode.limit !== null && promoCode.usage >= promoCode.limit) {
-      return res.status(400).json({ success: false, message: "Promo code usage limit exceeded" });
+      return res.status(400).json({ success: false, message: "Promo code usage limit exceeded." });
     }
 
     return res.status(200).json({
