@@ -7,6 +7,7 @@ const promoCodeSchema = new mongoose.Schema(
       ref: 'Hotel',
       required: true 
     },
+    detail: { type: String },
     code: {
       type: String,
       required: [true , 'Please add a code name'], 
@@ -33,6 +34,11 @@ const promoCodeSchema = new mongoose.Schema(
     discountValue: {
       type: Number,
       required: true
+    },
+    usedBy: {
+      type: mongoose.Schema.ObjectId , 
+      ref: 'Account',
+      default: []
     }
   },
   {

@@ -222,39 +222,8 @@ export const rejectedBooking = async (req, res) => {
   }
 };
 
-export const confirmedBooking = async (req, res) => {
-  try {
-    const account_id =
-      req.user.role === "user" ? req.user.id : req.body.account_id;
-
-    const hotel_id =
-      req.user.role === "hotel_admin" ? req.user.hotel_id : req.body.hotel_id;
-
-    const booking = await Booking.findOneAndUpdate(
-      { _id: req.body.booking_id, account_id, hotel_id },
-      { status: "confirmed" },
-      { new: true, runValidators: true }
-    );
-
-    if (!booking)
-      return res
-        .status(404)
-        .json({ success: false, message: "Booking not found." });
-
-    res.status(200).json({ success: true, booking });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-};
-
 export const canceledBooking = async (req, res) => {
   try {
-    const account_id =
-      req.user.role === "user" ? req.user.id : req.body.account_id;
-
-    const hotel_id =
-      req.user.role === "hotel_admin" ? req.user.hotel_id : req.body.hotel_id;
 
     const booking = await Booking.findOneAndUpdate(
       { _id: req.body.booking_id},
@@ -322,6 +291,7 @@ export const finishedBooking = async (req, res) => {
 export const deleteBooking = async (req, res) => {
   try {
     const hotel_id = req.user.hotel_id || req.body.hotel_id;
+    const booking_id = req.body.booking_id || req.params.booking_id
 
     if (
       req.user.role === "hotel_admin" &&
@@ -333,7 +303,7 @@ export const deleteBooking = async (req, res) => {
       });
 
     const booking = await Booking.findOneAndDelete({
-      _id: hotel_id,
+      _id: booking_id,
     });
 
     if (!booking)

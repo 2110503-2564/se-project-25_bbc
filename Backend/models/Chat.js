@@ -11,7 +11,7 @@ const chatSchema = new mongoose.Schema({
         ref: 'Account',
         required: true 
     },
-    type: { 
+    type: {
         type: String, 
         enum: ["single", "group"],
         required: true,

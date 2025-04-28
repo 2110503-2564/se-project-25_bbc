@@ -12,4 +12,48 @@ router.post('/public/upload', upload.single('file'), (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Upload
+ *   description: File upload APIs
+ */
+
+/**
+ * @swagger
+ * /public/upload:
+ *   post:
+ *     summary: Upload a single file
+ *     tags: [Upload]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - file
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: The file to upload
+ *     responses:
+ *       200:
+ *         description: File uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 filename:
+ *                   type: string
+ *                   description: The name of the uploaded file
+ *                 path:
+ *                   type: string
+ *                   description: URL path to access the uploaded file
+ *       400:
+ *         description: No file uploaded
+ */
+
 export default router;

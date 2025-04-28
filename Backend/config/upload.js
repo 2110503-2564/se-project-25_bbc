@@ -23,6 +23,43 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  fileFilter:(req,file,cb)=>{
+    const allowedType = ['image/jpeg','image/png']
+
+    if(allowedType.includes(file.mimetype)){
+      cb(null,true) // Accept file
+    }else{
+      cb(new Error('Invalid file type. Only JPEG and PNG are allowed.'));
+    }
+  }
+});
+
+
+// Multer error handling middleware
+const handleMulterError = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    // Handle Multer-specific errors
+    return res.status(400).json({
+      success: false,
+      error: err.message || 'File upload error',
+    });
+  } else if (err.message && err.message.includes('Invalid file type')) {
+    // Handle file type validation error
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid file type. Only JPEG and PNG are allowed.',
+    });
+  } else if (err) {
+    // Handle other general errors
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+    });
+  }
+  next();
+};
 
 export default upload;
+export {handleMulterError};
