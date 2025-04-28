@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { createBooking , uploadReceiptImage } from '@api/booking';
-import { use, useEffect, useState } from 'react';
-import { SuccessDialog } from '@components/cards/SuccessDialog';
-import PromptPayQR from '@components/payment/PromptPayQR';
+import { createBooking, uploadReceiptImage } from "@api/booking";
+import { use, useEffect, useState } from "react";
+import { SuccessDialog } from "@components/cards/SuccessDialog";
+import { checkPromocode } from "@api/promoCode";
+import PromptPayQR from "@components/payment/PromptPayQR";
 
 export const BookingForms = ({
   hotel_id,
@@ -13,18 +14,20 @@ export const BookingForms = ({
   roomCapacity,
   hotelName,
   tel,
-  room
+  room,
 }) => {
-  const [checkInDate, setCheckInDate] = useState('');
-  const [checkOutDate, setCheckOutDate] = useState('');
+  const [checkInDate, setCheckInDate] = useState("");
+  const [checkOutDate, setCheckOutDate] = useState("");
   const [numPeople, setNumPeople] = useState(1);
   const [totalPrice, setTotalPrice] = useState(room.rate_per_night);
-  const [successfulMessage, setSuccessfulMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [successfulMessage, setSuccessfulMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const [file, setFile] = useState(null);
+  const [promocode, setPromocode] = useState("");
+  const [discount, setDiscount] = useState(0);
   const [openSuccess, setOpenSuccess] = useState(false);
 
   useEffect(() => {
@@ -34,7 +37,6 @@ export const BookingForms = ({
       const parsedLogin = JSON.parse(storedLogin);
       setToken(storedToken);
       setUser(parsedLogin);
-      
     } catch (err) {
       console.error("Failed to parse login info:", err);
     }
@@ -43,14 +45,43 @@ export const BookingForms = ({
   useEffect(() => {
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
-    const dayDifference = (checkOut - checkIn)/(1000 * 60 * 60 * 24);
-    setTotalPrice((room.rate_per_night*(dayDifference?dayDifference:1)).toFixed(2)); 
-  },[checkInDate, checkOutDate]);
+    const dayDifference = (checkOut - checkIn) / (1000 * 60 * 60 * 24);
+    setTotalPrice(
+      (room.rate_per_night * (dayDifference ? dayDifference : 1)).toFixed(2)
+    );
+  }, [checkInDate, checkOutDate]);
+
+  const handlePromocodeCheck = async () => {
+    if (!promocode) {
+      setErrorMessage("Please enter a promocode.");
+      return;
+    }
+    setErrorMessage(""); // Clear error message
+    setLoading(true);
+
+    try {
+      const response = await checkPromocode(token, promocode);
+      if (response && response.success) {
+        const appliedDiscount = response.promoCode?.discountValue || 0;
+        setDiscount(appliedDiscount);
+        const newTotalPrice = (totalPrice - appliedDiscount).toFixed(2); // Apply the discount
+        setTotalPrice(newTotalPrice);
+        setSuccessfulMessage(`Promocode applied! Discount: ${appliedDiscount}`);
+      } else {
+        setErrorMessage(response.message || "Invalid promocode");
+      }
+    } catch (error) {
+      console.log("Error checking promocode:", error);
+      setErrorMessage(error.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault(); // prevent form refresh
-    setSuccessfulMessage('');
-    setErrorMessage('');
+    setSuccessfulMessage("");
+    setErrorMessage("");
     setLoading(true);
 
     if (!token || !user?.account?.id) {
@@ -103,9 +134,9 @@ export const BookingForms = ({
       formData.append("check_out_date", checkOutDate);
       formData.append("num_people", numPeople);
       formData.append("total_price", total_price);
-      formData.append("file", file); 
+      formData.append("file", file);
 
-      await createBooking(token , formData);
+      await createBooking(token, formData);
 
       setSuccessfulMessage("Booking Successful");
       setOpenSuccess(true);
@@ -117,12 +148,16 @@ export const BookingForms = ({
     }
   };
 
-  return (  
-    <div style={{overflowY:"scroll"}} className="w-full hide_scrollbar h-screen p-6 hdcard_white max-w-[500px] mt-20">
+  return (
+    <div
+      style={{ overflowY: "scroll" }}
+      className="w-full hide_scrollbar h-screen p-6 hdcard_white max-w-[500px] mt-20"
+    >
       <h2 className="text-2xl font-bold main_text mb-4">Book This Room</h2>
 
       <p className="text-sm sub_text mb-4">
-        Booking cannot exceed <span className="font-semibold text-black">4 days</span>
+        Booking cannot exceed{" "}
+        <span className="font-semibold text-black">4 days</span>
       </p>
 
       <form className="space-y-4" onSubmit={handleBookingSubmit}>
@@ -166,25 +201,59 @@ export const BookingForms = ({
           />
         </div>
 
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Promotion Code
+          </label>
+          <div className="flex items-center">
+            <input
+              type="text"
+              value={promocode}
+              onChange={(e) => setPromocode(e.target.value)}
+              disabled={loading}
+              className="w-3/4 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50"
+            />
+            <button
+              type="button"
+              onClick={handlePromocodeCheck}
+              className="ml-2 bg-blue-500 text-white w-1/4 py-2 text-sm rounded-md hover:bg-blue-600 disabled:opacity-50"
+              disabled={loading}
+            >
+              Check Code
+            </button>
+          </div>
+        </div>
+
         {successfulMessage && (
-          <p className="text-green-600 font-medium text-sm mt-2">{successfulMessage}</p>
+          <p className="text-green-600 font-medium text-sm mt-2">
+            {successfulMessage}
+          </p>
         )}
         {errorMessage && (
-          <p className="text-red-600 font-medium text-sm mt-2">{errorMessage}</p>
+          <p className="text-red-600 font-medium text-sm mt-2">
+            {errorMessage}
+          </p>
         )}
 
         {/* Detail of Booking */}
-        <div className='mb-10'>
-          <h2 className="text-2xl font-bold main_text mb-2">Confirmation Detail of Booking</h2>
+        <div className="mb-10">
+          <h2 className="text-2xl font-bold main_text mb-2">
+            Confirmation Detail of Booking
+          </h2>
           <p className="text-sm sub_text mb-4">
-            <span className="font-semibold text-red-500 underline">Make sure</span> before starting your booking.
+            <span className="font-semibold text-red-500 underline">
+              Make sure
+            </span>{" "}
+            before starting your booking.
           </p>
           <table className="w-full text-sm">
             <tbody>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">Name:</td>
                 <td className="sub_text font-light">
-                  {user ? `${user.account.first_name} ${user.account.last_name}` : "-"}
+                  {user
+                    ? `${user.account.first_name} ${user.account.last_name}`
+                    : "-"}
                 </td>
               </tr>
               <tr>
@@ -196,37 +265,47 @@ export const BookingForms = ({
                 <td className="sub_text font-light">{`${room.room_number} ${room.type}`}</td>
               </tr>
               <tr>
-                <td className="font-semibold main_text pr-4 py-1">Total Guest:</td>
+                <td className="font-semibold main_text pr-4 py-1">
+                  Total Guest:
+                </td>
                 <td className="sub_text font-light">{`${numPeople} person`}</td>
               </tr>
               <tr>
-                <td className="font-semibold main_text pr-4 py-1">Total Price*:</td>
+                <td className="font-semibold main_text pr-4 py-1">
+                  Total Price*:
+                </td>
                 <td className="sub_text font-light">{`${totalPrice} $`}</td>
               </tr>
             </tbody>
           </table>
 
-          <div className='card_bg2 p-2 flex justify-center  rounded-lg mt-3'>
-            <PromptPayQR phone={tel} size={120} amount={totalPrice}/>
-            <div className='ml-2'>
-              <div className=' main_text font-semibold'>Upload receipt</div>
-                <input type="file" name="photo" onChange={(e) => {setFile(e.target.files[0]);}} />
-              </div>
+          <div className="card_bg2 p-2 flex justify-center  rounded-lg mt-3">
+            <PromptPayQR phone={tel} size={120} amount={totalPrice} />
+            <div className="ml-2">
+              <div className=" main_text font-semibold">Upload receipt</div>
+              <input
+                type="file"
+                name="photo"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                }}
+              />
             </div>
-         
+          </div>
         </div>
-         <button
+        <button
           type="submit"
           className="bg-blue-500 text-white px-4 w-full py-2 hover:bg-blue-600 transition-all text-center  rounded-md"
         >
           <p>{loading ? "Processing..." : "Book Now"}</p>
         </button>
       </form>
-      
-      <SuccessDialog 
-      open={openSuccess} 
-      onClose={()=>setOpenSuccess(false)} 
-      textshow={successfulMessage}/>
+
+      <SuccessDialog
+        open={openSuccess}
+        onClose={() => setOpenSuccess(false)}
+        textshow={successfulMessage}
+      />
     </div>
   );
 };

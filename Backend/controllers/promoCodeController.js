@@ -132,27 +132,27 @@ const checkingPromocode = async (code , account_id) => {
 
     // 1. Find the promocode
     const promoCode = await Promocode.findOne({ code });
-    if (!promoCode) return { status: 404, success: false, message: "Promocode not found" };
+    if (!promoCode) return { status: 404, success: false, message: "Promotion code not found." };
 
     // 2. Check if expired
     if (promoCode.expire < new Date()) {
-      return { status: 400, success: false, message: "Promocode has expired" };
+      return { status: 400, success: false, message: "Promotion code has expired." };
     }
 
     // 3. Check if usage limit exceeded
     if (promoCode.limit !== null && promoCode.usage >= promoCode.limit) {
-      return { status: 400, success: false, message: "Promocode usage limit reached" };
+      return { status: 400, success: false, message: "Promotion code usage limit reached." };
     }
 
     // 4. Check if user already used it
     if (promoCode.usedBy.includes(account_id)) {
-      return { status: 400, success: false, message: "You have already used this promocode" };
+      return { status: 400, success: false, message: "You have already used this promotion code." };
     }
 
     return {
       status: 200,
       success: true,
-      message: "Promo code verified successfully",
+      message: "Promotion code verified successfully",
       promoCode
     };
 
