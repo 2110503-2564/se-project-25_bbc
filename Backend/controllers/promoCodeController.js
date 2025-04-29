@@ -43,7 +43,7 @@ export const searchPromocodes = async (req, res) => {
     const promoCodes = await query;
     return res.status(200).json({
       success: true,
-      count: promos.length,
+      count: promoCodes.length,
       promoCodes
     });
   } catch (error) {
