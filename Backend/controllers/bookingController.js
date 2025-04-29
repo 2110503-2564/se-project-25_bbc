@@ -396,13 +396,13 @@ export const updateBooking = async (req, res, next) => {
           });
         }
 
-        // Check if room is available for the new dates
-        // if (!await isRoomAvailable(room.id, booking.hotel_id, updateCheckInDate, updateCheckOutDate,booking._id)) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: `The room is not available for the selected dates`
-        //     });
-        // }
+        //Check if room is available for the new dates
+        if (!await isRoomAvailable(room.id, booking.hotel_id, updateCheckInDate, updateCheckOutDate,booking._id)) {
+            return res.status(400).json({
+                success: false,
+                message: `The room is not available for the selected dates`
+            });
+        }
 
         // Check room capacity
         if (!(await isRoomCapacityValid(room.id, updateNumPeople))) {
