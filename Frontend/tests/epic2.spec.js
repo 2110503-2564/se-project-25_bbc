@@ -29,7 +29,7 @@ test('PromoCodeApply', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
   await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
-  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('user2@user.com');
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('user3@user.com');
   await page.getByRole('textbox', { name: 'password' }).fill('123456');
   await page.getByRole('button', { name: 'Sign-In' }).click();
   await page.getByRole('link', { name: 'My-booking' }).click();
