@@ -1,6 +1,6 @@
 const URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const sendNoti = async (token = "" , head, detail, expire, type) => {
+export const sendNoti = async (token = "" , head, detail, type) => {
   try {
     const res = await fetch(`${URL}/api/chat/notification`, {
       method: "POST",
@@ -8,7 +8,7 @@ export const sendNoti = async (token = "" , head, detail, expire, type) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ head, detail, expire, type })
+      body: JSON.stringify({ head, detail, type })
     });
 
     const data = await res.json();
@@ -22,7 +22,7 @@ export const sendNoti = async (token = "" , head, detail, expire, type) => {
   }
 };
 
-export const sendPromoCode = async (token = "" , hotel_id, detail, expire, type, code, discountType, limit, discountValue) => {
+export const sendPromoCode = async (token = "" , hotel_id, detail, type, expire, code, discountType, limit, discountValue) => {
   try {
     const res = await fetch(`${URL}/api/promo/create`, {
       method: "POST",

@@ -3,7 +3,7 @@
 import { createBooking, uploadReceiptImage } from "@api/booking";
 import { use, useEffect, useState } from "react";
 import { SuccessDialog } from "@components/cards/SuccessDialog";
-import { checkPromocode } from "@api/promoCode";
+import { checkPromocode, usePromocode } from "@api/promoCode";
 import PromptPayQR from "@components/payment/PromptPayQR";
 
 export const BookingForms = ({
@@ -28,7 +28,9 @@ export const BookingForms = ({
   const [user, setUser] = useState(null);
   const [file, setFile] = useState(null);
   const [promocode, setPromocode] = useState("");
-  const [discount, setDiscount] = useState(0);
+  const [usedPromocode, setUsedPromocode] = useState("");
+  const [discountType, setDiscountType] = useState("");
+  const [discountValue, setDiscountValue] = useState(0);
   const [openSuccess, setOpenSuccess] = useState(false);
 
   useEffect(() => {
@@ -49,8 +51,10 @@ export const BookingForms = ({
     const dayDifference = (checkOut - checkIn) / (1000 * 60 * 60 * 24);
     const calculatedPrice = numPeople * room.rate_per_night * (dayDifference ? dayDifference : 1);
     setOriginalPrice(calculatedPrice.toFixed(2));
-    setTotalPrice((calculatedPrice - discount).toFixed(2));
-  }, [checkInDate, checkOutDate , numPeople]);
+    if(discountType === "percentage") setTotalPrice((calculatedPrice * ( 1 - ( discountValue / 100 ))).toFixed(2));
+    else if(discountType === "fixed") setTotalPrice((calculatedPrice - discountValue).toFixed(2));
+    else setTotalPrice(calculatedPrice.toFixed(2));
+  }, [checkInDate, checkOutDate , numPeople , usedPromocode]);
 
   const handlePromocodeCheck = async () => {
     setErrorMessage("");
@@ -64,15 +68,17 @@ export const BookingForms = ({
     try {
       const response = await checkPromocode(token, promocode);
       if (response && response.success) {
-        const appliedDiscount = response.promoCode?.discountValue || 0;
-        setDiscount(appliedDiscount);
-        const newTotalPrice = (originalPrice - appliedDiscount).toFixed(2);
-        setTotalPrice(newTotalPrice);
-        setSuccessfulMessage(`Promocode applied! Discount: ${appliedDiscount}`);
+        const appliedDiscountValue = response.promoCode?.discountValue || 0;
+        const appliedDiscountType = response.promoCode?.discountType || "";
+        setDiscountValue(appliedDiscountValue);
+        setDiscountType(appliedDiscountType);
+        setUsedPromocode(promocode);
+        setSuccessfulMessage('Promocode applied!');
       } else {
         setErrorMessage(response.message || "Invalid promocode");
-        setTotalPrice(originalPrice);
-        setDiscount(0);
+        setUsedPromocode("");
+        setDiscountValue(0);
+        setDiscountType("");
       }
     } catch (error) {
       console.log("Error checking promocode:", error);
@@ -81,6 +87,8 @@ export const BookingForms = ({
       setLoading(false);
     }
   };
+
+  console.log(usedPromocode);
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault(); // prevent form refresh
@@ -137,10 +145,11 @@ export const BookingForms = ({
       formData.append("check_in_date", checkInDate);
       formData.append("check_out_date", checkOutDate);
       formData.append("num_people", numPeople);
-      formData.append("total_price", total_price);
+      formData.append("total_price", totalPrice);
       formData.append("file", file);
 
       await createBooking(token, formData);
+      if(usedPromocode) await usePromocode(token , usedPromocode);
 
       setSuccessfulMessage("Booking Successful");
       setOpenSuccess(true);
@@ -223,7 +232,7 @@ export const BookingForms = ({
               className="ml-2 bg-blue-500 text-white w-1/4 py-2 text-sm rounded-md hover:bg-blue-600 disabled:opacity-50"
               disabled={loading}
             >
-              Check Code
+              Redeem
             </button>
           </div>
         </div>
@@ -276,10 +285,10 @@ export const BookingForms = ({
               </tr>
               <tr>
                 <td className="font-semibold main_text pr-4 py-1">
-                  Total Price*:
+                  Total Price:
                 </td>
                 <td className="sub_text font-light">
-                  {discount > 0 ? (
+                  {usedPromocode ? (
                     <>
                       <span className="line-through text-red-500">
                         ${originalPrice}

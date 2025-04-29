@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import Image from "@node_modules/next/image";
 import { ChatContext } from "@providers/chatProvider";
 import Link from "@node_modules/next/link";
-import { sendNoti } from "@api/noti";
 import NotiForm from "./NotiForm";
 import { playSound } from "./Playsounds";
 

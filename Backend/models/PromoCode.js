@@ -19,8 +19,7 @@ const promoCodeSchema = new mongoose.Schema(
     },
     limit: {
       type: Number,
-      required: true,
-      default: null,
+      default: null,  
     },
     expire: {
       type: Date,
