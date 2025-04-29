@@ -74,6 +74,7 @@ export default function NotiForm() {
     if (response?.success&&formData.type==="emergency") {
       playSound("/sounds/Emernoti.mp3");
       setSuccessMessage('Publish Emergency'); 
+      setTimeout(() => {setSuccessMessage('');}, 3000);
     }
 
     console.log(response);
