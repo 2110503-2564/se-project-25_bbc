@@ -21,7 +21,7 @@ router.post('/public/upload', upload.single('file'), (req, res) => {
 
 /**
  * @swagger
- * /public/upload:
+ * /api/uploads/public/upload:
  *   post:
  *     summary: Upload a single file
  *     tags: [Upload]

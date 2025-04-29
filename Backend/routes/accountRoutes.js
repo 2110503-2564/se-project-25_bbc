@@ -63,7 +63,7 @@ router.get('/profile', protect , accountController.getProfile);
 
 /**
  * @swagger
- * /profile:
+ * /api/account/profile:
  *   get:
  *     summary: Get account profile
  *     tags: [Accounts]
