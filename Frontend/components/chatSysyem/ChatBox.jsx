@@ -399,16 +399,6 @@ const ChatBox = () => {
                   };
                   const bgClass = typeColors[notification.type] || "main_bg";
                   const emoji = typeEmojis[notification.type] || "🔔";
-                  const formattedExpire = notification.expire
-                    ? new Date(notification.expire).toLocaleDateString(
-                        "en-GB",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      )
-                    : null;
 
                   return (
                     <li
@@ -461,18 +451,6 @@ const ChatBox = () => {
                       >
                         - {notification.detail}
                       </div>
-                      {formattedExpire && (
-                        <div
-                          style={{
-                            fontSize: "11px",
-                            color: "#e0e0e0",
-                            marginTop: "6px",
-                            fontStyle: "italic",
-                          }}
-                        >
-                          ⏳ Expires on: {formattedExpire}
-                        </div>
-                      )}
                     </li>
                   );
                 }) : (<div>

@@ -12,7 +12,6 @@ const notificationSchema = new mongoose.Schema(
      },
     head: { type: String },
     detail: { type: String },
-    expire: { type: Date },
     type: {
       type: String,
       enum: ["promotion", "news", "emergency", "booking"],

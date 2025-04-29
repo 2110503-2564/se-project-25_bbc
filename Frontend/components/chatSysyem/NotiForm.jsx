@@ -4,11 +4,9 @@ import { playSound } from './Playsounds';
 
 
 export default function NotiForm() {
-  const [showDate, setShowDate] = useState(true);
   const [formData, setFormData] = useState({
     head: '',
     detail: '',
-    expire: '',
     type: 'promotion',
     code: '',
     codeType: 'percentage',
@@ -31,11 +29,6 @@ export default function NotiForm() {
     }));
   };
 
-  const handleSelectChange = (e) => {
-    const { value } = e.target;
-    setShowDate(value !== "emergency");
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -44,7 +37,6 @@ export default function NotiForm() {
       token,
         hotel_id,
         formData.detail,
-        formData.expire,
         formData.type,
         formData.code,
         formData.codeType,
@@ -62,7 +54,6 @@ export default function NotiForm() {
       token,
       formData.head,
       formData.detail,
-      formData.expire,
       formData.type
     )
 
@@ -127,40 +118,6 @@ export default function NotiForm() {
           className="mt-1 mb-[20px] block w-full border-none rounded p-2"
           placeholder="Code"
         />
-        <input
-          type="number"
-          id="codeValue"
-          name="codeValue"
-          value={formData.codeValue}
-          onChange={handleChange}
-          style={{
-            width:"100%",
-            borderRadius: "10px",
-            boxSizing: "border-box",
-            paddingLeft: "20px",
-            paddingRight: "20px",
-            backgroundColor: "white",
-          }}
-          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
-          placeholder="Value"
-        />
-        <input
-          type="number"
-          id="codeLimit"
-          name="codeLimit"
-          value={formData.codeLimit}
-          onChange={handleChange}
-          style={{
-            width:"100%",
-            borderRadius: "10px",
-            boxSizing: "border-box",
-            paddingLeft: "20px",
-            paddingRight: "20px",
-            backgroundColor: "white",
-          }}
-          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
-          placeholder="Limit"
-        />
          <select
           id="codeType"
           name="codeType"
@@ -179,6 +136,40 @@ export default function NotiForm() {
           <option value="percentage">percentage</option>
           <option value="fixed">fixed</option>
         </select>
+        <input
+          type="number"
+          id="codeValue"
+          name="codeValue"
+          value={formData.codeValue}
+          onChange={handleChange}
+          style={{
+            width:"100%",
+            borderRadius: "10px",
+            boxSizing: "border-box",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            backgroundColor: "white",
+          }}
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
+          placeholder="Value"
+        />
+                <input
+          type="number"
+          id="codeLimit"
+          name="codeLimit"
+          value={formData.codeLimit}
+          onChange={handleChange}
+          style={{
+            width:"100%",
+            borderRadius: "10px",
+            boxSizing: "border-box",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            backgroundColor: "white",
+          }}
+          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
+          placeholder="Limit"
+        />
       </div>
       
       )}
@@ -201,33 +192,13 @@ export default function NotiForm() {
           placeholder="Detail"
         />
       </div>
-      {showDate && (
-      <div>
-        <input
-          type="datetime-local"
-          id="expire"
-          name="expire"
-          value={formData.expire}
-          onChange={handleChange}
-          style={{
-            width:"100%",
-            borderRadius: "10px",
-            boxSizing: "border-box",
-            paddingLeft: "20px",
-            paddingRight: "20px",
-            backgroundColor: "white",
-          }}
-          className="mt-1 mb-[20px] block w-full border-none rounded p-2"
-        />
-      </div>
-      )}
       <div>
 
         <select
           id="type"
           name="type"
           value={formData.type}
-          onChange={(e) => {handleChange(e); handleSelectChange(e)}}
+          onChange={(e) => {handleChange(e);}}
           style={{
             width:"100%",
             borderRadius: "10px",
@@ -238,9 +209,9 @@ export default function NotiForm() {
           }}
           className="mt-1 mb-[20px] block w-full border-none rounded p-2"
         >
-          <option value="promotion">promotion</option>
-          <option value="emergency">emergency</option>
-          <option value="promotion code">promotion code</option>
+          <option value="promotion">Promotion</option>
+          <option value="emergency">Emergency</option>
+          <option value="promotion code">Promotion code</option>
         </select>
       </div>
 
