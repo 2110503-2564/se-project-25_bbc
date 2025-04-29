@@ -5,6 +5,7 @@ import { ChatContext } from "@providers/chatProvider";
 import Link from "@node_modules/next/link";
 import NotiForm from "./NotiForm";
 import { playSound } from "./Playsounds";
+import checkTokenValidity from "@util/autoSignOut";
 
 const ChatBox = () => {
   const { isShow, setIsShow, socket } = useContext(ChatContext);
@@ -25,6 +26,7 @@ const ChatBox = () => {
   const chatBoxRef = useRef(null);
 
   useEffect(() => {
+    checkTokenValidity();
     const login = JSON.parse(localStorage.getItem("res_login"));
     setAccountId(login?.account?.id);
     setRole(login?.account?.role);

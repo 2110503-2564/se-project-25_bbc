@@ -6,14 +6,7 @@ import Footer from "@components/Footer";
 import ChatButton from "@components/chatSysyem/ChatButton";
 import ChatBox from "@components/chatSysyem/ChatBox";
 import { ChatProvider } from "@providers/chatProvider";
-import { use } from "@node_modules/@types/react";
 export default function RootLayout({ children }) {
-
-  useEffect(() => {
-     // Set up periodic check every 20 seconds
-     const interval = setInterval(checkTokenValidity, 20000);
-     return () => clearInterval(interval);
-  }, [])
 
   return (
     <html lang="en">

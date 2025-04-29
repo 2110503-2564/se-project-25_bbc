@@ -353,11 +353,13 @@ export async function updateHotelName({
     const data = await res.json();
 
     if (!res.ok) {
+      checkTokenValidity();
       throw new Error(data.message || "Failed to update hotel name");
     }
 
     return data;
   } catch (error) {
+    checkTokenValidity();
     console.error("Update hotel name error:", error);
     throw error;
   }
