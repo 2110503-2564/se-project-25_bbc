@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test('QRcode&Receipt', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
   await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
@@ -15,12 +15,60 @@ test('test', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Choose File' })).toBeVisible();
   await page.setInputFiles('input[type="file"]', 'mockFiles/015115182538CPM06894.jpg');
   await page.getByRole('link', { name: 'My-booking' }).click();
-  await expect(page.getByRole('button', { name: 'Paid wallet' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Attached wallet' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Payment wallet' })).toBeVisible();
-  await page.getByRole('button', { name: 'Manage Booking pencil-white' }).nth(1).click();
+  await page.getByRole('button', { name: 'Manage Booking pencil-white' }).first().click();
   await expect(page.getByRole('img', { name: 'receipt' })).toBeVisible();
   await page.getByRole('link', { name: 'My-booking' }).click();
   await page.getByRole('button', { name: 'Payment wallet' }).click();
   await expect(page.getByRole('img', { name: 'PromptPay QR' })).toBeVisible();
   await page.setInputFiles('input[type="file"]', 'mockFiles/015115182538CPM06894.jpg');
+});
+
+test('PromoCodeApply', async ({ page }) => {
+  await page.goto('http://localhost:3000/');
+  await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('user2@user.com');
+  await page.getByRole('textbox', { name: 'password' }).fill('123456');
+  await page.getByRole('button', { name: 'Sign-In' }).click();
+  await page.getByRole('link', { name: 'My-booking' }).click();
+  await page.getByRole('link', { name: 'Hotels' }).click();
+  await page.getByRole('link', { name: 'Brakus, Schowalter and Moore' }).click();
+  await page.locator('div:nth-child(2) > .hdcard_white > a > .main_bg').click();
+  await page.locator('div').filter({ hasText: /^Check-in Date$/ }).getByRole('textbox').fill('2025-10-09');
+  await page.locator('div').filter({ hasText: /^Check-out Date$/ }).getByRole('textbox').fill('2025-10-12');
+  await page.locator('input[type="text"]').click();
+  await page.locator('input[type="text"]').fill('SUMMER10');
+  await page.getByRole('button', { name: 'Redeem' }).click();
+  await page.getByText('Promocode applied!').click();
+  await expect(page.getByText('$2890.77')).toBeVisible();
+  await expect(page.getByText('$2601.69')).toBeVisible();
+  await page.setInputFiles('input[type="file"]', 'mockFiles/015115182538CPM06894.jpg');
+  await page.getByRole('button', { name: 'Book Now' }).click();
+  await expect(page.getByTestId('CheckCircleIcon').locator('path')).toBeVisible();
+  await expect(page.getByRole('paragraph')).toBeVisible();
+});
+
+test('multiplePromoCodeApplyPrevention', async ({ page }) => {
+  await page.goto('http://localhost:3000/');
+  await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('user1@user.com');
+  await page.getByRole('textbox', { name: 'password' }).fill('123456');
+  await page.getByRole('button', { name: 'Sign-In' }).click();
+  await page.getByRole('link', { name: 'My-booking' }).click();
+  await page.getByRole('link', { name: 'Hotels' }).click();
+  await page.getByRole('link', { name: 'Brakus, Schowalter and Moore' }).click();
+  await page.locator('div:nth-child(2) > .hdcard_white > a > .main_bg').click();
+  await page.locator('div').filter({ hasText: /^Check-in Date$/ }).getByRole('textbox').fill('2025-10-09');
+  await page.locator('div').filter({ hasText: /^Check-out Date$/ }).getByRole('textbox').fill('2025-10-12');
+  await page.locator('input[type="text"]').click();
+  await page.locator('input[type="text"]').fill('SUMMER10');
+  await page.getByRole('button', { name: 'Redeem' }).click();
+  await page.getByText('You have already used this promotion code.').click();
+  await page.getByRole('button', { name: 'Redeem' }).click();
+  await page.getByText('You have already used this promotion code.').click();
+  await page.getByRole('button', { name: 'Redeem' }).click();
+  await page.getByText('You have already used this promotion code.').click();
 });

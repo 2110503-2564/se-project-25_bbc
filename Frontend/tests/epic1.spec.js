@@ -41,24 +41,33 @@ test('non signed-in users are prompted to log in before chatting', async ({ page
 test('admin publishes a promotion notification and user sees it', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).click();
   await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('1111111111');
+  await page.getByRole('textbox', { name: 'password' }).click();
   await page.getByRole('textbox', { name: 'password' }).fill('123456');
   await page.getByRole('button', { name: 'Sign-In' }).click();
   await page.locator('.hdcard_white > img').click();
   await page.getByText('Publish').click();
-  await page.getByRole('textbox', { name: 'Title' }).fill('asadfsdfasdfsad');
-  await page.getByRole('textbox', { name: 'Detail' }).fill('sadffdsafsa');
-  await page.locator('#expire').fill('2025-04-20T10:00');
+  await page.locator('#type').selectOption('promotion code');
+  await page.getByRole('textbox', { name: 'Code' }).fill('DIS50-1');
+  await page.locator('#codeType').selectOption('fixed');
+  await page.getByPlaceholder('Value').fill('50');
+  await page.getByPlaceholder('Limit').fill('1');
+  await page.getByPlaceholder('Expire Date').fill('2025-05-29');
+  await page.getByRole('textbox', { name: 'Detail' }).fill('Get 50 discount');
+  await page.getByRole('button', { name: 'Publish' }).click();
+  await page.locator('#type').selectOption('Promotion');
+  await page.getByRole('textbox', { name: 'Title' }).fill('DIS50');
+  await page.getByRole('textbox', { name: 'Detail' }).fill('Get 50$ discount');
   await page.getByRole('button', { name: 'Publish' }).click();
   await page.getByRole('link', { name: 'Sign-out' }).click();
-
-  await page.locator('.hdcard_white > img').click();
-  await page.locator('span').filter({ hasText: 'Sign-In' }).click();
-  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('oak@user.com');
+  await page.getByRole('link', { name: 'Sign-In', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Email or Telephone' }).fill('user@user.com');
   await page.getByRole('textbox', { name: 'password' }).fill('123456');
   await page.getByRole('button', { name: 'Sign-In' }).click();
   await page.locator('.hdcard_white > img').click();
   await page.getByText('Notification').click();
+  await expect((page.getByText('🏷️ DIS50🏨 Brakus,')).first()).toBeVisible();
 });
 
 test('admin publishes a emergency notification and user sees it', async ({ page }) => {
