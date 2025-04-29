@@ -5,6 +5,7 @@ import { use, useEffect, useState } from 'react';
 import { SuccessDialog } from '@components/cards/SuccessDialog';
 import PromptPayQR from '@components/payment/PromptPayQR';
 import { uploadReceiptImage } from '@api/booking';
+import { useRouter } from "next/navigation";
 
 export const PaymentForm = ({
   tel = "0",
@@ -13,7 +14,12 @@ export const PaymentForm = ({
 }={}) => {
   const [file, setFile] = useState(null);
   const [token, setToken] = useState(null);
+  const [isClient, setIsClient] = useState(false);
+
+  const router = useRouter();
+
   useEffect(() => {
+    setIsClient(true);
     const storedToken = localStorage.getItem("token");
       setToken(storedToken);
   }, []);
@@ -26,7 +32,11 @@ export const PaymentForm = ({
       token
     });
 
-    console.log("Upload Receipt:")
+    if(res && res.success && isClient)
+      router.push(
+        `/my-booking-page`
+      );
+
   }
 
 
