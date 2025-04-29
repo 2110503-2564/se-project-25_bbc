@@ -18,7 +18,7 @@ router.post('/notification', protect , authorize('hotel_admin' , 'super_admin') 
 
 /**
  * @swagger
- * /chat/insert:
+ * /api/chat/insert:
  *   post:
  *     summary: Insert or create a chat session
  *     tags: [Chats]
@@ -71,7 +71,7 @@ router.post('/notification', protect , authorize('hotel_admin' , 'super_admin') 
 
 /**
  * @swagger
- * /chat/notification:
+ * /api/chat/notification:
  *   post:
  *     summary: Create and broadcast a notification
  *     tags: [Chats]
@@ -85,23 +85,27 @@ router.post('/notification', protect , authorize('hotel_admin' , 'super_admin') 
  *           schema:
  *             type: object
  *             required:
- *               - title
- *               - message
+ *               - head
+ *               - detail
  *               - type
  *             properties:
  *               hotel_id:
  *                 type: string
  *                 format: uuid
  *                 description: Hotel ID (optional if attached to hotel admin user)
- *               title:
+ *               account_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Optional, ID of the account sending the notification
+ *               head:
  *                 type: string
  *                 description: Title of the notification
- *               message:
+ *               detail:
  *                 type: string
- *                 description: Body message of the notification
+ *                 description: Detailed message of the notification
  *               type:
  *                 type: string
- *                 enum: [emergency, normal]
+ *                 enum: [promotion, news, emergency, booking]
  *                 description: Type of notification
  *     responses:
  *       201:
@@ -121,13 +125,15 @@ router.post('/notification', protect , authorize('hotel_admin' , 'super_admin') 
  *                       type: string
  *                     hotel_id:
  *                       type: string
- *                     title:
+ *                     account_id:
  *                       type: string
- *                     message:
+ *                     head:
+ *                       type: string
+ *                     detail:
  *                       type: string
  *                     type:
  *                       type: string
- *                       enum: [emergency, normal]
+ *                       enum: [promotion, news, emergency, booking]
  *                     createdAt:
  *                       type: string
  *                     updatedAt:

@@ -23,6 +23,7 @@ import roomRoutes from './routes/roomRoutes.js';
 import accountRoutes from './routes/accountRoutes.js'
 import chatRoutes from './routes/chatRoutes.js';
 import promoRoutes from './routes/promoCodeRoute.js'
+import uploadRoutes from './routes/uploadRoutes.js'
 
 // import Swagger
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -77,6 +78,7 @@ app.use("/api/room", roomRoutes);
 app.use("/api/account", accountRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/promo", promoRoutes);
+app.use('/api/uploads',uploadRoutes);
 app.use('/uploads', express.static('public/uploads', {
   setHeaders: (res, path, stat) => {
     res.set('Cross-Origin-Resource-Policy', 'cross-origin');
