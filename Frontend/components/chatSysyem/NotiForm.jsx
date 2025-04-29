@@ -58,10 +58,11 @@ export default function NotiForm() {
         setSuccessMessage("Publish Promotion");
       }
 
-      if (response?.success && formData.type === "emergency") {
-        playSound("/sounds/Emernoti.mp3");
-        setSuccessMessage("Publish Emergency");
-      }
+    if (response?.success&&formData.type==="emergency") {
+      playSound("/sounds/Emernoti.mp3");
+      setSuccessMessage('Publish Emergency'); 
+      setTimeout(() => {setSuccessMessage('');}, 3000);
+    }
 
       console.log(response);
     }
