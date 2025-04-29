@@ -14,7 +14,8 @@ import {
     roomNumber,
     numPeople,
     checkIn,
-    checkOut
+    checkOut,
+    hotelName
   }) => {
     return (
       <Dialog
@@ -53,6 +54,7 @@ import {
           </DialogContentText>
   
           <ul className="text-sm text-gray-700 space-y-1">
+            <li><span className="font-medium">Hotel:</span> {hotelName}</li>
             <li><span className="font-medium">Room No:</span> {roomNumber}</li>
             <li><span className="font-medium">People:</span> {numPeople}</li>
             <li><span className="font-medium">Check-in:</span> {checkIn}</li>

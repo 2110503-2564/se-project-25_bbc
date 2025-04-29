@@ -90,3 +90,12 @@ export const deleteHotel = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
     }
 };
+
+export const getAllHotels = async (req, res) => {
+    try {
+      const hotels = await Hotel.find();
+      res.status(200).json(hotels);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching hotels' });
+    }
+  };

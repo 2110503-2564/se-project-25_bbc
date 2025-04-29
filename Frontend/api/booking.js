@@ -313,3 +313,33 @@ export async function uploadReceiptImage({
 
   return data;
 }
+
+export async function updateHotelName({
+  token,
+  hotel_id,
+  new_name
+}) {
+  try {
+    const res = await fetch(`${URL}/api/hotel/${hotel_id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: new_name,
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to update hotel name");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Update hotel name error:", error);
+    throw error;
+  }
+}

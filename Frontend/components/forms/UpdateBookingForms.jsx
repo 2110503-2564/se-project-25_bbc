@@ -16,12 +16,12 @@ export const UpdateBookingForms = ({
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        const bookingIdFromUrl = params.get("booking_id")
+        const bookingIdFromUrl = params.get("booking_id");
         const storedToken = localStorage.getItem("token");
-
+    
         setBookingId(bookingIdFromUrl);
         setToken(storedToken);
-
+    
         const fetchBooking = async () => {
             if (bookingIdFromUrl && storedToken) {
                 try {
@@ -29,10 +29,11 @@ export const UpdateBookingForms = ({
                         token: storedToken,
                         query: `_id=${bookingIdFromUrl}`
                     });
-                    const hotelIdFromBooking = bookingData.bookings[0]?.hotel_id;
     
+                    const hotelIdFromBooking = bookingData.bookings[0]?.hotel_id;
                     setHotelId(hotelIdFromBooking);
     
+                    // กรองห้องที่ตรงกับ hotel_id ที่ได้รับจากการจอง
                     if (hotelIdFromBooking && rooms && rooms.length > 0) {
                         const filtered = rooms.filter(room => room.hotel_id === hotelIdFromBooking);
                         setFilteredRooms(filtered);
@@ -47,6 +48,7 @@ export const UpdateBookingForms = ({
     
         fetchBooking();
     }, [rooms]);
+    
     console.log(rooms)
     console.log(hotels)
 
@@ -69,6 +71,8 @@ export const UpdateBookingForms = ({
                                     booking_id={bookingId}
                                     hotel_id={hotelId}
                                     className="w-full"
+                                    hotels={hotels}
+                                    rooms={rooms}
                                 />
                             </div>
                         ))

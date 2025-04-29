@@ -11,6 +11,7 @@ router.get('/search' , hotelController.searchHotel);
 router.post('/', protect , authorize('super_admin') , hotelController.createHotel);
 router.put('/:hotel_id', protect , authorize('super_admin') , hotelExist , hotelController.updateHotel);
 router.delete('/:hotel_id', protect , authorize('super_admin') , hotelExist , hotelController.deleteHotel);
+router.get('/', hotelController.getAllHotels);
 
 /**
  * @swagger
