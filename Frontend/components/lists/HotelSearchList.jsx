@@ -15,7 +15,6 @@ const HotelSearchList = ({ hotels }) => {
     <>
       <div className="search" style={{ textAlign: 'center', margin: '20px 0' }}>
         <input
-          className='card_bg2'
           type="text"
           placeholder="Search hotels"
           value={searchTerm}
@@ -25,6 +24,7 @@ const HotelSearchList = ({ hotels }) => {
             paddingLeft: '20px',
             paddingRight:'20px',
             width: '80%',
+            backgroundColor:"white",
             maxWidth: '400px',
             borderRadius: '6px',
           }}

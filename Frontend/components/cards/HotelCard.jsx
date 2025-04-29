@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from '@node_modules/next/image'
+import Link from '@node_modules/next/link'
 
 const HotelCard = ({
   hotel=null
@@ -19,6 +20,7 @@ const HotelCard = ({
         borderRadius:"15px"
        }}
     >
+      <Link href={`/hotels-page/${hotel._id}`}>
        <div className="bigcard_image_container" style={{height: "60%"}}>
             <Image
               src={hotel.image_url} 
@@ -56,6 +58,7 @@ const HotelCard = ({
         </span>
         </span>
       </div> 
+      </Link>
     </div>
   )
 }

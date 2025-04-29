@@ -1,4 +1,5 @@
 const URL = process.env.NEXT_PUBLIC_API_URL;
+import checkTokenValidity from "@util/autoSignOut";
 
 export async function searchBookings({
   token
@@ -14,12 +15,14 @@ export async function searchBookings({
     const data = await res.json();
 
     if(!res.ok){
+      checkTokenValidity();
       throw new Error(`Error fecth bookings with message: ${data.message}`);
     }
 
     return data ;
 
   }catch (error) {
+    checkTokenValidity();
     console.error("Search Booking error:", error);
     throw error;
   }
@@ -39,12 +42,14 @@ export async function searchBookingsPopulateAccountId({
     const data = await res.json();
 
     if(!res.ok){
+      checkTokenValidity();
       throw new Error(`Error fecth bookings with message: ${data.message}`);
     }
 
     return data ;
 
   }catch (error) {
+    checkTokenValidity();
     console.error("Search Booking error:", error);
     throw error;
   }
@@ -65,11 +70,13 @@ export async function searchBookingsPopulateFields({ token, populateFields = [] 
     const data = await res.json();
 
     if (!res.ok) {
+      checkTokenValidity();
       throw new Error(`Error fetching bookings with message: ${data.message}`);
     }
 
     return data;
   } catch (error) {
+    checkTokenValidity();
     console.error('Search Booking error:', error);
     throw error;
   }
@@ -92,12 +99,14 @@ export async function getBooking({
     const data = await res.json();
 
     if (!res.ok) {
+      checkTokenValidity();
       throw new Error(`Error get booking with message: ${data.message}`);
     }
 
     return data;
 
   } catch (error) {
+    checkTokenValidity();
     console.error("Get Booking error", error);
     throw error;
   }
@@ -119,11 +128,13 @@ export async function createBooking(token , formData) {
 
     const data = await res.json();
     if (!res.ok) {
+      checkTokenValidity();
       throw new Error(data.message || "Failed to create booking");
     }
 
     return data;
   } catch (error) {
+    checkTokenValidity();
     console.error("Booking creation error:", error);
     throw error;
   }
@@ -161,10 +172,12 @@ export async function updateBooking({
     console.log(data);
 
     if (!res.ok) {
+      checkTokenValidity();
       throw new Error(data.message || "Failed to update booking");
     }
 
   } catch(error) {
+    checkTokenValidity();
     console.log("Update booking error:", error);
     throw error;
   }
@@ -196,10 +209,12 @@ export async function updateBookingStatus(
     console.log(data);
 
     if (!res.ok) {
+      checkTokenValidity();
       throw new Error(data.message || "Failed to update booking status");
     }
 
   } catch(error) {
+    checkTokenValidity();
     console.log("Update booking status error:", error);
     throw error;
   }
@@ -226,11 +241,13 @@ export async function deleteBooking(token, booking_id, hotel_id) {
     console.log(data);
 
     if (!res.ok) {
+      checkTokenValidity();
       throw new Error(data.message || "Failed to delete booking");
     }
 
     return data; // Consider returning the response data for further use
   } catch (error) {
+    checkTokenValidity();
     console.error("Delete booking error:", error); // Prefer `console.error` for errors
     throw error;
   }
@@ -278,6 +295,7 @@ export async function changeBookingStatus({ token, booking_id, new_status }) {
     const data = await res.json();
 
     if (!res.ok) {
+      checkTokenValidity();
       console.error("❌ Response not OK", data);
       throw new Error(data.message || "Failed to update booking status");
     }
@@ -308,6 +326,7 @@ export async function uploadReceiptImage({
 
   const data = await response.json();
   if (!response.ok) {
+    checkTokenValidity();
     throw new Error(data.message || "Upload failed");
   }
 

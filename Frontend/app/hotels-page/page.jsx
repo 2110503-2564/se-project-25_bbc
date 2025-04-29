@@ -13,12 +13,15 @@ const page = async () => {
           width: "100%",
           paddingLeft: "20px",
           paddingRight: "20px",
-          height: "100px",
+          height: "50vh",
           zIndex: "-300",
+          position:"absolute",
           WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%)",
           maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%)"
         }}
       ></div>
+      <div style={{height:"80px"}}>
+      </div>
       <HotelSearchList hotels={hotels} />
     </div>
   );
