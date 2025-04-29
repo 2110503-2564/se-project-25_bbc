@@ -141,7 +141,6 @@ export const acceptedBooking = async (req, res) => {
     }
 
     booking.status = "accepted";
-    booking.isPaid = true;
     await booking.save();
 
     const hotel = await Hotel.findById(hotel_id);

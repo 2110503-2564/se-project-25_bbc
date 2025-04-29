@@ -47,10 +47,10 @@ export const BookingForms = ({
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
     const dayDifference = (checkOut - checkIn) / (1000 * 60 * 60 * 24);
-    const calculatedPrice = room.rate_per_night * (dayDifference ? dayDifference : 1);
-    setOriginalPrice(calculatedPrice);
+    const calculatedPrice = numPeople * room.rate_per_night * (dayDifference ? dayDifference : 1);
+    setOriginalPrice(calculatedPrice.toFixed(2));
     setTotalPrice((calculatedPrice - discount).toFixed(2));
-  }, [checkInDate, checkOutDate]);
+  }, [checkInDate, checkOutDate , numPeople]);
 
   const handlePromocodeCheck = async () => {
     setErrorMessage("");

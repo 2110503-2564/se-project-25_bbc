@@ -57,11 +57,6 @@ const bookSchema = new mongoose.Schema({
         required: true,
         min: [0, 'Total price cannot be negative']
     },
-    isPaid: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
     receiptUrl: {
         type: String,
         default: "" 

@@ -134,12 +134,10 @@ export const BookingCard = ({ booking }) => {
           <div className="ml-[150px] bg-white rounded-[5px] pl-[6px] pt-[6px]">
             <span
               className={`font-semibold capitalize px-2 py-1 rounded ${
-                status === "pending"
+                  status === "pending"
                   ? "text-yellow-600 bg-yellow-100"
                   : status === "accepted"
                   ? "text-green-600 bg-green-100"
-                  : status === "confirmed"
-                  ? "text-emerald-600 bg-emerald-100"
                   : status === "rejected"
                   ? "text-red-600 bg-red-100"
                   : status === "canceled"
@@ -208,7 +206,7 @@ export const BookingCard = ({ booking }) => {
     
           className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 transition-all flex items-center rounded-md"
         >
-          <p>Paid</p>
+          <p>Attached</p>
           <img
             src="/icons/wallet-cards.svg"
             alt="wallet"
