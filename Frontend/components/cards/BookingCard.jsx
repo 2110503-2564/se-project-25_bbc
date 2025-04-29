@@ -185,16 +185,9 @@ export const BookingCard = ({ booking }) => {
                 </button>
               </>
             )}
-
-            {status === "accepted" && (
+            {["user", "super_admin"].includes(userRole) &&
+            status === "accepted" && (
               <>
-                <button
-                  onClick={() => handleUpdateStatus("finished")}
-                  className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 transition-all flex items-center rounded-md"
-                >
-                  <p>Finished</p>
-                </button>
-
                 <button
                   onClick={() => handleUpdateStatus("canceled")}
                   className="bg-gray-600 text-white px-4 py-2 hover:bg-gray-700 transition-all flex items-center rounded-md"
@@ -202,6 +195,18 @@ export const BookingCard = ({ booking }) => {
                   <p>Canceled</p>
                 </button>
               </>
+          )};
+
+          {["hotel_admin", "super_admin"].includes(userRole) &&
+            status === "accepted" && (
+              <>
+                <button
+                  onClick={() => handleUpdateStatus("finished")}
+                  className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 transition-all flex items-center rounded-md"
+                >
+                  <p>Finished</p>
+                </button>
+                </>
           )}
 
           {booking.receiptUrl === "" ? (
