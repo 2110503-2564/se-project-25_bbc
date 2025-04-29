@@ -32,9 +32,7 @@ export const UpdateBookingForms = ({
     
                     const hotelIdFromBooking = bookingData.bookings[0]?.hotel_id;
                     setHotelId(hotelIdFromBooking);
-    
-                    // กรองห้องที่ตรงกับ hotel_id ที่ได้รับจากการจอง
-                    if (hotelIdFromBooking && rooms && rooms.length > 0) {
+                        if (hotelIdFromBooking && rooms && rooms.length > 0) {
                         const filtered = rooms.filter(room => room.hotel_id === hotelIdFromBooking);
                         setFilteredRooms(filtered);
                     } else {

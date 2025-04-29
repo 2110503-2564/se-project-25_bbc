@@ -39,7 +39,6 @@ export const BookingCard = ({ booking }) => {
         role: user?.account?.role,
       });
 
-      // ตรวจสอบว่า response.ok เป็น true หรือไม่
       if (!response || !response.success) {
         throw new Error("Booking not found or status update failed");
       }
@@ -63,9 +62,9 @@ export const BookingCard = ({ booking }) => {
     if (isClient) {
       router.push(
         `/my-booking-page/payment-page?tel=${hotel.tel}&booking_id=${booking._id}&total_price=${booking.total_price}&status=${booking.status}`
-      )
+      );
     }
-  }
+  };
 
   if (!isClient) return null;
 
@@ -134,7 +133,7 @@ export const BookingCard = ({ booking }) => {
           <div className="ml-[150px] bg-white rounded-[5px] pl-[6px] pt-[6px]">
             <span
               className={`font-semibold capitalize px-2 py-1 rounded ${
-                  status === "pending"
+                status === "pending"
                   ? "text-yellow-600 bg-yellow-100"
                   : status === "accepted"
                   ? "text-green-600 bg-green-100"
@@ -167,71 +166,84 @@ export const BookingCard = ({ booking }) => {
         </div>
 
         <div className="mt-4 flex justify-end flex-row space-x-2">
-        {["hotel_admin", "super_admin"].includes(userRole) &&
-          status !== "accepted" &&
-          status !== "rejected" &&
-          status !== "finished" && (
-            <>
-              <button
-                onClick={() => handleUpdateStatus("accepted")}
-                className="bg-green-500 text-white px-4 py-2 hover:bg-green-600 transition-all flex items-center rounded-md"
-              >
-                <p>Accept</p>
-              </button>
+          {["hotel_admin", "super_admin"].includes(userRole) &&
+            status === "pending" && (
+              <>
+                <button
+                  onClick={() => handleUpdateStatus("accepted")}
+                  className="bg-green-500 text-white px-4 py-2 hover:bg-green-600 transition-all flex items-center rounded-md"
+                >
+                  <p>Accept</p>
+                </button>
 
-              <button
-                onClick={() => handleUpdateStatus("rejected")}
-                className="bg-red-500 text-white px-4 py-2 hover:bg-red-600 transition-all flex items-center rounded-md"
-              >
-                <p>Reject</p>
-              </button>
-            </>
+                <button
+                  onClick={() => handleUpdateStatus("rejected")}
+                  className="bg-red-500 text-white px-4 py-2 hover:bg-red-600 transition-all flex items-center rounded-md"
+                >
+                  <p>Reject</p>
+                </button>
+              </>
+            )}
+
+            {status === "accepted" && (
+              <>
+                <button
+                  onClick={() => handleUpdateStatus("finished")}
+                  className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 transition-all flex items-center rounded-md"
+                >
+                  <p>Finished</p>
+                </button>
+
+                <button
+                  onClick={() => handleUpdateStatus("canceled")}
+                  className="bg-gray-600 text-white px-4 py-2 hover:bg-gray-700 transition-all flex items-center rounded-md"
+                >
+                  <p>Canceled</p>
+                </button>
+              </>
           )}
-        {booking.receiptUrl === "" ? (
-        <button
-          onClick={handlePayment}
-          className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center rounded-md"
-        >
-          <p>Payment</p>
-          <img
-            src="/icons/wallet-cards.svg"
-            alt="wallet"
-            width={15}
-            height={15}
-            className="ml-2"
-          />
-        </button>
-        ) : (
-          <button
-    
-          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 transition-all flex items-center rounded-md"
-        >
-          <p>Attached</p>
-          <img
-            src="/icons/wallet-cards.svg"
-            alt="wallet"
-            width={15}
-            height={15}
-            className="ml-2"
-          />
-        </button>
-        )}
 
-        <button
-          onClick={handleManageBooking}
-          className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center rounded-md"
-        >
-          <p>Manage Booking</p>
-          <img
-            src="/icons/pencil.svg"
-            alt="pencil-white"
-            width={15}
-            height={15}
-            className="ml-2"
-          />
-        </button>
-        
-      </div>
+          {booking.receiptUrl === "" ? (
+            <button
+              onClick={handlePayment}
+              className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center rounded-md"
+            >
+              <p>Payment</p>
+              <img
+                src="/icons/wallet-cards.svg"
+                alt="wallet"
+                width={15}
+                height={15}
+                className="ml-2"
+              />
+            </button>
+          ) : (
+            <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 transition-all flex items-center rounded-md">
+              <p>Attached</p>
+              <img
+                src="/icons/wallet-cards.svg"
+                alt="wallet"
+                width={15}
+                height={15}
+                className="ml-2"
+              />
+            </button>
+          )}
+
+          <button
+            onClick={handleManageBooking}
+            className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-all flex items-center rounded-md"
+          >
+            <p>Manage Booking</p>
+            <img
+              src="/icons/pencil.svg"
+              alt="pencil-white"
+              width={15}
+              height={15}
+              className="ml-2"
+            />
+          </button>
+        </div>
       </div>
     </div>
   );
