@@ -11,6 +11,7 @@ export const BookingCard = ({ booking }) => {
   const [status, setStatus] = useState(booking.status);
   const [isClient, setIsClient] = useState(false);
   const [user, setUser] = useState(null);
+  const [showReceipt, setShowReceipt] = useState(false);
 
   const router = useRouter();
 
@@ -195,7 +196,7 @@ export const BookingCard = ({ booking }) => {
                   <p>Canceled</p>
                 </button>
               </>
-          )};
+          )}
 
           {["hotel_admin", "super_admin"].includes(userRole) &&
             status === "accepted" && (
@@ -224,17 +225,46 @@ export const BookingCard = ({ booking }) => {
               />
             </button>
           ) : (
-            <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 transition-all flex items-center rounded-md">
-              <p>Attached</p>
-              <img
-                src="/icons/wallet-cards.svg"
-                alt="wallet"
-                width={15}
-                height={15}
-                className="ml-2"
-              />
-            </button>
+          <button
+            onClick={() => setShowReceipt(true)}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 transition-all flex items-center rounded-md"
+          >
+            <p>Attached</p>
+            <img
+              src="/icons/wallet-cards.svg"
+              alt="wallet"
+              width={15}
+              height={15}
+              className="ml-2"
+            />
+          </button>
           )}
+
+          {showReceipt && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <div
+                className="bg-white p-6 rounded-xl shadow-xl w-[400px] max-w-[90%] relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h2 className="text-xl font-semibold mb-4 text-blue-500 pb-2">
+                  📄 Receipt Preview
+                </h2>
+                <img
+                  src={booking.receiptUrl}
+                  alt="Receipt"
+                  className="w-full h-auto rounded-lg border"
+                />
+                <button
+                  onClick={() => setShowReceipt(false)}
+                  className="absolute top-2 right-2 text-blue-500 hover:text-red-500 text-2xl font-bold"
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+          )}
+
 
           <button
             onClick={handleManageBooking}
