@@ -30,6 +30,7 @@
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
     "helmet": "^8.1.0",
+    "jest-mock-extended": "^4.0.0-beta1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.1",
     "multer": "^1.4.5-lts.2",
@@ -46,6 +47,9 @@
       "**/__tests__/**/*.test.mjs",
       "**/?(*.)+(spec|test).[jt]s",
       "**/?(*.)+(spec|test).mjs"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-mock-extended)/)"
     ]
   }
 }
