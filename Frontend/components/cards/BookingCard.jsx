@@ -27,6 +27,7 @@ export const BookingCard = ({ booking }) => {
   // Function to update booking status
   const handleUpdateStatus = async (newStatus) => {
     const booking_id = booking._id;
+    console.log(booking_id);
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Token is missing or expired");

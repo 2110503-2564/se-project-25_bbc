@@ -245,7 +245,6 @@ export const canceledBooking = async (req, res) => {
 
 export const finishedBooking = async (req, res) => {
   try {
-    const hotel_id = req.user.hotel_id || req.body.hotel_id;
 
     if (
       req.user.role === "hotel_admin" &&
@@ -257,7 +256,7 @@ export const finishedBooking = async (req, res) => {
       });
 
     const booking = await Booking.findOneAndUpdate(
-      { _id: req.body.booking_id, hotel_id },
+      { _id: req.body.booking_id },
       { status: "finished" },
       { new: true, runValidators: true }
     );
@@ -266,6 +265,8 @@ export const finishedBooking = async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "Booking not found." });
+
+    const hotel_id = booking.hotel_id.toString();
 
     const io = getSocketInstance();
     const hotel = await Hotel.findById(hotel_id);
