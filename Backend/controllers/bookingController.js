@@ -107,7 +107,7 @@ export const createBooking = async (req, res) => {
       });
 
     if (req.file) {
-      const filePath = `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`;
+      const filePath = `${process.env.BACKEND_URL}/uploads/${req.file.filename}`;
       req.body.receiptUrl = filePath;
     }
 
