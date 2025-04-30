@@ -11,6 +11,7 @@ export const BookingCard = ({ booking }) => {
   const [status, setStatus] = useState(booking.status);
   const [isClient, setIsClient] = useState(false);
   const [user, setUser] = useState(null);
+  const [ownerBooking, setOwnerBookingName] = useState(null)
   const [showReceipt, setShowReceipt] = useState(false);
 
   const router = useRouter();
@@ -18,6 +19,11 @@ export const BookingCard = ({ booking }) => {
   useEffect(() => {
     setIsClient(true);
     console.log("Booking:", booking);
+    if (booking.account_id && booking.account_id.first_name && booking.account_id.last_name) {
+      const fullName = `${booking.account_id.first_name} ${booking.account_id.last_name}`;
+      setOwnerBookingName(fullName);
+      console.log("Owner booking name set to:", fullName);
+    }
     const storedLogin = localStorage.getItem("res_login");
     if (storedLogin) {
       const parsedUser = JSON.parse(storedLogin);
@@ -91,7 +97,7 @@ export const BookingCard = ({ booking }) => {
             Name
           </div>
           <div className="ml-[150px]  bg-white rounded-[5px] pl-[10px] pt-[5px]">
-            {user?.account?.first_name} {user?.account?.last_name}
+            {ownerBooking}
           </div>
 
           <div className="font-semibold m-[1px] bg-white rounded-[5px] p-[5px] text-blue-500">
