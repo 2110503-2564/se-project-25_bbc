@@ -148,11 +148,10 @@ export async function updateBooking({
   room_number,
   num_people,
   check_in_date,
-  check_out_date
+  check_out_date,
 }){
   try {
     console.log("Update booking:", booking_id, hotel_id, room_number, num_people, check_in_date, check_out_date);
-    console
     const res = await fetch(`${URL}/api/booking/${booking_id}`, {
       method: "PUT",
       headers: {
