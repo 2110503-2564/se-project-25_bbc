@@ -81,6 +81,7 @@ app.use("/api/promo", promoRoutes);
 app.use('/api/uploads',uploadRoutes);
 app.use('/uploads', express.static('public/uploads', {
   setHeaders: (res, path, stat) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.set('Cross-Origin-Resource-Policy', 'cross-origin');
   }
 }));
