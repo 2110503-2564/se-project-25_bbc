@@ -89,7 +89,7 @@ const UpdateBookingRoomCard = ({
   if (isLoading) return <div>Loading...</div>;
 
   // user / hotel-admin
-  if (userRole === "user" || userRole === "hotel-admin") {
+  if (userRole === "user" || userRole === "hotel_admin") {
     return (
       <div className="rounded-2xl overflow-hidden">
         <RoomInfoCard
